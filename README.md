@@ -58,9 +58,7 @@ The following **bonus** features are implemented (Sprint 3):
 
 ## Wireframe
 
-
-![Sprint 1 Wireframe](https://user-images.githubusercontent.com/1111292/31313197-42dda862-ab90-11e7-969b-15607dc07f33.jpg)
-
+![Sprint 1 Wireframe](https://user-images.githubusercontent.com/1111292/31313212-b4bbb4d8-ab90-11e7-9346-af22cdf64056.JPG)
 
 ## Open-source libraries used
 
