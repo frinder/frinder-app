@@ -55,7 +55,12 @@ The following **bonus** features are implemented (Sprint 3):
   * [ ] VoIP calls
 * [ ] [ambitious] Allow group meetups
 
-## Video Walkthrough
+
+## Wireframe
+
+
+![Sprint 1 Wireframe](https://user-images.githubusercontent.com/1111292/31313197-42dda862-ab90-11e7-969b-15607dc07f33.jpg)
+
 
 ## Open-source libraries used
 
