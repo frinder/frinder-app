@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Frinder</string>
+    <string name="force_crash_results">See CrashAnalytics on your Fabric Dashboard in about a minute or so</string>
 </resources>
