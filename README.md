@@ -36,6 +36,7 @@ The following **optional** features are implemented (Sprint 2):
 * [ ] Add a messages view to view all your recent messages
 * [ ] Support sharing contact details with accepted contacts
 * [ ] Add a location service that runs in the background even when the app is not running
+* [ ] Focus on low-end devices and different screen sizes
 * [ ] Support sharing contact details with accepted contact
 * [ ] Explore different list view options (card stack, single card)
 * [ ] App badging (on notifications)
