@@ -6,7 +6,7 @@ Have you found yourself in the following situations when you were bored and coul
 
 I'm sure everyone has some time been in such a situation where they were alone and wouldn't mind meeting a new person. However, the initial conversation or ice-breaker can be particularly awkward.
 
-This app links to your Facebook profile and has a profile that contains basic information about you. On opening the app, you can see nearby people in the area and swipe right in case you'd like to meet them. Similar to Tinder, the app notifies you only when the other person reciprocates interest in meeting you. Some additions to this would be a chat functionality and the ability to create interest-based groups (e.g. an IoT focussed ad-hoc group at a computer science conference)..
+This app links to your Facebook profile and has a profile that contains basic information about you. On opening the app, you can see nearby people in the area and swipe right in case you'd like to meet them. Similar to Tinder, the app notifies you only when the other person reciprocates interest in meeting you. Some additions to this would be a chat functionality and the ability to create interest-based groups (e.g. an IoT focussed ad-hoc group at a computer science conference).
 
 ## User Stories
 
