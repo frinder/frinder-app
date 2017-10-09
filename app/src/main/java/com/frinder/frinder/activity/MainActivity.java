@@ -16,6 +16,8 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.frinder.frinder.R;
 import com.frinder.frinder.model.User;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
 
 import io.fabric.sdk.android.Fabric;
 
