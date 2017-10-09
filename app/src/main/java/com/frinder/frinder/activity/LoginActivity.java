@@ -1,4 +1,4 @@
-package com.frinder.frinder;
+package com.frinder.frinder.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import com.facebook.GraphResponse;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.frinder.frinder.R;
 import com.frinder.frinder.model.User;
 
 import org.json.JSONException;
@@ -102,7 +103,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
-
     }
 
 }

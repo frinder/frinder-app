@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:https="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:https="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.frinder.frinder.MainActivity">
+    tools:context="com.frinder.frinder.activity.MainActivity">
 
     <TextView
         android:id="@+id/tv1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="Hello World!" />
 
     <Button
         android:id="@+id/btnForceCrash"
@@ -25,17 +25,17 @@
         android:layout_below="@id/tv1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:text="Force a Crash"
-        android:onClick="forceCrash"/>
+        android:onClick="forceCrash"
+        android:text="Force a Crash" />
 
     <TextView
         android:id="@+id/tv2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:autoLink="web"
-        android:text="@string/force_crash_results"
         android:layout_below="@+id/btnForceCrash"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="30dp"
+        android:autoLink="web"
+        android:text="@string/force_crash_results" />
 
     <TextView
         android:id="@+id/tvName"
@@ -56,5 +56,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="31dp"
         https:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait" />
+
+    <Button
+        android:id="@+id/fbLogout"
+        style="@style/com_facebook_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ivProfilePic"
+        android:layout_toEndOf="@+id/btnForceCrash"
+        android:layout_toRightOf="@+id/btnForceCrash"
+        android:onClick="logoutUser"
+        android:text="@string/com_facebook_loginview_log_out_button" />
 
 </RelativeLayout>

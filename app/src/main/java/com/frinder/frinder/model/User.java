@@ -3,10 +3,6 @@ package com.frinder.frinder.model;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * Created by sanal on 10/9/17.
- */
-
 //TODO change to parcelable
 public class User implements Serializable{
     String name;

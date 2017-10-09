@@ -1,17 +1,20 @@
-package com.frinder.frinder;
+package com.frinder.frinder.activity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
+import com.frinder.frinder.R;
 import com.frinder.frinder.model.User;
 
 import io.fabric.sdk.android.Fabric;
@@ -37,13 +40,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logUser() {
-        facebookUserLogin();
-        if(loggedUser != null) {
+        TextView tvName = (TextView) findViewById(R.id.tvName);
+        ImageView ivProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
+        Profile profile = null;
+
+        if(Profile.getCurrentProfile()==null) {
+            facebookUserLogin();
+        } else {
+            profile = Profile.getCurrentProfile();
             // You can call any combination of these three methods
             //Crashlytics.setUserIdentifier("12345");
             //Crashlytics.setUserEmail("user@fabric.io");
-            Crashlytics.setUserName(loggedUser.getName());
-            Crashlytics.setUserEmail(loggedUser.getEmail());
+            Crashlytics.setUserName(profile.getName());
+
+            tvName.setText(profile.getName());
+            Glide.with(getApplicationContext())
+                    .load(profile.getProfilePictureUri(200,200))
+                    .into(ivProfilePic);
         }
     }
 
@@ -58,18 +71,15 @@ public class MainActivity extends AppCompatActivity {
             if(resultCode == Activity.RESULT_OK){
                 loggedUser = (User) data.getExtras().getSerializable("loggedUser");
                 Log.d("Main",loggedUser.toString());
-                //TODO remove after login works
-                TextView tvName = (TextView) findViewById(R.id.tvName);
-                ImageView ivProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
-
-                tvName.setText(loggedUser.getName());
-                Glide.with(getApplicationContext())
-                        .load(loggedUser.getProfilePicUrl())
-                        .into(ivProfilePic);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 Log.d("Main", "Login failed!");
             }
         }
+    }
+
+    public void logoutUser(View view) {
+        LoginManager.getInstance().logOut();
+        Toast.makeText(this, "User logged out ",Toast.LENGTH_LONG).show();
     }
 }
