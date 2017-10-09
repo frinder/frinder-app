@@ -16,8 +16,6 @@ import com.frinder.frinder.model.User;
 
 import io.fabric.sdk.android.Fabric;
 
-import static com.frinder.frinder.R.id.ivProfilePic;
-
 public class MainActivity extends AppCompatActivity {
 
     public static final int LOGIN_RESULT = 100;
@@ -25,16 +23,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         Fabric.with(this, new Crashlytics());
-
         // TODO: Move this to where you establish a user session
         logUser();
+    }
 
-        setContentView(R.layout.activity_main);
-        //TODO move inside logUser
+
+
+    public void forceCrash(View view) {
+        throw new RuntimeException("This is a crash");
+    }
+
+    private void logUser() {
         facebookUserLogin();
-
+        if(loggedUser != null) {
+            // You can call any combination of these three methods
+            //Crashlytics.setUserIdentifier("12345");
+            //Crashlytics.setUserEmail("user@fabric.io");
+            Crashlytics.setUserName(loggedUser.getName());
+            Crashlytics.setUserEmail(loggedUser.getEmail());
+        }
     }
 
     private void facebookUserLogin() {
@@ -50,32 +60,16 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Main",loggedUser.toString());
                 //TODO remove after login works
                 TextView tvName = (TextView) findViewById(R.id.tvName);
+                ImageView ivProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
+
                 tvName.setText(loggedUser.getName());
-
-                if(!TextUtils.isEmpty(loggedUser.getProfilePicUrl())) {
-                    ImageView ivProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
-                    Glide.with(getApplicationContext())
-                            .load(loggedUser.getProfilePicUrl())
-                            .into(ivProfilePic);
-                }
-
+                Glide.with(getApplicationContext())
+                        .load(loggedUser.getProfilePicUrl())
+                        .into(ivProfilePic);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 Log.d("Main", "Login failed!");
             }
         }
     }
-
-    public void forceCrash(View view) {
-        throw new RuntimeException("This is a crash");
-    }
-
-    private void logUser() {
-        // TODO: Use the current user's information
-        // You can call any combination of these three methods
-        //Crashlytics.setUserIdentifier("12345");
-        //Crashlytics.setUserEmail("user@fabric.io");
-        Crashlytics.setUserName("Sanal Kumar");
-    }
-
 }

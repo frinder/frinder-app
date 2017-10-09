@@ -25,6 +25,9 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import static android.R.attr.id;
+import static android.R.attr.name;
+
 public class LoginActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
@@ -52,21 +55,13 @@ public class LoginActivity extends AppCompatActivity {
                                     String name = object.getString("name");
                                     String email = object.getString("email");
                                     String id = object.getString("id");
-                                    String picUrl = "";
-                                    JSONObject pictureBlob = object.getJSONObject("picture");
-                                    if(pictureBlob!=null) {
-                                        JSONObject pictureData = pictureBlob.getJSONObject("data");
-                                        if(pictureData!=null) {
-                                            picUrl = pictureData.getString("url");
-                                        }
-                                    }
+                                    String picUrl = "http://graph.facebook.com/"+id+"/picture?type=large";
+
                                     User user = new User();
                                     user.setName(name);
                                     user.setEmail(email);
-                                    if(!TextUtils.isEmpty(picUrl)) {
-                                        user.setProfilePicUrl(picUrl.toString());
-                                        Log.d("LoginScreen", "ProfilePic :: " + picUrl);
-                                    }
+                                    user.setProfilePicUrl(picUrl);
+                                    Log.d("LoginScreen", "ProfilePic :: " + picUrl);
                                     Toast.makeText(getApplicationContext(), name + " " + " " + email + " " + id, Toast.LENGTH_LONG).show();
 
                                     //On Successful login
