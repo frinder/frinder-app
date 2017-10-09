@@ -34,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
     CallbackManager callbackManager;
     private LoginButton loginButton;
 
+    private static final String TAG = "FacebookLogin";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d("LoginScreen", "Login Success " + loginResult.toString());
+                Log.d(TAG, "Login Success " + loginResult.toString());
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
@@ -62,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                                     user.setName(name);
                                     user.setEmail(email);
                                     user.setProfilePicUrl(picUrl);
-                                    Log.d("LoginScreen", "ProfilePic :: " + picUrl);
+                                    Log.d(TAG, "ProfilePic :: " + picUrl);
                                     Toast.makeText(getApplicationContext(), name + " " + " " + email + " " + id, Toast.LENGTH_LONG).show();
 
                                     //On Successful login
@@ -83,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onCancel() {
-                Log.d("LoginScreen","Cancelled");
+                Log.d(TAG,"Cancelled");
                 Intent returnIntent = new Intent();
                 setResult(Activity.RESULT_CANCELED, returnIntent);
                 finish();
@@ -91,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException e) {
-                Log.e("LoginScreen", "Error " + e.toString());
+                Log.e(TAG, "Error " + e.toString());
                 Intent returnIntent = new Intent();
                 setResult(Activity.RESULT_CANCELED, returnIntent);
                 finish();

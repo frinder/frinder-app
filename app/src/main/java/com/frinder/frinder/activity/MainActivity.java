@@ -23,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int LOGIN_RESULT = 100;
     private User loggedUser;
+    private static final String TAG = "Main";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,10 +73,10 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode== LOGIN_RESULT) {
             if(resultCode == Activity.RESULT_OK){
                 loggedUser = (User) data.getExtras().getSerializable("loggedUser");
-                Log.d("Main",loggedUser.toString());
+                Log.d(TAG,loggedUser.toString());
             }
             if (resultCode == Activity.RESULT_CANCELED) {
-                Log.d("Main", "Login failed!");
+                Log.d(TAG, "Login failed!");
             }
         }
     }
