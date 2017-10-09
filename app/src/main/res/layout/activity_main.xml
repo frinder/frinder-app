@@ -37,4 +37,24 @@
         android:layout_below="@+id/btnForceCrash"
         android:layout_marginTop="30dp" />
 
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/tv1"
+        android:layout_alignRight="@+id/tv1"
+        android:layout_below="@+id/tv2"
+        android:layout_marginTop="53dp"
+        android:text="TextView"
+        android:textSize="24sp" />
+
+    <ImageView
+        android:id="@+id/ivProfilePic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="31dp"
+        https:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait" />
+
 </RelativeLayout>
