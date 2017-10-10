@@ -1,5 +1,6 @@
 package com.frinder.frinder.dataaccess;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -26,8 +27,10 @@ import java.util.Map;
 public class UserFirebaseDas {
     FirebaseFirestore db;
     private static final String TAG = "UserFirebaseDAS";
+    private Context context;
 
     public UserFirebaseDas(Context context) {
+        this.context = context;
         FirebaseApp.initializeApp(context);
         db = FirebaseFirestore.getInstance();
     }
@@ -67,6 +70,8 @@ public class UserFirebaseDas {
                         Log.d(TAG, "DocumentSnapshot data: " + task.getResult().getData());
                         User user = document.toObject(User.class);
                         Log.d(TAG, user.toString());
+                        UserDasInterface userDasInterface = (UserDasInterface) (Activity) context;
+                        userDasInterface.readUserReady(user);
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -75,5 +80,9 @@ public class UserFirebaseDas {
                 }
             }
         });
+    }
+
+    public interface UserDasInterface {
+        public void readUserReady(User user);
     }
 }

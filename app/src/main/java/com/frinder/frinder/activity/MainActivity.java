@@ -21,7 +21,7 @@ import com.google.firebase.FirebaseApp;
 
 import io.fabric.sdk.android.Fabric;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements UserFirebaseDas.UserDasInterface{
 
     public static final int LOGIN_RESULT = 100;
     private User loggedUser;
@@ -51,23 +51,26 @@ public class MainActivity extends AppCompatActivity {
     private void logUser() {
         if(Profile.getCurrentProfile()==null) {
             facebookUserLogin();
-        } else {
-            Profile profile = Profile.getCurrentProfile();
-            //TODO Sanal to fix
-            UserFirebaseDas userFirebaseDas = new UserFirebaseDas(this);
-            userFirebaseDas.getUser(profile.getId());
-            TextView tvName = (TextView) findViewById(R.id.tvName);
-            ImageView ivProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
-            // You can call any combination of these three methods
-            //Crashlytics.setUserIdentifier("12345");
-            //Crashlytics.setUserEmail("user@fabric.io");
-            Crashlytics.setUserName(profile.getName());
-            //get user
-            tvName.setText(profile.getName());
-            Glide.with(getApplicationContext())
-                    .load(profile.getProfilePictureUri(200,200))
-                    .into(ivProfilePic);
         }
+        Profile profile = Profile.getCurrentProfile();
+        //TODO Sanal to fix
+        UserFirebaseDas userFirebaseDas = new UserFirebaseDas(this);
+        userFirebaseDas.getUser(profile.getId());
+        //loggedUser has the user fetched from firebase
+
+        TextView tvName = (TextView) findViewById(R.id.tvName);
+        ImageView ivProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
+
+        // You can call any combination of these three methods
+        //Crashlytics.setUserIdentifier("12345");
+        //Crashlytics.setUserEmail("user@fabric.io");
+        Crashlytics.setUserName(profile.getName());
+
+        //get user
+        tvName.setText(profile.getName());
+        Glide.with(getApplicationContext())
+                .load(profile.getProfilePictureUri(200,200))
+                .into(ivProfilePic);
     }
 
     private void facebookUserLogin() {
@@ -97,5 +100,11 @@ public class MainActivity extends AppCompatActivity {
     public void logoutUser(View view) {
         LoginManager.getInstance().logOut();
         Toast.makeText(this, "User logged out ",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void readUserReady(User user) {
+        Log.d("debug","Read user from firebase " + user.toString());
+        loggedUser = user;
     }
 }
