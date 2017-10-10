@@ -22,3 +22,12 @@ android:
     # if you need to run emulator(s) during your tests
     - sys-img-armeabi-v7a-android-22
     - sys-img-armeabi-v7a-android-17
+
+  install:
+    # Ensure Gradle wrapper is executable, download wrapper and show version
+    - chmod +x ./gradlew; ls -l gradlew; ./gradlew wrapper -v
+    # Download and show android dependencies
+    # - ./gradlew androidDependencies
+
+  script:
+    - ./gradlew clean build -Pbuild=dev
