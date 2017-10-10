@@ -1,4 +1,4 @@
-# *Frinder* ![Build status](https://travis-ci.org/frinder/frinder-app.svg?branch=master)
+# *Frinder* [![Build status](https://travis-ci.org/frinder/frinder-app.svg?branch=master)](https://travis-ci.org/frinder/frinder-app/builds)
 
 **Frinder** is an android app matches you to people nearby who are also looking to meet new people (not focussed on dating). e.g.: while you are waiting for a flight, having lunch alone, traveling by the train
 
