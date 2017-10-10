@@ -1,5 +1,7 @@
 package com.frinder.frinder.model;
 
+import android.net.Uri;
+
 import com.facebook.Profile;
 
 import org.json.JSONException;
@@ -15,7 +17,7 @@ public class User implements Serializable{
     String name;
     String email;
     String gender;
-    Profile profile;
+    String profileUri;
 
     public String getUid() {
         return uid;
@@ -49,13 +51,12 @@ public class User implements Serializable{
         this.gender = gender;
     }
 
-
-    public Profile getProfile() {
-        return profile;
+    public String getProfileUri() {
+        return profileUri;
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
+    public void setProfileUri(String profileUri) {
+        this.profileUri = profileUri;
     }
 
     @Override
@@ -65,7 +66,7 @@ public class User implements Serializable{
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", gender='" + gender + '\'' +
-                ", profile=" + profile +
+                ", profileUri=" + profileUri +
                 '}';
     }
 }

@@ -61,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
                                     String gender = object.getString("gender");
 
                                     User user = new User();
+                                    user.setUid(id);
                                     user.setName(name);
                                     user.setEmail(email);
                                     user.setGender(gender);

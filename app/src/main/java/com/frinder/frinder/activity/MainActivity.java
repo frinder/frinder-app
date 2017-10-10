@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Profile profile = Profile.getCurrentProfile();
             //TODO Sanal to fix
-//            UserFirebaseDas userFirebaseDas = new UserFirebaseDas(this);
-//            Log.d("debug",userFirebaseDas.getUser(profile.getId()).toString());
+            UserFirebaseDas userFirebaseDas = new UserFirebaseDas(this);
+            userFirebaseDas.getUser(profile.getId());
             TextView tvName = (TextView) findViewById(R.id.tvName);
             ImageView ivProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
             // You can call any combination of these three methods
@@ -82,9 +82,9 @@ public class MainActivity extends AppCompatActivity {
                 loggedUser = (User) data.getExtras().getSerializable("loggedUser");
                 Log.d(TAG,loggedUser.toString());
                 //TODO persist user
-                Profile profile = Profile.getCurrentProfile();
-                loggedUser.setUid(profile.getId());
-                loggedUser.setProfile(profile);
+//                Profile profile = Profile.getCurrentProfile();
+//                loggedUser.setUid(profile.getId());
+//                loggedUser.setProfileUri(profile.getProfilePictureUri(200,200).toString());
                 UserFirebaseDas userFirebaseDas = new UserFirebaseDas(getApplicationContext());
                 userFirebaseDas.addUser(loggedUser);
             }
