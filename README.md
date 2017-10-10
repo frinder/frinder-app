@@ -30,7 +30,7 @@ The following **required** functionality are completed (Sprint 1):
 The following **optional** features are implemented (Sprint 2):
 
 * [ ] Add a navigation bar
-* [ ] User can edit/fill their profile (description, choose interests)
+* [ ] User can edit/fill their profile (desc, choose interests)
 * [ ] User can edit their search settings (radius, gender, age, interest, turn off discoverability)
 * [ ] User can send/receive messages in the app
 * [ ] Add a messages view to view all your recent messages

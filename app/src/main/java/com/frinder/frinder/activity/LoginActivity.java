@@ -42,9 +42,9 @@ public class LoginActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
 
-        loginButton = (LoginButton)findViewById(R.id.login_button);
+        loginButton = (LoginButton) findViewById(R.id.login_button);
         callbackManager = CallbackManager.Factory.create();
-        loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
+//        loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -54,38 +54,24 @@ public class LoginActivity extends AppCompatActivity {
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
-                                try {
-                                    String name = object.getString("name");
-                                    String email = object.getString("email");
-                                    String id = object.getString("id");
-                                    String gender = object.getString("gender");
-
-                                    User user = new User();
-                                    user.setUid(id);
-                                    user.setName(name);
-                                    user.setEmail(email);
-                                    user.setGender(gender);
-                                    Toast.makeText(getApplicationContext(), name + " " + " " + email + " " + id, Toast.LENGTH_LONG).show();
-
-                                    //On Successful login
-                                    Intent returnIntent = new Intent();
-                                    returnIntent.putExtra("loggedUser", user);
-                                    setResult(Activity.RESULT_OK,returnIntent);
-                                    finish();
-                                } catch (JSONException ex) {
-                                    ex.printStackTrace();
-                                }
+                                User user = User.fromJSON(object);
+                                Toast.makeText(getApplicationContext(), user.getName() + " " + " " + user.getEmail(), Toast.LENGTH_LONG).show();
+                                //On Successful login
+                                Intent returnIntent = new Intent();
+                                returnIntent.putExtra("loggedUser", user);
+                                setResult(Activity.RESULT_OK, returnIntent);
+                                finish();
                             }
                         });
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email,gender");
+                parameters.putString("fields", "id, name, email, gender, age_range, link");
                 request.setParameters(parameters);
                 request.executeAsync();
             }
 
             @Override
             public void onCancel() {
-                Log.d(TAG,"Cancelled");
+                Log.d(TAG, "Cancelled");
                 Intent returnIntent = new Intent();
                 setResult(Activity.RESULT_CANCELED, returnIntent);
                 finish();
