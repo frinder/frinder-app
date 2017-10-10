@@ -21,12 +21,12 @@ import com.google.firebase.FirebaseApp;
 
 import io.fabric.sdk.android.Fabric;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements UserFirebaseDas.UserDasInterface {
 
     public static final int LOGIN_RESULT = 100;
     private User loggedUser;
     private static final String TAG = "Main";
-
+    private Profile profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logUser() {
-        if(Profile.getCurrentProfile()==null) {
+        if (Profile.getCurrentProfile() == null) {
             facebookUserLogin();
         } else {
-            Profile profile = Profile.getCurrentProfile();
+            profile = Profile.getCurrentProfile();
             //TODO Sanal to fix
             UserFirebaseDas userFirebaseDas = new UserFirebaseDas(this);
             userFirebaseDas.getUser(profile.getId());
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             //get user
             tvName.setText(profile.getName());
             Glide.with(getApplicationContext())
-                    .load(profile.getProfilePictureUri(200,200))
+                    .load(profile.getProfilePictureUri(200, 200))
                     .into(ivProfilePic);
         }
     }
@@ -77,14 +77,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode== LOGIN_RESULT) {
-            if(resultCode == Activity.RESULT_OK){
+        if (requestCode == LOGIN_RESULT) {
+            if (resultCode == Activity.RESULT_OK) {
                 loggedUser = (User) data.getExtras().getSerializable("loggedUser");
-                Log.d(TAG,loggedUser.toString());
+                Log.d(TAG, loggedUser.toString());
                 //TODO persist user
-//                Profile profile = Profile.getCurrentProfile();
-//                loggedUser.setUid(profile.getId());
-//                loggedUser.setProfileUri(profile.getProfilePictureUri(200,200).toString());
+                Profile profile = Profile.getCurrentProfile();
                 UserFirebaseDas userFirebaseDas = new UserFirebaseDas(getApplicationContext());
                 userFirebaseDas.addUser(loggedUser);
             }
@@ -96,6 +94,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void logoutUser(View view) {
         LoginManager.getInstance().logOut();
-        Toast.makeText(this, "User logged out ",Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "User logged out ", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void readUserComplete(User user) {
+        Log.d(TAG, "Read user from firebase " + user.toString());
+        //loggedUser has the user fetched from firebase
+        loggedUser = user;
     }
 }
