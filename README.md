@@ -10,7 +10,7 @@ This app links to your Facebook profile and has a profile that contains basic in
 
 ## User Stories
 
-The following **required** functionality are completed (Sprint 1):
+The following **required** functionality are completed (Sprint-1):
 
 * [ ] User can sign into Frinder using Facebook login
   * [ ] Query user profile data from facebook
