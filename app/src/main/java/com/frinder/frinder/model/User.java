@@ -1,15 +1,25 @@
 package com.frinder.frinder.model;
 
+import com.facebook.Profile;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
+import java.net.URI;
 import java.util.Date;
 
 //TODO change to parcelable
 public class User implements Serializable{
+    String uid;
     String name;
     String email;
     String gender;
-    Date birthday;
-    String profilePicUrl;
+    Profile profile;
+
+    public String getUid() {
+        return uid;
+    }
 
     public String getName() {
         return name;
@@ -23,12 +33,8 @@ public class User implements Serializable{
         return gender;
     }
 
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public String getProfilePicUrl() {
-        return profilePicUrl;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public void setName(String name) {
@@ -43,22 +49,23 @@ public class User implements Serializable{
         this.gender = gender;
     }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+
+    public Profile getProfile() {
+        return profile;
     }
 
-    public void setProfilePicUrl(String profilePicUrl) {
-        this.profilePicUrl = profilePicUrl;
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "name='" + name + '\'' +
+                "uid='" + uid + '\'' +
+                ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", gender='" + gender + '\'' +
-                ", birthday=" + birthday +
-                ", profilePicUrl='" + profilePicUrl + '\'' +
+                ", profile=" + profile +
                 '}';
     }
 }

@@ -15,9 +15,9 @@ import com.crashlytics.android.Crashlytics;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.frinder.frinder.R;
+import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.User;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -32,32 +32,37 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        FirebaseApp.initializeApp(this);
         Fabric.with(this, new Crashlytics());
-        // TODO: Move this to where you establish a user session
-        logUser();
     }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        logUser();
+
+    }
 
     public void forceCrash(View view) {
         throw new RuntimeException("This is a crash");
     }
 
     private void logUser() {
-        TextView tvName = (TextView) findViewById(R.id.tvName);
-        ImageView ivProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
-        Profile profile = null;
-
         if(Profile.getCurrentProfile()==null) {
             facebookUserLogin();
         } else {
-            profile = Profile.getCurrentProfile();
+            Profile profile = Profile.getCurrentProfile();
+            //TODO Sanal to fix
+//            UserFirebaseDas userFirebaseDas = new UserFirebaseDas(this);
+//            Log.d("debug",userFirebaseDas.getUser(profile.getId()).toString());
+            TextView tvName = (TextView) findViewById(R.id.tvName);
+            ImageView ivProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
             // You can call any combination of these three methods
             //Crashlytics.setUserIdentifier("12345");
             //Crashlytics.setUserEmail("user@fabric.io");
             Crashlytics.setUserName(profile.getName());
-
+            //get user
             tvName.setText(profile.getName());
             Glide.with(getApplicationContext())
                     .load(profile.getProfilePictureUri(200,200))
@@ -76,6 +81,12 @@ public class MainActivity extends AppCompatActivity {
             if(resultCode == Activity.RESULT_OK){
                 loggedUser = (User) data.getExtras().getSerializable("loggedUser");
                 Log.d(TAG,loggedUser.toString());
+                //TODO persist user
+                Profile profile = Profile.getCurrentProfile();
+                loggedUser.setUid(profile.getId());
+                loggedUser.setProfile(profile);
+                UserFirebaseDas userFirebaseDas = new UserFirebaseDas(getApplicationContext());
+                userFirebaseDas.addUser(loggedUser);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 Log.d(TAG, "Login failed!");

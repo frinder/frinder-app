@@ -58,13 +58,12 @@ public class LoginActivity extends AppCompatActivity {
                                     String name = object.getString("name");
                                     String email = object.getString("email");
                                     String id = object.getString("id");
-                                    String picUrl = "http://graph.facebook.com/"+id+"/picture?type=large";
+                                    String gender = object.getString("gender");
 
                                     User user = new User();
                                     user.setName(name);
                                     user.setEmail(email);
-                                    user.setProfilePicUrl(picUrl);
-                                    Log.d(TAG, "ProfilePic :: " + picUrl);
+                                    user.setGender(gender);
                                     Toast.makeText(getApplicationContext(), name + " " + " " + email + " " + id, Toast.LENGTH_LONG).show();
 
                                     //On Successful login
@@ -78,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email,gender, birthday, picture");
+                parameters.putString("fields", "id,name,email,gender");
                 request.setParameters(parameters);
                 request.executeAsync();
             }
