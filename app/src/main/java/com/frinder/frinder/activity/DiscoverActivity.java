@@ -122,7 +122,7 @@ public class DiscoverActivity extends AppCompatActivity implements UserFirebaseD
         }
 
         if (id == R.id.menu_action_settings) {
-            //ToDo Mallika Create Filter DialogFragment
+            //ToDo Create Filter DialogFragment
             return true;
         }
         return super.onOptionsItemSelected(item);
