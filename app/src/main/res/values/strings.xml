@@ -3,4 +3,6 @@
     <string name="force_crash_results">See CrashAnalytics on your Fabric Dashboard in about a minute or so</string>
     <string name="facebook_app_id">180343762540270</string>
     <string name="fb_login_protocol_scheme">fb180343762540270</string>
+    <string name="tv_discover_users_label">Search</string>
+    <string name="tv_btn_request_to_meet_label">Meetup?</string>
 </resources>

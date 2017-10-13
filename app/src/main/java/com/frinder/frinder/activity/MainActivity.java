@@ -6,11 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -18,6 +15,8 @@ import com.frinder.frinder.R;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.User;
 import com.google.firebase.FirebaseApp;
+
+import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -40,8 +39,14 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
     @Override
     protected void onStart() {
         super.onStart();
-        logUser();
 
+        logUser();
+    }
+
+    @Override
+    protected void onDestroy() {
+        LoginManager.getInstance().logOut();
+        super.onDestroy();
     }
 
     public void forceCrash(View view) {
@@ -49,14 +54,15 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
     }
 
     private void logUser() {
-        if (Profile.getCurrentProfile() == null) {
+        profile = Profile.getCurrentProfile();
+        if (profile == null) {
             facebookUserLogin();
         } else {
             profile = Profile.getCurrentProfile();
             //TODO Sanal to fix
             UserFirebaseDas userFirebaseDas = new UserFirebaseDas(this);
             userFirebaseDas.getUser(profile.getId());
-            TextView tvName = (TextView) findViewById(R.id.tvName);
+            /*TextView tvName = (TextView) findViewById(R.id.tvName);
             ImageView ivProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
             // You can call any combination of these three methods
             //Crashlytics.setUserIdentifier("12345");
@@ -66,7 +72,11 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
             tvName.setText(profile.getName());
             Glide.with(getApplicationContext())
                     .load(profile.getProfilePictureUri(200, 200))
-                    .into(ivProfilePic);
+                    .into(ivProfilePic);*/
+
+            //Open discover screen after login
+            Intent discoverIntent = new Intent(this, DiscoverActivity.class);
+            startActivity(discoverIntent);
         }
     }
 
@@ -102,5 +112,10 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
         Log.d(TAG, "Read user from firebase " + user.toString());
         //loggedUser has the user fetched from firebase
         loggedUser = user;
+    }
+
+    @Override
+    public void readAllUsersComplete(ArrayList<User> userList) {
+
     }
 }
