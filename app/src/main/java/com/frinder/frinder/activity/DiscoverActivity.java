@@ -17,12 +17,11 @@ import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.User;
 
 import java.util.ArrayList;
-import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class DiscoverActivity extends AppCompatActivity implements UserFirebaseDas.UserDasInterface{
     private static final String TAG = "DiscoverActivity";
     ArrayList<User> users;
-    TreeMap<Float, User> distanceFromCurrentUser;
     DiscoverUsersAdapter adapter;
     Profile profile;
     User currentUser;
@@ -67,7 +66,9 @@ public class DiscoverActivity extends AppCompatActivity implements UserFirebaseD
 
         //ToDo - transfer this logic to Firebase if possible
 
-        distanceFromCurrentUser = new TreeMap<>();
+        ArrayList<User> nearbyUsers = new ArrayList<>();
+        ArrayList<Float> distanceFromCurrentUser = new ArrayList<>();
+        TreeSet<Float> distances = new TreeSet<>();
 
         for (User user : userList) {
             if (!user.getUid().contentEquals(currentUser.getUid())) {
@@ -78,17 +79,25 @@ public class DiscoverActivity extends AppCompatActivity implements UserFirebaseD
 
                 if (distance <= 150F) {
                     Log.d(TAG, user.getName() + ", distance = " + distance);
-                    distanceFromCurrentUser.put(distance, user);
+                    nearbyUsers.add(user);
+                    distanceFromCurrentUser.add(distance);
+                    distances.add(distance);
                 }
             }
         }
 
         Log.d(TAG, "Sorted List");
         if (distanceFromCurrentUser != null && !distanceFromCurrentUser.isEmpty()) {
-            for (User user : distanceFromCurrentUser.values()) {
-                Log.d(TAG, user.getName());
-                users.add(user);
+            for (Float distance : distances) {
+                for (int i=0; i<distanceFromCurrentUser.size(); i++) {
+                    Float tDistance = distanceFromCurrentUser.get(i);
+                    if (tDistance.floatValue() == distance.floatValue()) {
+                        Log.d(TAG, nearbyUsers.get(i).getName());
+                        users.add(nearbyUsers.get(i));
+                    }
+                }
             }
+
             adapter.notifyDataSetChanged();
         }
         else {
