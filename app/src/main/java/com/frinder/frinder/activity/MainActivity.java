@@ -2,6 +2,7 @@ package com.frinder.frinder.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,7 +18,10 @@ import com.facebook.login.LoginManager;
 import com.frinder.frinder.R;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.User;
+import com.frinder.frinder.utils.LocationUtils;
 import com.google.firebase.FirebaseApp;
+
+import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -27,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
     private User loggedUser;
     private static final String TAG = "Main";
     private Profile profile;
+    UserFirebaseDas userFirebaseDas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
         setContentView(R.layout.activity_main);
         FirebaseApp.initializeApp(this);
         Fabric.with(this, new Crashlytics());
+        userFirebaseDas = new UserFirebaseDas(this);
     }
 
 
@@ -41,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
     protected void onStart() {
         super.onStart();
         logUser();
-
     }
 
     public void forceCrash(View view) {
@@ -54,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
         } else {
             profile = Profile.getCurrentProfile();
             //TODO Sanal to fix
-            UserFirebaseDas userFirebaseDas = new UserFirebaseDas(this);
             userFirebaseDas.getUser(profile.getId());
             TextView tvName = (TextView) findViewById(R.id.tvName);
             ImageView ivProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
@@ -85,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
                 Profile profile = Profile.getCurrentProfile();
                 UserFirebaseDas userFirebaseDas = new UserFirebaseDas(getApplicationContext());
                 userFirebaseDas.addUser(loggedUser);
+
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 Log.d(TAG, "Login failed!");
@@ -102,5 +107,16 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
         Log.d(TAG, "Read user from firebase " + user.toString());
         //loggedUser has the user fetched from firebase
         loggedUser = user;
+        LocationUtils locationUtils = new LocationUtils(getBaseContext());
+        locationUtils.getLastLocation(new LocationUtils.LocationUpdate() {
+            @Override
+            public void onSuccess(Location location) {
+                ArrayList<Double> locationList = new ArrayList<>();
+                locationList.add(location.getLatitude());
+                locationList.add(location.getLongitude());
+                Log.d(TAG, "Updating user " + loggedUser.getUid() + " location with " + locationList.toString());
+                userFirebaseDas.updateUserLocation(loggedUser.getUid(),locationList);
+            }
+        });
     }
-}
+ }
