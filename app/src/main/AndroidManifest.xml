@@ -44,7 +44,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.DiscoverActivity"></activity>
+        <activity android:name=".activity.DiscoverActivity" />
+        <activity android:name=".activity.NotificationsActivity"></activity>
     </application>
 
 </manifest>

@@ -11,6 +11,14 @@
         android:visible="true"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/menu_action_notifications"
+        android:checkable="true"
+        android:enabled="true"
+        android:icon="@drawable/ic_notifications_white"
+        android:title="Notifications"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/menu_action_settings"
         android:checkable="true"
         android:enabled="true"

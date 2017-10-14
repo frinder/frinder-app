@@ -1,5 +1,6 @@
 package com.frinder.frinder.activity;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +20,7 @@ import com.frinder.frinder.model.User;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
-public class DiscoverActivity extends AppCompatActivity implements UserFirebaseDas.UserDasInterface{
+public class DiscoverActivity extends AppCompatActivity implements UserFirebaseDas.UserDasInterface {
     private static final String TAG = "DiscoverActivity";
     ArrayList<User> users;
     DiscoverUsersAdapter adapter;
@@ -127,6 +128,12 @@ public class DiscoverActivity extends AppCompatActivity implements UserFirebaseD
         //noinspection SimplifiableIfStatement
         if (id == R.id.menu_action_discover) {
             getNearbyUsers();
+            return true;
+        }
+
+        if (id == R.id.menu_action_notifications) {
+            Intent i = new Intent(this, NotificationsActivity.class);
+            startActivity(i);
             return true;
         }
 
