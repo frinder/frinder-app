@@ -15,6 +15,8 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,6 +28,7 @@ public class UserFirebaseDas {
     FirebaseFirestore db;
     private static final String TAG = "UserFirebaseDAS";
     private Context context;
+
     public UserFirebaseDas(Context context) {
         this.context = context;
         FirebaseApp.initializeApp(context);
@@ -78,8 +81,37 @@ public class UserFirebaseDas {
         });
     }
 
+    // Get all records in users table in Frinder Firebase Firestore
+    public void getAllUsers() {
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ArrayList<User> userList = new ArrayList<User>();
+                            for (DocumentSnapshot document : task.getResult()) {
+                                if (document != null && document.exists()) {
+                                    User user = convertFromFirebaseObject(document.getData());
+                                    userList.add(user);
+                                }
+                                else {
+                                    Log.d(TAG, "No such document");
+                                }
+                            }
+
+                            UserDasInterface userDasInterface = (UserDasInterface) (Activity) context;
+                            userDasInterface.readAllUsersComplete(userList);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
     public interface UserDasInterface {
         public void readUserComplete(User user);
+        public void readAllUsersComplete(ArrayList<User> userList);
     }
 
 

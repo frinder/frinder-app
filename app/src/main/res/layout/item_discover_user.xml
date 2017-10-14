@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardBackgroundColor="@color/card_layout_background"
+    card_view:cardElevation="@dimen/card_layout_elevation"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+        <ImageView
+            android:id="@+id/ivUserImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            tools:src="@drawable/profile_img_neutral" />
+
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/ivUserImage"
+            android:layout_toEndOf="@id/ivUserImage"
+            android:layout_toRightOf="@id/ivUserImage"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            tools:text="User Name" />
+
+        <TextView
+            android:id="@+id/tvUserDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/tvUserName"
+            android:layout_alignStart="@id/tvUserName"
+            android:layout_below="@id/tvUserName"
+            android:textColor="@color/black"
+            tools:text="This is a short description about the user" />
+
+        <TextView
+            android:id="@+id/tvBtnRequestToMeet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/dark_orange"
+            android:clickable="true"
+            android:drawableLeft="@drawable/ic_request_to_meet_white"
+            android:drawablePadding="@dimen/textview_drawable_padding"
+            android:drawableStart="@drawable/ic_request_to_meet_white"
+            android:drawableTint="@color/light_orange"
+            android:padding="@dimen/text_padding"
+            android:text="@string/tv_btn_request_to_meet_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/light_orange"
+            android:textStyle="bold"
+            android:layout_alignBottom="@+id/ivUserImage"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
