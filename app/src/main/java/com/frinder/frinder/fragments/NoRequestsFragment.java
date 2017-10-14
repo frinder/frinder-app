@@ -3,6 +3,7 @@ package com.frinder.frinder.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,7 @@ public class NoRequestsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_no_requests, container, false);
         mUnbinder = ButterKnife.bind(this, view);
 
-        if (mMessage != null) {
+        if (!TextUtils.isEmpty(mMessage)) {
             tvMessage.setText(mMessage);
         }
 
