@@ -40,4 +40,4 @@ android:
     # - ./gradlew androidDependencies
 
   script:
-    - ./gradlew build -Pbuild=dev connectedAndroidCheck
+    - ./gradlew build connectedAndroidCheck
