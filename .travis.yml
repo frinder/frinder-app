@@ -10,7 +10,7 @@ android:
     - build-tools-26.0.1
 
     # The SDK version used to compile your project
-    - android-22
+    - android-26
 
     # Additional components
     - extra-google-google_play_services
@@ -26,6 +26,7 @@ android:
   install:
     # Workaround for travis license issue
     - echo y | android update sdk -u -a -t build-tools-26.0.1
+    - echo y | android update sdk -u -a -t android-26
     # Ensure Gradle wrapper is executable, download wrapper and show version
     - chmod +x ./gradlew; ls -l gradlew; ./gradlew wrapper -v
     # Download and show android dependencies
