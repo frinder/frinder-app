@@ -24,6 +24,8 @@ android:
     - sys-img-armeabi-v7a-android-17
 
   install:
+    # Workaround for travis license issue
+    - echo y | android update sdk -u -a -t build-tools-26.0.1
     # Ensure Gradle wrapper is executable, download wrapper and show version
     - chmod +x ./gradlew; ls -l gradlew; ./gradlew wrapper -v
     # Download and show android dependencies
