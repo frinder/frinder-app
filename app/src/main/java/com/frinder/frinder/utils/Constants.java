@@ -3,7 +3,7 @@ package com.frinder.frinder.utils;
 
 public final class Constants {
 
-    //User Firebase Datastore Keys (Column Names)
+    // User Firebase Datastore Keys (Column Names)
     public static final String USER_COLUMN_ID = "id" ;
     public static final String USER_COLUMN_NAME = "name" ;
     public static final String USER_COLUMN_GENDER = "gender" ;
@@ -16,7 +16,15 @@ public final class Constants {
     public static final String USER_COLUMN_PROFILE_PIC_URL = "profilePicUrl";
     public static final String USER_COLUMN_TIMESTAMP = "timestamp";
 
-    //Facebook data access keys
+    // Request Firebase Datastore Keys (Column Names)
+    public static final String REQUEST_COLUMN_ID = "id" ;
+    public static final String REQUEST_COLUMN_ACCEPTED = "accepted" ;
+    public static final String REQUEST_COLUMN_ACCEPTED_TIMESTAMP = "acceptedTimestamp" ;
+    public static final String REQUEST_COLUMN_RECEIVER_ID = "receiverId" ;
+    public static final String REQUEST_COLUMN_SENDER_ID = "senderId" ;
+    public static final String REQUEST_COLUMN_SENT_TIMESTAMP = "sentTimestamp" ;
+
+    // Facebook data access keys
     public static final String FACEBOOK_PROFILE_ID = "id";
     public static final String FACEBOOK_PROFILE_NAME = "name";
     public static final String FACEBOOK_PROFILE_EMAIL = "email";
