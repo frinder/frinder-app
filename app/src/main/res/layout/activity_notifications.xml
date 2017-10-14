@@ -10,4 +10,19 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tlTabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        app:tabMode="fixed" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vpPager"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"
+        android:layout_below="@id/tlTabs"
+        android:background="@android:color/white" />
+
 </RelativeLayout>
