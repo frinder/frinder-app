@@ -1,4 +1,5 @@
 language: android
+sudo: false
 android:
   components:
     # Uncomment the lines below if you want to
@@ -39,4 +40,4 @@ android:
     # - ./gradlew androidDependencies
 
   script:
-    - ./gradlew clean build -Pbuild=dev
+    - ./gradlew build -Pbuild=dev connectedCheck
