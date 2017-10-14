@@ -1,5 +1,5 @@
 language: android
-sudo: false
+sudo: required
 android:
   components:
     # Uncomment the lines below if you want to
@@ -41,3 +41,6 @@ android:
 
   script:
     - ./gradlew build
+
+  after_failure: 
+    - "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml"
