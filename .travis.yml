@@ -30,7 +30,7 @@ android:
     - echo y | android update sdk -u -a -t android-26
 
   script:
-    - ./gradlew build connectedCheck
+    - ./gradlew clean assembleDebug
 
   after_failure: 
     - "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml"
