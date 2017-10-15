@@ -6,7 +6,6 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 
@@ -21,12 +20,12 @@ public class User implements Serializable {
     private int age;
     private String desc;
     private ArrayList<String> interests;
-    private Double location[];
+    private ArrayList<Double> location;
     private Date timestamp;
 
     public User() {
         interests = new ArrayList<>();
-        location = new Double[2];
+        location = new ArrayList<>();
     }
 
     public String getUid() {
@@ -101,7 +100,7 @@ public class User implements Serializable {
         return linkUrl;
     }
 
-    public Double[] getLocation() {
+    public ArrayList<Double> getLocation() {
         return location;
     }
 
@@ -113,7 +112,7 @@ public class User implements Serializable {
         this.linkUrl = linkUrl;
     }
 
-    public void setLocation(Double[] location) {
+    public void setLocation(ArrayList<Double> location) {
         this.location = location;
     }
 
@@ -129,7 +128,7 @@ public class User implements Serializable {
                 ", age=" + age +
                 ", desc='" + desc + '\'' +
                 ", interests=" + interests +
-                ", location=" + Arrays.toString(location) +
+                ", location=" + location.toString() +
                 ", timestamp=" + timestamp +
                 '}';
     }

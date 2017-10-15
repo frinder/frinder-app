@@ -26,5 +26,4 @@ public class AcceptedRequestFragment extends RequestFragment {
         RequestFirebaseDas das = new RequestFirebaseDas(context);
         das.getAcceptedRequests(listener);
     }
-
 }
