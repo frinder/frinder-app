@@ -20,7 +20,7 @@ import com.frinder.frinder.model.User;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
-public class DiscoverActivity extends AppCompatActivity implements UserFirebaseDas.UserDasInterface {
+public class DiscoverActivity extends AppCompatActivity {
     private static final String TAG = "DiscoverActivity";
     ArrayList<User> users;
     DiscoverUsersAdapter adapter;
@@ -43,7 +43,12 @@ public class DiscoverActivity extends AppCompatActivity implements UserFirebaseD
         userFirebaseDas = new UserFirebaseDas(DiscoverActivity.this);
 
         profile = Profile.getCurrentProfile();
-        userFirebaseDas.getUser(profile.getId());
+        userFirebaseDas.getUser(profile.getId(), new UserFirebaseDas.OnCompletionListener() {
+            @Override
+            public void onUserReceived(User user) {
+                readUserComplete(user);
+            }
+        });
 
         RecyclerView rvDiscoverusers = (RecyclerView) findViewById(R.id.rvDiscoverUsers);
         users = new ArrayList<>();
@@ -57,10 +62,14 @@ public class DiscoverActivity extends AppCompatActivity implements UserFirebaseD
         users.clear();
         adapter.notifyDataSetChanged();
         // ToDo Mallika - change userFirebaseDas.getAllUsers() to return users based on current filters
-        userFirebaseDas.getAllUsers();
+        userFirebaseDas.getAllUsers(new UserFirebaseDas.OnCompletionListener() {
+            @Override
+            public void onUsersReceived(ArrayList<User> users) {
+                readAllUsersComplete(users);
+            }
+        });
     }
 
-    @Override
     public void readAllUsersComplete(ArrayList<User> userList) {
         Log.d(TAG, "in readAllUsersComplete");
         Log.d(TAG, userList.toString());
@@ -106,7 +115,6 @@ public class DiscoverActivity extends AppCompatActivity implements UserFirebaseD
         }
     }
 
-    @Override
     public void readUserComplete(User user) {
         currentUser = user;
         Log.d(TAG, "in readUserComplete");
