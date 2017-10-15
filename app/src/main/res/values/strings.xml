@@ -5,6 +5,7 @@
     <string name="fb_login_protocol_scheme">fb180343762540270</string>
     <string name="tv_discover_users_label">Search</string>
     <string name="tv_btn_request_to_meet_label">Meetup?</string>
+    <string name="tv_btn_existing_request_label">Sent</string>
     <string name="no_requests">No requests</string>
     <string name="tv_new_tag">New</string>
 

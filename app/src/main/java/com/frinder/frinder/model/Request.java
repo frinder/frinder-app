@@ -15,4 +15,14 @@ public class Request {
     public Date sentTimestamp;
     public Date acceptedTimestamp;
 
+    public static Request newInstance(String senderId, String receiverId) {
+        Request request = new Request();
+        request.senderId = senderId;
+        request.receiverId = receiverId;
+        request.unread = true;
+        request.accepted = false;
+        request.sentTimestamp = new Date();
+        return request;
+    }
+
 }
