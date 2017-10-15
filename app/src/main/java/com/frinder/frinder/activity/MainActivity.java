@@ -44,15 +44,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         logUser();
     }
-
-    @Override
-    protected void onDestroy() {
-        if (LoginManager.getInstance() != null) {
-            LoginManager.getInstance().logOut();
-        }
-        super.onDestroy();
-    }
-
+    
     public void forceCrash(View view) {
         throw new RuntimeException("This is a crash");
     }

@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,13 +26,13 @@ import com.frinder.frinder.adapters.SpacesItemDecoration;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.User;
 import com.frinder.frinder.utils.LocationUtils;
+import com.google.android.gms.location.LocationCallback;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TreeSet;
 
 import static com.frinder.frinder.activity.MainActivity.LOCATION_DENY_MSG;
-import static com.frinder.frinder.utils.LocationUtils.locationUtilInstance;
 
 public class DiscoverActivity extends AppCompatActivity {
     private static final String TAG = "DiscoverActivity";
@@ -41,8 +42,8 @@ public class DiscoverActivity extends AppCompatActivity {
     User currentUser;
     UserFirebaseDas userFirebaseDas;
     private static final int REQUEST_FINE_LOCATION = 99;
-    private Location currentLocation = null;
     private LocationUtils locationUtilInstance;
+    SwipeRefreshLayout srlDiscoverContainer;
 
     //ToDo Mallika - Remove this constant when filters/settings screen is ready
     //Assuming that we are looking for people in a radius of 150m which is about 574.147ft.
@@ -64,6 +65,7 @@ public class DiscoverActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        srlDiscoverContainer = (SwipeRefreshLayout) findViewById(R.id.srlDiscoverContainer);
         RecyclerView rvDiscoverusers = (RecyclerView) findViewById(R.id.rvDiscoverUsers);
         users = new ArrayList<>();
         adapter = new DiscoverUsersAdapter(this, users);
@@ -79,31 +81,22 @@ public class DiscoverActivity extends AppCompatActivity {
                 currentUser = user;
                 Log.d(TAG, "in onUserReceived");
                 Log.d(TAG, currentUser.toString());
+                if(user.getLocation()!=null) {
+                    getNearbyUsers();
+                }
+            }
+        });
+
+        srlDiscoverContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
                 getNearbyUsers();
             }
         });
     }
 
     private void getCurrentLocation() {
-        locationUtilInstance.startLocationUpdates(this, new LocationUtils.LocationUpdate(){
-            @Override
-            public void onLocationChanged(Context context, Location location) {
-                // New location has now been determined
-                String msg = "Updated Location: " +
-                        Double.toString(location.getLatitude()) + "," +
-                        Double.toString(location.getLongitude());
-                Log.d(TAG, msg);
-                Toast.makeText(context,msg,Toast.LENGTH_LONG).show();
-
-                if(location!=null) {
-                    ArrayList<Double> locationList = new ArrayList<>();
-                    locationList.add(location.getLatitude());
-                    locationList.add(location.getLongitude());
-                    Log.d(TAG, "Updating user " + Profile.getCurrentProfile().getId() + " location with " + locationList.toString());
-                    userFirebaseDas.updateUserLocation(profile.getId(), locationList);
-                }
-            }
-        });
+        locationUtilInstance.startLocationUpdates(this,locationUtilsCallback);
     }
 
     public void getNearbyUsers() {
@@ -168,6 +161,7 @@ public class DiscoverActivity extends AppCompatActivity {
             }
 
             adapter.notifyDataSetChanged();
+            srlDiscoverContainer.setRefreshing(false);
         }
         else {
             Toast.makeText(this, "No one closeby right now. Consider increasing the radius", Toast.LENGTH_SHORT).show();
@@ -239,4 +233,42 @@ public class DiscoverActivity extends AppCompatActivity {
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
+
+    @Override
+    protected void onPause() {
+        locationUtilInstance.stopLocationUpdates(this);
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        locationUtilInstance.stopLocationUpdates(this);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        locationUtilInstance.startLocationUpdates(this,locationUtilsCallback);
+        super.onResume();
+    }
+
+    LocationUtils.LocationUpdate locationUtilsCallback = new LocationUtils.LocationUpdate(){
+        @Override
+        public void onLocationChanged(Context context, Location location) {
+            // New location has now been determined
+            String msg = "Updated Location: " +
+                    Double.toString(location.getLatitude()) + "," +
+                    Double.toString(location.getLongitude());
+            Log.d(TAG, msg);
+            Toast.makeText(context,msg,Toast.LENGTH_LONG).show();
+
+            if(location!=null) {
+                ArrayList<Double> locationList = new ArrayList<>();
+                locationList.add(location.getLatitude());
+                locationList.add(location.getLongitude());
+                Log.d(TAG, "Updating user " + Profile.getCurrentProfile().getId() + " location with " + locationList.toString());
+                userFirebaseDas.updateUserLocation(profile.getId(), locationList);
+            }
+        }
+    };
 }

@@ -12,6 +12,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -36,21 +38,64 @@ public class RequestFirebaseDas {
 
     public void addRequest(Request request){
         Map<String, Object> requestMap = convertToFirebaseObject(request);
-        db.collection("requests")
+        Task task = getCollection()
                 .document()
-                .set(requestMap)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
-                    }
-                });
+                .set(requestMap);
+        setListeners(task);
+    }
+
+    public void deleteRequest(Request request){
+        DocumentReference document = getDocument(request);
+        if (document == null) {
+            Log.w(TAG, "Cannot find request to be deleted");
+            return;
+        }
+        setListeners(document.delete());
+    }
+
+    public void updateUnread(Request request, boolean unread) {
+        DocumentReference document = getDocument(request);
+        if (document == null) {
+            Log.w(TAG, "Cannot find request to be updated");
+            return;
+        }
+        Task task  = document.update(Constants.REQUEST_COLUMN_UNREAD , unread);
+        setListeners(task);
+    }
+
+    public void updateAccepted(Request request, boolean accepted) {
+        DocumentReference document = getDocument(request);
+        if (document == null) {
+            Log.w(TAG, "Cannot find request to be updated");
+            return;
+        }
+        Task task  = document.update(Constants.REQUEST_COLUMN_ACCEPTED , accepted);
+        setListeners(task);
+    }
+
+    private CollectionReference getCollection() {
+        return db.collection("requests");
+    }
+
+    private DocumentReference getDocument(Request request) {
+        if (request.uid == null) return null;
+
+        return getCollection().document(request.uid);
+    }
+
+    private void setListeners(Task task) {
+        // TODO: Show error messages based on this
+        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "DocumentSnapshot successfully written!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error writing document", e);
+            }
+        });
     }
 
     public void getSentRequests(final OnCompletionListener listener) {
@@ -118,9 +163,6 @@ public class RequestFirebaseDas {
     @NonNull
     private static Map<String, Object> convertToFirebaseObject(Request request) {
         Map<String, Object> requestMap = new HashMap<>();
-        if (request.uid != null) {
-            requestMap.put(Constants.REQUEST_COLUMN_ID, request.uid);
-        }
         requestMap.put(Constants.REQUEST_COLUMN_ACCEPTED, request.accepted);
         requestMap.put(Constants.REQUEST_COLUMN_ACCEPTED_TIMESTAMP, request.acceptedTimestamp);
         requestMap.put(Constants.REQUEST_COLUMN_RECEIVER_ID, request.receiverId);
@@ -131,9 +173,9 @@ public class RequestFirebaseDas {
     }
 
     @NonNull
-    private static Request convertFromFirebaseObject(Map<String, Object> requestMap) {
+    private static Request convertFromFirebaseObject(String id, Map<String, Object> requestMap) {
         Request request = new Request();
-        request.uid = (String)requestMap.get(Constants.REQUEST_COLUMN_ID);
+        request.uid = id;
         request.accepted = (boolean)requestMap.get(Constants.REQUEST_COLUMN_ACCEPTED);
         request.acceptedTimestamp = (Date)requestMap.get(Constants.REQUEST_COLUMN_ACCEPTED_TIMESTAMP);
         request.receiverId = (String)requestMap.get(Constants.REQUEST_COLUMN_RECEIVER_ID);
@@ -148,7 +190,7 @@ public class RequestFirebaseDas {
         ArrayList<Request> requestList = new ArrayList<Request>();
         for (DocumentSnapshot document : snapshot) {
             if (document.exists()) {
-                Request request = convertFromFirebaseObject(document.getData());
+                Request request = convertFromFirebaseObject(document.getId(), document.getData());
                 requestList.add(request);
             }
             else {

@@ -33,9 +33,6 @@ public class LocationUtils {
     private long FASTEST_INTERVAL = 1 * 1000; /* 60 sec */
     public static LocationUtils locationUtilInstance = null;
     LocationRequest mLocationRequest;
-    public boolean firstLocationReceived = false;
-    private UserFirebaseDas userFirebaseDas;
-    private String userId;
 
     public static LocationUtils getInstance() {
         if(locationUtilInstance == null )
@@ -47,13 +44,6 @@ public class LocationUtils {
         void onLocationChanged(Context context, Location lastLocation);
     }
 
-    public void getLastLocation(Context context, final LocationUpdate callback) {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        } else {
-            requestLocation(context, callback);
-        }
-    }
 
     private void requestLocation(final Context context, final LocationUpdate callback) {
         FusedLocationProviderClient locationClient = getFusedLocationProviderClient(context);
@@ -98,5 +88,14 @@ public class LocationUtils {
                     }
                 },
                 Looper.myLooper());
+    }
+
+    public void stopLocationUpdates(final Context context) {
+        getFusedLocationProviderClient(context).removeLocationUpdates(new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                Log.d(TAG,"Stop location updates!");
+            }
+        });
     }
 }
