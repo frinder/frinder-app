@@ -24,7 +24,6 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 
 public class LocationUtils {
     private static final String TAG = "LocationUtil";
-    private static final int REQUEST_FINE_LOCATION = 99;
     private long UPDATE_INTERVAL = 10 * 60 * 1000;  /* 10 mins */
     private long FASTEST_INTERVAL = 60*1000; /* 60 sec */
     public static LocationUtils locationUtilInstance = null;

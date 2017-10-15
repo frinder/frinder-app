@@ -27,7 +27,7 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
     private static final String TAG = "DiscoverUsersAdapter";
     private List<User> mUsers;
     private Context mContext;
-    private LocationUtils locationUtils;
+    private LocationUtils locationUtilInstance;
 
     // Pass in the contact array into the constructor
     public DiscoverUsersAdapter(Context context, List<User> users) {
