@@ -16,6 +16,7 @@ import com.frinder.frinder.dataaccess.RequestFirebaseDas;
 import com.frinder.frinder.model.Request;
 import com.frinder.frinder.model.User;
 import com.frinder.frinder.utils.LocationUtils;
+import static com.frinder.frinder.utils.LocationUtils.locationUtilInstance;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
