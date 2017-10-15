@@ -31,14 +31,11 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
     private static final String TAG = "DiscoverUsersAdapter";
     private List<User> mUsers;
     private Context mContext;
-    private LocationUtils locationUtilInstance;
 
     // Pass in the contact array into the constructor
     public DiscoverUsersAdapter(Context context, List<User> users) {
         mUsers = users;
         mContext = context;
-        locationUtilInstance = LocationUtils.getInstance();
-        locationUtilInstance.startLocationUpdates(getContext());
     }
 
     // Easy access to the context object in the recyclerview

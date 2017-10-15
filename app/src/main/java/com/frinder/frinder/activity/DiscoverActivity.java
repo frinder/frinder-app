@@ -1,8 +1,13 @@
 package com.frinder.frinder.activity;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,10 +25,14 @@ import com.frinder.frinder.adapters.DiscoverUsersAdapter;
 import com.frinder.frinder.adapters.SpacesItemDecoration;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.User;
+import com.frinder.frinder.utils.LocationUtils;
+import com.google.android.gms.location.LocationCallback;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TreeSet;
+
+import static com.frinder.frinder.activity.MainActivity.LOCATION_DENY_MSG;
 
 public class DiscoverActivity extends AppCompatActivity {
     private static final String TAG = "DiscoverActivity";
@@ -32,6 +41,8 @@ public class DiscoverActivity extends AppCompatActivity {
     Profile profile;
     User currentUser;
     UserFirebaseDas userFirebaseDas;
+    private static final int REQUEST_FINE_LOCATION = 99;
+    private LocationUtils locationUtilInstance;
     SwipeRefreshLayout srlDiscoverContainer;
 
     //ToDo Mallika - Remove this constant when filters/settings screen is ready
@@ -46,6 +57,10 @@ public class DiscoverActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discover);
+        locationUtilInstance = LocationUtils.getInstance();
+        if(requestLocationPermissions()) {
+            getCurrentLocation();
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -58,7 +73,6 @@ public class DiscoverActivity extends AppCompatActivity {
         rvDiscoverusers.setLayoutManager(new LinearLayoutManager(this));
         SpacesItemDecoration decoration = new SpacesItemDecoration(24);
         rvDiscoverusers.addItemDecoration(decoration);
-
         userFirebaseDas = new UserFirebaseDas(DiscoverActivity.this);
         profile = Profile.getCurrentProfile();
         userFirebaseDas.getUser(profile.getId(), new UserFirebaseDas.OnCompletionListener() {
@@ -67,7 +81,9 @@ public class DiscoverActivity extends AppCompatActivity {
                 currentUser = user;
                 Log.d(TAG, "in onUserReceived");
                 Log.d(TAG, currentUser.toString());
-                getNearbyUsers();
+                if(user.getLocation()!=null) {
+                    getNearbyUsers();
+                }
             }
         });
 
@@ -77,6 +93,10 @@ public class DiscoverActivity extends AppCompatActivity {
                 getNearbyUsers();
             }
         });
+    }
+
+    private void getCurrentLocation() {
+        locationUtilInstance.startLocationUpdates(this,locationUtilsCallback);
     }
 
     public void getNearbyUsers() {
@@ -183,4 +203,72 @@ public class DiscoverActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private boolean requestLocationPermissions() {
+        int hasFineLocation = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+        int hasCoarseLocation = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+        if(hasCoarseLocation != PackageManager.PERMISSION_GRANTED || hasFineLocation != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_FINE_LOCATION);
+        }
+        return true;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_FINE_LOCATION:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    getCurrentLocation();
+                } else {
+                    // Permission Denied
+                    Toast.makeText(this, LOCATION_DENY_MSG, Toast.LENGTH_LONG)
+                            .show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        locationUtilInstance.stopLocationUpdates(this);
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        locationUtilInstance.stopLocationUpdates(this);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        locationUtilInstance.startLocationUpdates(this,locationUtilsCallback);
+        super.onResume();
+    }
+
+    LocationUtils.LocationUpdate locationUtilsCallback = new LocationUtils.LocationUpdate(){
+        @Override
+        public void onLocationChanged(Context context, Location location) {
+            // New location has now been determined
+            String msg = "Updated Location: " +
+                    Double.toString(location.getLatitude()) + "," +
+                    Double.toString(location.getLongitude());
+            Log.d(TAG, msg);
+            Toast.makeText(context,msg,Toast.LENGTH_LONG).show();
+
+            if(location!=null) {
+                ArrayList<Double> locationList = new ArrayList<>();
+                locationList.add(location.getLatitude());
+                locationList.add(location.getLongitude());
+                Log.d(TAG, "Updating user " + Profile.getCurrentProfile().getId() + " location with " + locationList.toString());
+                userFirebaseDas.updateUserLocation(profile.getId(), locationList);
+            }
+        }
+    };
 }
