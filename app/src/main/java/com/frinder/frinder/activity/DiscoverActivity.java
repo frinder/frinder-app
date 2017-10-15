@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.frinder.frinder.R;
+import com.frinder.frinder.adapters.DiscoverUsersAdapter;
+import com.frinder.frinder.adapters.SpacesItemDecoration;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.User;
 
@@ -56,12 +58,19 @@ public class DiscoverActivity extends AppCompatActivity {
         adapter = new DiscoverUsersAdapter(this, users);
         rvDiscoverusers.setAdapter(adapter);
         rvDiscoverusers.setLayoutManager(new LinearLayoutManager(this));
+        SpacesItemDecoration decoration = new SpacesItemDecoration(24);
+        rvDiscoverusers.addItemDecoration(decoration);
+
+        getNearbyUsers();
     }
 
     public void getNearbyUsers() {
         //Clear the list each time discover menu button is clicked as user list will change based on who is nearby
-        users.clear();
-        adapter.notifyDataSetChanged();
+        if (!users.isEmpty()) {
+            users.clear();
+            adapter.notifyDataSetChanged();
+        }
+
         // ToDo Mallika - change userFirebaseDas.getAllUsers() to return users based on current filters
         userFirebaseDas.getAllUsers(new UserFirebaseDas.OnCompletionListener() {
             @Override
@@ -70,6 +79,8 @@ public class DiscoverActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     public void readAllUsersComplete(ArrayList<User> userList) {
         Log.d(TAG, "in readAllUsersComplete");
