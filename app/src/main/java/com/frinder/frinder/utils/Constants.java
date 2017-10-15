@@ -17,11 +17,10 @@ public final class Constants {
     public static final String USER_COLUMN_TIMESTAMP = "timestamp";
 
     // Request Firebase Datastore Keys (Column Names)
-    public static final String REQUEST_COLUMN_ID = "id" ;
     public static final String REQUEST_COLUMN_ACCEPTED = "accepted" ;
     public static final String REQUEST_COLUMN_ACCEPTED_TIMESTAMP = "acceptedTimestamp" ;
     public static final String REQUEST_COLUMN_RECEIVER_ID = "receiverId" ;
-    public static final String REQUEST_COLUMN_SENDER_ID = "senderId" ;
+    public static final String REQUEST_COLUMN_SENDER_ID = "senderId";
     public static final String REQUEST_COLUMN_SENT_TIMESTAMP = "sentTimestamp" ;
     public static final String REQUEST_COLUMN_UNREAD = "unread" ;
 
