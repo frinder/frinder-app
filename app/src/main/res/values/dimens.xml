@@ -2,7 +2,7 @@
 <resources>
     <dimen name="activity_horizontal_margin">8dp</dimen>
     <dimen name="activity_vertical_margin">8dp</dimen>
-    <dimen name="request_item_margin">8dp</dimen>
+    <dimen name="request_item_margin">10dp</dimen>
     <dimen name="textview_drawable_padding">5dp</dimen>
     <dimen name="text_padding">5dp</dimen>
     <dimen name="card_layout_elevation">5dp</dimen>

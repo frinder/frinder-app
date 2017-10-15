@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.frinder.frinder.R;
 import com.frinder.frinder.fragments.NoRequestsFragment;
+import com.frinder.frinder.fragments.RequestFragment;
 
 public class RequestsFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -28,8 +29,13 @@ public class RequestsFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        // TODO: Change this
-        return NoRequestsFragment.newInstance();
+        switch (position) {
+            case 0:
+                return RequestFragment.newInstance();
+            default:
+                // TODO: Change this
+                return NoRequestsFragment.newInstance();
+        }
     }
 
     @Override

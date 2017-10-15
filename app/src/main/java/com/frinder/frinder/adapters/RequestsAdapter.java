@@ -9,9 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.frinder.frinder.R;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.Request;
+import com.frinder.frinder.model.User;
 
 import java.util.List;
 
@@ -43,14 +45,23 @@ public class RequestsAdapter extends
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         // Get the data model based on position
         Request request = mRequests.get(position);
 
         String userId = getUserId(request);
+        holder.position = position;
         // TODO: Move this to a static variable/cache this
         UserFirebaseDas das = new UserFirebaseDas(mContext);
-        // TODO Fill out user details
+        das.getUser(userId, new UserFirebaseDas.OnCompletionListener() {
+            @Override
+            public void onUserReceived(User user) {
+                // Ensure that the ViewHolder is still at the same position
+                if (user != null && holder.position == position) {
+                    populateUserDetails(holder, user);
+                }
+            }
+        });
     }
 
     @Override
@@ -63,14 +74,25 @@ public class RequestsAdapter extends
         return request.senderId;
     }
 
+    private void populateUserDetails(ViewHolder holder, User user) {
+        holder.tvUserName.setText(user.getName());
+        holder.tvUserDesc.setText(user.getDesc());
+        Glide.with(mContext)
+                .load(user.getProfilePicUrl())
+                .centerCrop()
+                .into(holder.ivUserImage);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.ivProfilePic)
-        ImageView ivProfilePic;
+        @BindView(R.id.ivUserImage)
+        ImageView ivUserImage;
         @BindView(R.id.tvUserName)
         TextView tvUserName;
         @BindView(R.id.tvUserDesc)
         TextView tvUserDesc;
+
+        int position;
 
         public ViewHolder(View itemView) {
             super(itemView);
