@@ -2,6 +2,12 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- TODO change logo -->
+    <item
+        android:id="@+id/menu_action_logout"
+        android:icon="@drawable/com_facebook_close"
+        android:title="Logout"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_action_discover"
         android:checkable="true"

@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.frinder.frinder.R;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.User;
@@ -83,8 +84,8 @@ public class DiscoverActivity extends AppCompatActivity {
         for (User user : userList) {
             if (!user.getUid().contentEquals(currentUser.getUid())) {
                 float[] results = new float[1];
-                Location.distanceBetween(currentUser.getLocation()[0], currentUser.getLocation()[1],
-                        user.getLocation()[0], user.getLocation()[1], results);
+                Location.distanceBetween(currentUser.getLocation().get(0), currentUser.getLocation().get(1),
+                        user.getLocation().get(0), user.getLocation().get(1), results);
                 float distance = results[0];
 
                 if (distance <= 150F) {
@@ -147,6 +148,11 @@ public class DiscoverActivity extends AppCompatActivity {
 
         if (id == R.id.menu_action_settings) {
             //ToDo Create Filter DialogFragment
+            return true;
+        }
+        if (id == R.id.menu_action_logout) {
+            Toast.makeText(this, "User logged out ", Toast.LENGTH_LONG).show();
+            LoginManager.getInstance().logOut();
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -20,6 +20,8 @@ import com.frinder.frinder.model.User;
 
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 public class LoginActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
@@ -35,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
         callbackManager = CallbackManager.Factory.create();
-//        loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override

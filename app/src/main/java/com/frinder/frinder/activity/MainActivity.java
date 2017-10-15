@@ -2,6 +2,7 @@ package com.frinder.frinder.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,7 +15,10 @@ import com.facebook.login.LoginManager;
 import com.frinder.frinder.R;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.User;
+import com.frinder.frinder.utils.LocationUtils;
 import com.google.firebase.FirebaseApp;
+
+import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -24,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private User loggedUser;
     private static final String TAG = "Main";
     private Profile profile;
+    UserFirebaseDas userFirebaseDas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         FirebaseApp.initializeApp(this);
         Fabric.with(this, new Crashlytics());
+        userFirebaseDas = new UserFirebaseDas(this);
     }
 
 
@@ -43,7 +49,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        LoginManager.getInstance().logOut();
+        if (LoginManager.getInstance() != null) {
+            LoginManager.getInstance().logOut();
+        }
         super.onDestroy();
     }
 
@@ -56,31 +64,22 @@ public class MainActivity extends AppCompatActivity {
         if (profile == null) {
             facebookUserLogin();
         } else {
-            profile = Profile.getCurrentProfile();
-            //TODO Sanal to fix
-            UserFirebaseDas userFirebaseDas = new UserFirebaseDas(this);
-            userFirebaseDas.getUser(profile.getId(), new UserFirebaseDas.OnCompletionListener() {
-                @Override
-                public void onUserReceived(User user) {
-                    readUserComplete(user);
-                }
-            });
-            /*TextView tvName = (TextView) findViewById(R.id.tvName);
-            ImageView ivProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
-            // You can call any combination of these three methods
-            //Crashlytics.setUserIdentifier("12345");
-            //Crashlytics.setUserEmail("user@fabric.io");
-            Crashlytics.setUserName(profile.getName());
-            //get user
-            tvName.setText(profile.getName());
-            Glide.with(getApplicationContext())
-                    .load(profile.getProfilePictureUri(200, 200))
-                    .into(ivProfilePic);*/
-
-            //Open discover screen after login
-            Intent discoverIntent = new Intent(this, DiscoverActivity.class);
-            startActivity(discoverIntent);
+            readProfile();
         }
+    }
+
+    private void readProfile() {
+        profile = Profile.getCurrentProfile();
+        userFirebaseDas.getUser(profile.getId(), new UserFirebaseDas.OnCompletionListener() {
+            @Override
+            public void onUserReceived(User user) {
+                readUserComplete(user);
+            }
+        });
+        Crashlytics.setUserName(profile.getName());
+        //TODO sent profile user data with intent
+        Intent discoverIntent = new Intent(this, DiscoverActivity.class);
+        startActivity(discoverIntent);
     }
 
     private void facebookUserLogin() {
@@ -96,8 +95,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, loggedUser.toString());
                 //TODO persist user
                 Profile profile = Profile.getCurrentProfile();
-                UserFirebaseDas userFirebaseDas = new UserFirebaseDas(getApplicationContext());
+                Profile.setCurrentProfile(profile);
                 userFirebaseDas.addUser(loggedUser);
+                readProfile();
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 Log.d(TAG, "Login failed!");
@@ -114,5 +114,17 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "Read user from firebase " + user.toString());
         //loggedUser has the user fetched from firebase
         loggedUser = user;
+        LocationUtils locationUtils = new LocationUtils(getBaseContext());
+        locationUtils.startLocationUpdates();
+        locationUtils.getLastLocation(new LocationUtils.LocationUpdate() {
+            @Override
+            public void onSuccess(Location location) {
+                ArrayList<Double> locationList = new ArrayList<>();
+                locationList.add(location.getLatitude());
+                locationList.add(location.getLongitude());
+                Log.d(TAG, "Updating user " + loggedUser.getUid() + " location with " + locationList.toString());
+                userFirebaseDas.updateUserLocation(loggedUser.getUid(), locationList);
+            }
+        });
     }
 }
