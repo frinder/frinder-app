@@ -1,12 +1,14 @@
 {
   "project_info": {
-    "project_number": "",
-    "project_id": ""
+    "project_number": "25931054402",
+    "firebase_url": "https://projectfrinder.firebaseio.com",
+    "project_id": "projectfrinder",
+    "storage_bucket": "projectfrinder.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "",
+        "mobilesdk_app_id": "1:25931054402:android:ad3f1952d84702f7",
         "android_client_info": {
           "package_name": "com.frinder.frinder"
         }

@@ -1,7 +1,6 @@
 package com.frinder.frinder.utils;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -24,32 +23,32 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 public class LocationUtils {
-    private Context context;
-    private LocationRequest mLocationRequest;
     private static final String TAG = "LocationUtil";
     private static final int REQUEST_FINE_LOCATION = 99;
     private long UPDATE_INTERVAL = 10 * 60 * 1000;  /* 10 mins */
     private long FASTEST_INTERVAL = 60*1000; /* 60 sec */
+    public static LocationUtils locationUtilInstance = null;
 
-
-    public LocationUtils(Context context) {
-        this.context = context;
+    public static LocationUtils getInstance() {
+        if(locationUtilInstance == null )
+            return new LocationUtils();
+        return locationUtilInstance;
     }
 
     public interface LocationUpdate {
         void onSuccess(Location location);
+        void onFailure();
     }
 
-    public void getLastLocation(final LocationUpdate callback) {
+    public void getLastLocation(Context context, final LocationUpdate callback) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions();
             return;
         } else {
-            requestLocation(callback);
+            requestLocation(context, callback);
         }
     }
 
-    private void requestLocation(final LocationUpdate callback) {
+    private void requestLocation(final Context context, final LocationUpdate callback) {
         FusedLocationProviderClient locationClient = getFusedLocationProviderClient(context);
         locationClient.getLastLocation()
                 .addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -60,6 +59,7 @@ public class LocationUtils {
                             callback.onSuccess(location);
                         } else {
                             Toast.makeText(context, "Please enable GPS!", Toast.LENGTH_LONG).show();
+                            callback.onFailure();
                         }
                     }
                 })
@@ -68,13 +68,14 @@ public class LocationUtils {
                     public void onFailure(@NonNull Exception e) {
                         Log.d(TAG, "Error trying to get last GPS location");
                         e.printStackTrace();
+                        callback.onFailure();
                     }
                 });
     }
 
     // Trigger new location updates at interval
-    public void startLocationUpdates() {
-        mLocationRequest = new LocationRequest();
+    public void startLocationUpdates(final Context context) {
+        LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(UPDATE_INTERVAL);
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
@@ -87,30 +88,23 @@ public class LocationUtils {
         settingsClient.checkLocationSettings(locationSettingsRequest);
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions();
             return;
         }
         getFusedLocationProviderClient(context).requestLocationUpdates(mLocationRequest, new LocationCallback() {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
-                        onLocationChanged(locationResult.getLastLocation());
+                        onLocationChanged(context, locationResult.getLastLocation());
                     }
                 },
                 Looper.myLooper());
     }
 
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(Context context, Location location) {
         // New location has now been determined
         String msg = "Updated Location: " +
                 Double.toString(location.getLatitude()) + "," +
                 Double.toString(location.getLongitude());
         Log.d(TAG, msg);
         Toast.makeText(context,msg,Toast.LENGTH_LONG).show();
-    }
-
-    private void requestPermissions() {
-        ActivityCompat.requestPermissions((Activity) context,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                REQUEST_FINE_LOCATION);
     }
 }

@@ -52,7 +52,7 @@ public class RequestFirebaseDas {
     }
 
     // Get all records in requests table in Frinder Firebase Firestore
-    public void getSentRequests(final RequestDasInterface listener) {
+    public void getSentRequests(final OnCompletionListener listener) {
         // TODO: query only requests for the logged in user's id
         db.collection("requests")
                 .get()
@@ -71,7 +71,7 @@ public class RequestFirebaseDas {
                 });
     }
 
-    public interface RequestDasInterface {
+    public static abstract class OnCompletionListener {
         abstract public void onRequestsReceived(ArrayList<Request> requests);
     }
 
