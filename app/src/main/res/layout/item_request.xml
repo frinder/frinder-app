@@ -35,6 +35,15 @@
             android:textStyle="bold"
             tools:text="User Name" />
 
+        <ImageView
+            android:id="@+id/ivNewTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:background="@drawable/ic_fiber_new"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/tvUserName" />
+
         <TextView
             android:id="@+id/tvUserDesc"
             android:layout_width="wrap_content"
