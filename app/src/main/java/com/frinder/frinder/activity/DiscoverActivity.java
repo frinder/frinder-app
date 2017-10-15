@@ -21,6 +21,7 @@ import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.User;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.TreeSet;
 
 public class DiscoverActivity extends AppCompatActivity {
@@ -35,6 +36,10 @@ public class DiscoverActivity extends AppCompatActivity {
     //Assuming that we are looking for people in a radius of 150m which is about 574.147ft.
     private final static int SEARCH_RADIUS = 175; //unit is meters
 
+    //ToDo Mallika - Remove this constant when User location is current and user discoverability has been handled
+    //This is used to filter nearby users to show users active/with timestamp within 15 minutes
+    private final static long TIME_USER_LAST_ACTIVE = 15; //unit is minutes
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,16 +47,6 @@ public class DiscoverActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        userFirebaseDas = new UserFirebaseDas(DiscoverActivity.this);
-
-        profile = Profile.getCurrentProfile();
-        userFirebaseDas.getUser(profile.getId(), new UserFirebaseDas.OnCompletionListener() {
-            @Override
-            public void onUserReceived(User user) {
-                readUserComplete(user);
-            }
-        });
 
         RecyclerView rvDiscoverusers = (RecyclerView) findViewById(R.id.rvDiscoverUsers);
         users = new ArrayList<>();
@@ -61,7 +56,17 @@ public class DiscoverActivity extends AppCompatActivity {
         SpacesItemDecoration decoration = new SpacesItemDecoration(24);
         rvDiscoverusers.addItemDecoration(decoration);
 
-        getNearbyUsers();
+        userFirebaseDas = new UserFirebaseDas(DiscoverActivity.this);
+        profile = Profile.getCurrentProfile();
+        userFirebaseDas.getUser(profile.getId(), new UserFirebaseDas.OnCompletionListener() {
+            @Override
+            public void onUserReceived(User user) {
+                currentUser = user;
+                Log.d(TAG, "in onUserReceived");
+                Log.d(TAG, currentUser.toString());
+                getNearbyUsers();
+            }
+        });
     }
 
     public void getNearbyUsers() {
@@ -93,17 +98,22 @@ public class DiscoverActivity extends AppCompatActivity {
         TreeSet<Float> distances = new TreeSet<>();
 
         for (User user : userList) {
+            //Check that current app user is not added to nearby users list
             if (!user.getUid().contentEquals(currentUser.getUid())) {
-                float[] results = new float[1];
-                Location.distanceBetween(currentUser.getLocation().get(0), currentUser.getLocation().get(1),
-                        user.getLocation().get(0), user.getLocation().get(1), results);
-                float distance = results[0];
+                //Check that user was nearby/active (timestamp) within past 15 mins
+                Date currentTimestamp = new Date();
+                if (currentTimestamp.getTime() - user.getTimestamp().getTime() < (TIME_USER_LAST_ACTIVE * 60000)) {
+                    float[] results = new float[1];
+                    Location.distanceBetween(currentUser.getLocation().get(0), currentUser.getLocation().get(1),
+                            user.getLocation().get(0), user.getLocation().get(1), results);
+                    float distance = results[0];
 
-                if (distance <= 150F) {
-                    Log.d(TAG, user.getName() + ", distance = " + distance);
-                    nearbyUsers.add(user);
-                    distanceFromCurrentUser.add(distance);
-                    distances.add(distance);
+                    if (distance <= 150F) {
+                        Log.d(TAG, user.getName() + ", distance = " + distance);
+                        nearbyUsers.add(user);
+                        distanceFromCurrentUser.add(distance);
+                        distances.add(distance);
+                    }
                 }
             }
         }
@@ -125,12 +135,6 @@ public class DiscoverActivity extends AppCompatActivity {
         else {
             Toast.makeText(this, "No one closeby right now. Consider increasing the radius", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public void readUserComplete(User user) {
-        currentUser = user;
-        Log.d(TAG, "in readUserComplete");
-        Log.d(TAG, currentUser.toString());
     }
 
     @Override
