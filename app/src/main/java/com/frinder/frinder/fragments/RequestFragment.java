@@ -1,6 +1,7 @@
 package com.frinder.frinder.fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import com.frinder.frinder.dataaccess.RequestFirebaseDas;
 import com.frinder.frinder.model.Request;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,7 +25,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RequestFragment extends Fragment {
+public abstract class RequestFragment extends Fragment {
 
     private Unbinder mUnbinder;
     private ArrayList<Request> mRequests;
@@ -31,13 +33,6 @@ public class RequestFragment extends Fragment {
 
     @BindView(R.id.rvRequests)
     RecyclerView rvRequests;
-
-    public static RequestFragment newInstance() {
-        Bundle args = new Bundle();
-        RequestFragment fragment = new RequestFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     public RequestFragment() {
         // Required empty public constructor
@@ -51,12 +46,11 @@ public class RequestFragment extends Fragment {
         mUnbinder = ButterKnife.bind(this, view);
 
         mRequests = new ArrayList<>();
-        mAdapter = new RequestsAdapter(getContext(), mRequests);
+        mAdapter = createAdapater(mRequests);
         rvRequests.setAdapter(mAdapter);
         rvRequests.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        RequestFirebaseDas das = new RequestFirebaseDas(getContext());
-        das.getSentRequests(new RequestFirebaseDas.OnCompletionListener() {
+        getRequests(getContext(), new RequestFirebaseDas.OnCompletionListener() {
             @Override
             public void onRequestsReceived(ArrayList<Request> requests) {
                 mRequests.addAll(requests);
@@ -72,4 +66,6 @@ public class RequestFragment extends Fragment {
         mUnbinder.unbind();
     }
 
+    abstract RequestsAdapter createAdapater(List<Request> requests);
+    abstract void getRequests(Context context, RequestFirebaseDas.OnCompletionListener listener);
 }

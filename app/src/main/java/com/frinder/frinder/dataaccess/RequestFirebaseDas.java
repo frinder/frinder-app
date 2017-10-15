@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.facebook.Profile;
 import com.frinder.frinder.model.Request;
 import com.frinder.frinder.utils.Constants;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -13,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -51,12 +53,50 @@ public class RequestFirebaseDas {
                 });
     }
 
-    // Get all records in requests table in Frinder Firebase Firestore
     public void getSentRequests(final OnCompletionListener listener) {
-        // TODO: query only requests for the logged in user's id
-        db.collection("requests")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        getResults(getSentRequestsQuery(false), listener);
+    }
+
+    public void getReceivedRequests(final OnCompletionListener listener) {
+        getResults(getReceivedRequestsQuery(false), listener);
+    }
+
+    public void getAcceptedRequests(final OnCompletionListener listener) {
+        OnCompletionListener inListener = new OnCompletionListener() {
+
+            private boolean mFirstReceived = false;
+            private ArrayList<Request> mRequests;
+
+            @Override
+            public void onRequestsReceived(ArrayList<Request> requests) {
+                // TODO: Can this be called from different thread? If so, add synchronization logic
+                if (!mFirstReceived) {
+                    mRequests = new ArrayList<>(requests);
+                    mFirstReceived = true;
+                } else {
+                    mRequests.addAll(requests);
+                    listener.onRequestsReceived(mRequests);
+                }
+            }
+        };
+        getResults(getSentRequestsQuery(true), inListener);
+        getResults(getReceivedRequestsQuery(true), inListener);
+    }
+
+    private Query getSentRequestsQuery(boolean accepted) {
+        return db.collection("requests")
+                .whereEqualTo(Constants.REQUEST_COLUMN_SENDER_ID, Profile.getCurrentProfile().getId())
+                .whereEqualTo("accepted", accepted);
+    }
+
+    private Query getReceivedRequestsQuery(boolean accepted) {
+        return db.collection("requests")
+                .whereEqualTo(Constants.REQUEST_COLUMN_RECEIVER_ID, Profile.getCurrentProfile().getId())
+                .whereEqualTo("accepted", accepted);
+    }
+
+    private void getResults(Query query, final OnCompletionListener listener) {
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
@@ -71,7 +111,9 @@ public class RequestFirebaseDas {
                 });
     }
 
-    public static abstract class OnCompletionListener {
+
+
+        public static abstract class OnCompletionListener {
         abstract public void onRequestsReceived(ArrayList<Request> requests);
     }
 
