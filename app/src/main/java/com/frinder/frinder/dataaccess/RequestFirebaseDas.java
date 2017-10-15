@@ -111,9 +111,7 @@ public class RequestFirebaseDas {
                 });
     }
 
-
-
-        public static abstract class OnCompletionListener {
+    public static abstract class OnCompletionListener {
         abstract public void onRequestsReceived(ArrayList<Request> requests);
     }
 

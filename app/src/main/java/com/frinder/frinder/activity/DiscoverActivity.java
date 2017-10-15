@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.facebook.Profile;
 import com.frinder.frinder.R;
+import com.frinder.frinder.adapters.DiscoverUsersAdapter;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.User;
 
