@@ -3,6 +3,7 @@ package com.frinder.frinder.activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +32,7 @@ public class DiscoverActivity extends AppCompatActivity {
     Profile profile;
     User currentUser;
     UserFirebaseDas userFirebaseDas;
+    SwipeRefreshLayout srlDiscoverContainer;
 
     //ToDo Mallika - Remove this constant when filters/settings screen is ready
     //Assuming that we are looking for people in a radius of 150m which is about 574.147ft.
@@ -48,6 +50,7 @@ public class DiscoverActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        srlDiscoverContainer = (SwipeRefreshLayout) findViewById(R.id.srlDiscoverContainer);
         RecyclerView rvDiscoverusers = (RecyclerView) findViewById(R.id.rvDiscoverUsers);
         users = new ArrayList<>();
         adapter = new DiscoverUsersAdapter(this, users);
@@ -64,6 +67,13 @@ public class DiscoverActivity extends AppCompatActivity {
                 currentUser = user;
                 Log.d(TAG, "in onUserReceived");
                 Log.d(TAG, currentUser.toString());
+                getNearbyUsers();
+            }
+        });
+
+        srlDiscoverContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
                 getNearbyUsers();
             }
         });
@@ -131,6 +141,7 @@ public class DiscoverActivity extends AppCompatActivity {
             }
 
             adapter.notifyDataSetChanged();
+            srlDiscoverContainer.setRefreshing(false);
         }
         else {
             Toast.makeText(this, "No one closeby right now. Consider increasing the radius", Toast.LENGTH_SHORT).show();
