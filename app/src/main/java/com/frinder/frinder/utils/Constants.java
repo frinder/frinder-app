@@ -23,6 +23,7 @@ public final class Constants {
     public static final String REQUEST_COLUMN_RECEIVER_ID = "receiverId" ;
     public static final String REQUEST_COLUMN_SENDER_ID = "senderId" ;
     public static final String REQUEST_COLUMN_SENT_TIMESTAMP = "sentTimestamp" ;
+    public static final String REQUEST_COLUMN_UNREAD = "unread" ;
 
     // Facebook data access keys
     public static final String FACEBOOK_PROFILE_ID = "id";

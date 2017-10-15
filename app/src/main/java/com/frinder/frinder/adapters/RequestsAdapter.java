@@ -51,6 +51,7 @@ public abstract class RequestsAdapter extends
 
         String userId = getUserId(request);
         holder.position = position;
+        holder.ivNewTag.setVisibility(request.unread ? View.VISIBLE : View.INVISIBLE);
         // TODO: Move this to a static variable/cache this
         UserFirebaseDas das = new UserFirebaseDas(mContext);
         das.getUser(userId, new UserFirebaseDas.OnCompletionListener() {
@@ -86,6 +87,8 @@ public abstract class RequestsAdapter extends
         TextView tvUserName;
         @BindView(R.id.tvUserDesc)
         TextView tvUserDesc;
+        @BindView(R.id.ivNewTag)
+        ImageView ivNewTag;
 
         int position;
 

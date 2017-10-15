@@ -128,6 +128,7 @@ public class RequestFirebaseDas {
         requestMap.put(Constants.REQUEST_COLUMN_RECEIVER_ID, request.receiverId);
         requestMap.put(Constants.REQUEST_COLUMN_SENDER_ID, request.senderId);
         requestMap.put(Constants.REQUEST_COLUMN_SENT_TIMESTAMP, request.sentTimestamp);
+        requestMap.put(Constants.REQUEST_COLUMN_UNREAD, request.unread);
         return requestMap;
     }
 
@@ -140,6 +141,7 @@ public class RequestFirebaseDas {
         request.receiverId = (String)requestMap.get(Constants.REQUEST_COLUMN_RECEIVER_ID);
         request.senderId = (String)requestMap.get(Constants.REQUEST_COLUMN_SENDER_ID);
         request.sentTimestamp = (Date)requestMap.get(Constants.REQUEST_COLUMN_SENT_TIMESTAMP);
+        request.unread = (boolean)requestMap.get(Constants.REQUEST_COLUMN_UNREAD);
         return request;
     }
 

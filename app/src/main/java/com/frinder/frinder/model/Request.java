@@ -11,6 +11,7 @@ public class Request {
     public String senderId;
     public String receiverId;
     public boolean accepted;
+    public boolean unread;
     public Date sentTimestamp;
     public Date acceptedTimestamp;
 
