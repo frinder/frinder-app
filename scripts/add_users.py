@@ -6,6 +6,7 @@ import random
 
 genders = [u'male', u'female']
 interests = [u'Movies', u'Football', u'Books', u'Music']
+script_version=1
 
 def queryUsers(db):
 	users_ref = db.collection(u'users')
@@ -27,11 +28,14 @@ def addUser(db, ref_lat, ref_lon, range):
     u'name': names.get_full_name(gender=gender),
     u'linkUrl': u'https://www.google.com',
     u'email': u'fake@gmail.com',
-    u'urofilePicUrl': None,
+    u'profilePicUrl': None,
+    u'gender': gender,
     u'age': random.randint(14,80),
     u'timestamp': datetime.datetime.now(),
     u'interests': [random.choice(interests)],
-	  u'location': [lat, lon]
+	  u'location': [lat, lon],
+	  u'createdByScript': True,
+	  u'scriptVersion': script_version
 	})
 	doc = doc_ref.get()
 	print(u'Created {} => {}'.format(doc.id, doc.to_dict()))
