@@ -53,3 +53,7 @@ $app/google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
+
+# node modules for cloud functions
+**/node_modules/*
+
