@@ -37,6 +37,21 @@ public class SentRequestAdapter extends RequestsAdapter {
         return viewHolder;
     }
 
+    @Override
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        super.onBindViewHolder(holder, position);
+
+        final Request request = getRequest(position);
+        SentViewHolder viewHolder = (SentViewHolder)holder;
+        viewHolder.tvDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getRequestDas().deleteRequest(request);
+                deleteItem(position);
+            }
+        });
+    }
+
     public class SentViewHolder extends RequestsAdapter.ViewHolder {
 
         @BindView(R.id.tvDelete)
