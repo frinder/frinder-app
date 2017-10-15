@@ -136,20 +136,52 @@ public class User implements Serializable {
     }
 
     public static User fromJSON(JSONObject object) {
+        String id, name, email, gender, link, ageRange;
         User user = new User();
         try {
-            String id = object.getString(Constants.FACEBOOK_PROFILE_ID);
-            String name = object.getString(Constants.FACEBOOK_PROFILE_NAME);
-            String email = object.getString(Constants.FACEBOOK_PROFILE_EMAIL);
-            String gender = object.getString(Constants.FACEBOOK_PROFILE_GENDER);
-            String link = object.getString(Constants.FACEBOOK_PROFILE_LINK);
-            String ageRange = object.getString(Constants.FACEBOOK_PROFILE_AGE_RANGE);
+            id = object.getString(Constants.FACEBOOK_PROFILE_ID);
+
+            if (object.has(Constants.FACEBOOK_PROFILE_NAME)) {
+                name = object.getString(Constants.FACEBOOK_PROFILE_NAME);
+            }
+            else {
+                name = "";
+            }
+
+            if (object.has(Constants.FACEBOOK_PROFILE_EMAIL)) {
+                email = object.getString(Constants.FACEBOOK_PROFILE_EMAIL);
+            }
+            else {
+                email = "";
+            }
+
+            if (object.has(Constants.FACEBOOK_PROFILE_GENDER)) {
+                gender = object.getString(Constants.FACEBOOK_PROFILE_GENDER);
+            }
+            else {
+                gender = "neutral";
+            }
+
+            if (object.has(Constants.FACEBOOK_PROFILE_LINK)) {
+                link = object.getString(Constants.FACEBOOK_PROFILE_LINK);
+            }
+            else {
+                link = "";
+            }
+
+            if (object.has(Constants.FACEBOOK_PROFILE_AGE_RANGE)) {
+                ageRange = object.getString(Constants.FACEBOOK_PROFILE_AGE_RANGE);
+            }
+            else {
+                ageRange = "";
+            }
+
             user.setUid(id);
             user.setName(name);
             user.setEmail(email);
             user.setGender(gender);
             user.setLinkUrl(link);
-            user.setProfilePicUrl("http://graph.facebook.com/" + id + "/picture?type=square");
+            user.setProfilePicUrl("http://graph.facebook.com/" + id + "/picture?type=large");
         } catch (JSONException e) {
             e.printStackTrace();
         }

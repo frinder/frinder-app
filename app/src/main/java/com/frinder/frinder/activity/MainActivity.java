@@ -7,11 +7,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -46,7 +43,16 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
     @Override
     protected void onStart() {
         super.onStart();
+
         logUser();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (LoginManager.getInstance() != null) {
+            LoginManager.getInstance().logOut();
+        }
+        super.onDestroy();
     }
 
     public void forceCrash(View view) {
@@ -54,24 +60,21 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
     }
 
     private void logUser() {
-        if (Profile.getCurrentProfile() == null) {
+        profile = Profile.getCurrentProfile();
+        if (profile == null) {
             facebookUserLogin();
         } else {
-            profile = Profile.getCurrentProfile();
-            //TODO Sanal to fix
-            userFirebaseDas.getUser(profile.getId());
-            TextView tvName = (TextView) findViewById(R.id.tvName);
-            ImageView ivProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
-            // You can call any combination of these three methods
-            //Crashlytics.setUserIdentifier("12345");
-            //Crashlytics.setUserEmail("user@fabric.io");
-            Crashlytics.setUserName(profile.getName());
-            //get user
-            tvName.setText(profile.getName());
-            Glide.with(getApplicationContext())
-                    .load(profile.getProfilePictureUri(200, 200))
-                    .into(ivProfilePic);
+            readProfile();
         }
+    }
+
+    private void readProfile() {
+        profile = Profile.getCurrentProfile();
+        userFirebaseDas.getUser(profile.getId());
+        Crashlytics.setUserName(profile.getName());
+        //TODO sent profile user data with intent
+        Intent discoverIntent = new Intent(this, DiscoverActivity.class);
+        startActivity(discoverIntent);
     }
 
     private void facebookUserLogin() {
@@ -87,9 +90,9 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
                 Log.d(TAG, loggedUser.toString());
                 //TODO persist user
                 Profile profile = Profile.getCurrentProfile();
-                UserFirebaseDas userFirebaseDas = new UserFirebaseDas(getApplicationContext());
+                Profile.setCurrentProfile(profile);
                 userFirebaseDas.addUser(loggedUser);
-
+                readProfile();
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 Log.d(TAG, "Login failed!");
@@ -108,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
         //loggedUser has the user fetched from firebase
         loggedUser = user;
         LocationUtils locationUtils = new LocationUtils(getBaseContext());
+        locationUtils.startLocationUpdates();
         locationUtils.getLastLocation(new LocationUtils.LocationUpdate() {
             @Override
             public void onSuccess(Location location) {
@@ -115,8 +119,13 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
                 locationList.add(location.getLatitude());
                 locationList.add(location.getLongitude());
                 Log.d(TAG, "Updating user " + loggedUser.getUid() + " location with " + locationList.toString());
-                userFirebaseDas.updateUserLocation(loggedUser.getUid(),locationList);
+                userFirebaseDas.updateUserLocation(loggedUser.getUid(), locationList);
             }
         });
     }
- }
+
+    @Override
+    public void readAllUsersComplete(ArrayList<User> userList) {
+
+    }
+}
