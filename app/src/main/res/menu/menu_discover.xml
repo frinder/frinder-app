@@ -2,12 +2,6 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- TODO change logo -->
-    <item
-        android:id="@+id/menu_action_logout"
-        android:icon="@drawable/com_facebook_close"
-        android:title="Logout"
-        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_action_discover"
         android:checkable="true"
@@ -15,7 +9,7 @@
         android:icon="@drawable/ic_discover_white"
         android:title="Discover People"
         android:visible="true"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/menu_action_notifications"
         android:checkable="true"
@@ -23,13 +17,20 @@
         android:icon="@drawable/ic_notifications_white"
         android:title="Notifications"
         android:visible="true"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/menu_action_settings"
-        android:checkable="true"
+        android:checkable="false"
         android:enabled="true"
         android:icon="@drawable/ic_settings_white_24dp"
         android:title="Search Filters"
         android:visible="true"
         app:showAsAction="ifRoom" />
+    <!-- TODO change logo -->
+    <item
+        android:id="@+id/menu_action_logout"
+        android:icon="@drawable/com_facebook_close"
+        android:title="Logout"
+        app:showAsAction="ifRoom" />
+
 </menu>
