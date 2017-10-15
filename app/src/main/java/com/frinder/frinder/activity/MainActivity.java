@@ -16,11 +16,9 @@ import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.User;
 import com.google.firebase.FirebaseApp;
 
-import java.util.ArrayList;
-
 import io.fabric.sdk.android.Fabric;
 
-public class MainActivity extends AppCompatActivity implements UserFirebaseDas.UserDasInterface {
+public class MainActivity extends AppCompatActivity {
 
     public static final int LOGIN_RESULT = 100;
     private User loggedUser;
@@ -61,7 +59,12 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
             profile = Profile.getCurrentProfile();
             //TODO Sanal to fix
             UserFirebaseDas userFirebaseDas = new UserFirebaseDas(this);
-            userFirebaseDas.getUser(profile.getId());
+            userFirebaseDas.getUser(profile.getId(), new UserFirebaseDas.OnCompletionListener() {
+                @Override
+                public void onUserReceived(User user) {
+                    readUserComplete(user);
+                }
+            });
             /*TextView tvName = (TextView) findViewById(R.id.tvName);
             ImageView ivProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
             // You can call any combination of these three methods
@@ -107,15 +110,9 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
         Toast.makeText(this, "User logged out ", Toast.LENGTH_LONG).show();
     }
 
-    @Override
     public void readUserComplete(User user) {
         Log.d(TAG, "Read user from firebase " + user.toString());
         //loggedUser has the user fetched from firebase
         loggedUser = user;
-    }
-
-    @Override
-    public void readAllUsersComplete(ArrayList<User> userList) {
-
     }
 }
