@@ -20,7 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RequestsAdapter extends
+public abstract class RequestsAdapter extends
         RecyclerView.Adapter<RequestsAdapter.ViewHolder> {
 
     private List<Request> mRequests;
@@ -69,11 +69,6 @@ public class RequestsAdapter extends
         return mRequests.size();
     }
 
-    private String getUserId(Request request) {
-        // TODO: Override this based on the tab
-        return request.senderId;
-    }
-
     private void populateUserDetails(ViewHolder holder, User user) {
         holder.tvUserName.setText(user.getName());
         holder.tvUserDesc.setText(user.getDesc());
@@ -99,5 +94,7 @@ public class RequestsAdapter extends
             ButterKnife.bind(this, itemView);
         }
     }
+
+    abstract String getUserId(Request request);
 
 }

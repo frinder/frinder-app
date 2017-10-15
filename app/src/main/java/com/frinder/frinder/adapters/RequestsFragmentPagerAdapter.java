@@ -8,8 +8,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.frinder.frinder.R;
+import com.frinder.frinder.fragments.AcceptedRequestFragment;
 import com.frinder.frinder.fragments.NoRequestsFragment;
-import com.frinder.frinder.fragments.RequestFragment;
+import com.frinder.frinder.fragments.ReceivedRequestFragment;
+import com.frinder.frinder.fragments.SentRequestFragment;
 
 public class RequestsFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -31,7 +33,11 @@ public class RequestsFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return RequestFragment.newInstance();
+                return ReceivedRequestFragment.newInstance();
+            case 1:
+                return SentRequestFragment.newInstance();
+            case 2:
+                return AcceptedRequestFragment.newInstance();
             default:
                 // TODO: Change this
                 return NoRequestsFragment.newInstance();
