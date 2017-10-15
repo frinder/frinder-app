@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
 
-public class MainActivity extends AppCompatActivity implements UserFirebaseDas.UserDasInterface {
+public class MainActivity extends AppCompatActivity {
 
     public static final int LOGIN_RESULT = 100;
     private User loggedUser;
@@ -70,7 +70,12 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
 
     private void readProfile() {
         profile = Profile.getCurrentProfile();
-        userFirebaseDas.getUser(profile.getId());
+        userFirebaseDas.getUser(profile.getId(), new UserFirebaseDas.OnCompletionListener() {
+            @Override
+            public void onUserReceived(User user) {
+                readUserComplete(user);
+            }
+        });
         Crashlytics.setUserName(profile.getName());
         //TODO sent profile user data with intent
         Intent discoverIntent = new Intent(this, DiscoverActivity.class);
@@ -105,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
         Toast.makeText(this, "User logged out ", Toast.LENGTH_LONG).show();
     }
 
-    @Override
     public void readUserComplete(User user) {
         Log.d(TAG, "Read user from firebase " + user.toString());
         //loggedUser has the user fetched from firebase
@@ -122,10 +126,5 @@ public class MainActivity extends AppCompatActivity implements UserFirebaseDas.U
                 userFirebaseDas.updateUserLocation(loggedUser.getUid(), locationList);
             }
         });
-    }
-
-    @Override
-    public void readAllUsersComplete(ArrayList<User> userList) {
-
     }
 }

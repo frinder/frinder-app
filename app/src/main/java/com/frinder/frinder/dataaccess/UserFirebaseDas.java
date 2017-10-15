@@ -1,6 +1,5 @@
 package com.frinder.frinder.dataaccess;
 
-import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -88,7 +87,7 @@ public class UserFirebaseDas {
 
 
 
-    public void getUser(String id) {
+    public void getUser(String id, final OnCompletionListener listener) {
         DocumentReference docRef = db.collection("users").document(id);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -100,8 +99,8 @@ public class UserFirebaseDas {
                         if(task.getResult() != null && task.getResult().getData() != null) {
                             User user = convertFromFirebaseObject(task.getResult().getData());
                             Log.d(TAG, user.toString());
-                            UserDasInterface userDasInterface = (UserDasInterface) (Activity) context;
-                            userDasInterface.readUserComplete(user);
+                            listener.onUserReceived(user);
+                            return;
                         }
                     } else {
                         Log.d(TAG, "No such document");
@@ -109,12 +108,13 @@ public class UserFirebaseDas {
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
+                listener.onUserReceived(null);
             }
         });
     }
 
     // Get all records in users table in Frinder Firebase Firestore
-    public void getAllUsers() {
+    public void getAllUsers(final OnCompletionListener listener) {
         db.collection("users")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -132,20 +132,25 @@ public class UserFirebaseDas {
                                 }
                             }
 
-                            UserDasInterface userDasInterface = (UserDasInterface) (Activity) context;
-                            userDasInterface.readAllUsersComplete(userList);
+                            listener.onUsersReceived(userList);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
+                            listener.onUsersReceived(null);
                         }
                     }
                 });
     }
 
-    public interface UserDasInterface {
-        public void readUserComplete(User user);
-        public void readAllUsersComplete(ArrayList<User> userList);
-    }
 
+    public static class OnCompletionListener {
+        public void onUserReceived(User user) {
+            // override if required
+        }
+
+        public void onUsersReceived(ArrayList<User> users){
+            // override if required
+        }
+    }
 
     @NonNull
     private Map<String, Object> convertToFirebaseObject(User user) {

@@ -1,15 +1,26 @@
 language: android
+sudo: required
+
+jdk:
+  - oraclejdk8
+
+env:
+ global:
+ - ADB_INSTALL_TIMEOUT=10 # minutes
+
 android:
   components:
     # Uncomment the lines below if you want to
     # use the latest revision of Android SDK Tools
     - tools
+    - tools # see https://github.com/travis-ci/travis-ci/issues/6040#issuecomment-219367943)
     - platform-tools
 
     # The BuildTools version used by your project
     - build-tools-26.0.1
 
     # The SDK version used to compile your project
+    - android-26
     - android-22
 
     # Additional components
@@ -18,16 +29,22 @@ android:
     - extra-android-m2repository
     - addon-google_apis-google-19
 
-    # Specify at least one system image,
-    # if you need to run emulator(s) during your tests
+    # emulators
     - sys-img-armeabi-v7a-android-22
-    - sys-img-armeabi-v7a-android-17
 
-  install:
-    # Ensure Gradle wrapper is executable, download wrapper and show version
-    - chmod +x ./gradlew; ls -l gradlew; ./gradlew wrapper -v
-    # Download and show android dependencies
-    # - ./gradlew androidDependencies
+install:
+  # Workaround for travis license issue
+  - echo y | android update sdk -u -a -t build-tools-26.0.1
+  - echo y | android update sdk -u -a -t android-26
 
-  script:
-    - ./gradlew clean build -Pbuild=dev
+before_script:
+  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
+  - emulator -avd test -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
+
+script:
+  - "./gradlew clean build connectedCheck -PdisablePreDex --stacktrace"
+
+after_failure:
+  - "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml"
