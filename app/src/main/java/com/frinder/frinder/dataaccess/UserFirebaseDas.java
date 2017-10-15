@@ -38,8 +38,10 @@ public class UserFirebaseDas {
 
     public void updateUserLocation(String id, ArrayList location) {
         DocumentReference userRef = db.collection("users").document(id);
-
-        userRef.update("location", location)
+        Map<String, Object> userData = new HashMap();
+        userData.put("location",location);
+        userData.put("timestamp",new Date());
+        userRef.update(userData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
