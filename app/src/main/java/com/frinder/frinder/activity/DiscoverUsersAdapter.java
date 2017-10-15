@@ -12,8 +12,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.frinder.frinder.R;
 import com.frinder.frinder.model.User;
+import com.frinder.frinder.utils.LocationUtils;
 
 import java.util.List;
+
+import static com.frinder.frinder.utils.LocationUtils.locationUtilInstance;
 
 /**
  * Created by mallikaviswas on 10/12/17.
@@ -24,11 +27,14 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
     private static final String TAG = "DiscoverUsersAdapter";
     private List<User> mUsers;
     private Context mContext;
+    private LocationUtils locationUtilInstance;
 
     // Pass in the contact array into the constructor
     public DiscoverUsersAdapter(Context context, List<User> users) {
         mUsers = users;
         mContext = context;
+        locationUtilInstance = LocationUtils.getInstance();
+        locationUtilInstance.startLocationUpdates(getContext());
     }
 
     // Easy access to the context object in the recyclerview

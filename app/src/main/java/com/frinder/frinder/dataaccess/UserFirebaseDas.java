@@ -1,11 +1,13 @@
 package com.frinder.frinder.dataaccess;
 
 import android.content.Context;
+import android.location.Location;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.frinder.frinder.model.User;
 import com.frinder.frinder.utils.Constants;
+import com.frinder.frinder.utils.LocationUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,23 +36,61 @@ public class UserFirebaseDas {
         db = FirebaseFirestore.getInstance();
     }
 
-    public void addUser(User user){
-        Map<String, Object> usr = convertToFirebaseObject(user);
+    public void updateUserLocation(String id, ArrayList location) {
+        DocumentReference userRef = db.collection("users").document(id);
 
-        db.collection("users").document(user.getUid())
-                .set(usr)
+        userRef.update("location", location)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
+                        Log.e(TAG, "Error updating document", e);
                     }
                 });
+    }
+
+    public void addUser(final User user){
+        LocationUtils locationUtils = LocationUtils.getInstance();
+        locationUtils.getLastLocation(context, new LocationUtils.LocationUpdate() {
+            @Override
+            public void onSuccess(Location location) {
+                ArrayList<Double> locationList = new ArrayList<>();
+                locationList.add(location.getLatitude());
+                locationList.add(location.getLongitude());
+                user.setLocation(locationList);
+                addUserDocument();
+            }
+
+            @Override
+            public void onFailure() {
+                addUserDocument();
+            }
+
+            private void addUserDocument() {
+                Map<String, Object> usr = convertToFirebaseObject(user);
+                db.collection("users").document(user.getUid())
+                        .set(usr)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "DocumentSnapshot successfully written!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error writing document", e);
+                            }
+                        });
+            }
+        });
+
+
     }
 
 
@@ -137,13 +177,7 @@ public class UserFirebaseDas {
         interests.add("Movies");
         interests.add("Football");
         usr.put(Constants.USER_COLUMN_INTERESTS, interests);
-
-        //TODO get from the phone location
-        List<Double> location = new ArrayList<>();
-        location.add(37.41);
-        location.add(-121.87);
-        usr.put(Constants.USER_COLUMN_LOCATION, location);
-
+        usr.put(Constants.USER_COLUMN_LOCATION, user.getLocation());
         usr.put(Constants.USER_COLUMN_TIMESTAMP, new Date());
         usr.put(Constants.USER_COLUMN_PROFILE_PIC_URL, user.getProfilePicUrl());
         usr.put(Constants.USER_COLUMN_LINK_URL, user.getLinkUrl());
@@ -162,7 +196,7 @@ public class UserFirebaseDas {
         ArrayList interests = (ArrayList) usr.get(Constants.USER_COLUMN_INTERESTS);
         user.setInterests(interests);
         ArrayList location = (ArrayList) usr.get(Constants.USER_COLUMN_LOCATION);
-        user.setLocation((Double[]) location.toArray(new Double[2]));
+        user.setLocation(location);
         user.setTimestamp((Date)usr.get(Constants.USER_COLUMN_TIMESTAMP));
         user.setProfilePicUrl((String)usr.get(Constants.USER_COLUMN_PROFILE_PIC_URL));
         user.setLinkUrl((String)usr.get(Constants.USER_COLUMN_LINK_URL));
