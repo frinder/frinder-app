@@ -54,45 +54,23 @@ public class UserFirebaseDas {
                 });
     }
 
-    public void addUser(final User user){
-        LocationUtils locationUtils = LocationUtils.getInstance();
-        locationUtils.getLastLocation(context, new LocationUtils.LocationUpdate() {
-            @Override
-            public void onSuccess(Location location) {
-                ArrayList<Double> locationList = new ArrayList<>();
-                locationList.add(location.getLatitude());
-                locationList.add(location.getLongitude());
-                user.setLocation(locationList);
-                addUserDocument();
-            }
-
-            @Override
-            public void onFailure() {
-                addUserDocument();
-            }
-
-            private void addUserDocument() {
-                Map<String, Object> usr = convertToFirebaseObject(user);
-                db.collection("users").document(user.getUid())
-                        .set(usr)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "DocumentSnapshot successfully written!");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error writing document", e);
-                            }
-                        });
-            }
-        });
-
-
+    public void addUser(final User user) {
+        Map<String, Object> usr = convertToFirebaseObject(user);
+        db.collection("users").document(user.getUid())
+                .set(usr)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
     }
-
 
 
     public void getUser(String id, final OnCompletionListener listener) {
@@ -104,7 +82,7 @@ public class UserFirebaseDas {
                     DocumentSnapshot document = task.getResult();
                     if (document != null && document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + task.getResult().getData());
-                        if(task.getResult() != null && task.getResult().getData() != null) {
+                        if (task.getResult() != null && task.getResult().getData() != null) {
                             User user = convertFromFirebaseObject(task.getResult().getData());
                             Log.d(TAG, user.toString());
                             listener.onUserReceived(user);
@@ -134,8 +112,7 @@ public class UserFirebaseDas {
                                 if (document != null && document.exists()) {
                                     User user = convertFromFirebaseObject(document.getData());
                                     userList.add(user);
-                                }
-                                else {
+                                } else {
                                     Log.d(TAG, "No such document");
                                 }
                             }
@@ -155,7 +132,7 @@ public class UserFirebaseDas {
             // override if required
         }
 
-        public void onUsersReceived(ArrayList<User> users){
+        public void onUsersReceived(ArrayList<User> users) {
             // override if required
         }
     }
@@ -168,7 +145,7 @@ public class UserFirebaseDas {
         usr.put(Constants.USER_COLUMN_EMAIL, user.getEmail());
         usr.put(Constants.USER_COLUMN_GENDER, user.getGender());
         //TODO get from fb
-        usr.put(Constants.USER_COLUMN_AGE,25);
+        usr.put(Constants.USER_COLUMN_AGE, 25);
         //TODO get from user, via new activty
         usr.put(Constants.USER_COLUMN_DESC, "from SJ");
 
@@ -189,17 +166,17 @@ public class UserFirebaseDas {
         User user = new User();
         user.setUid((String) usr.get(Constants.USER_COLUMN_ID));
         user.setName((String) usr.get(Constants.USER_COLUMN_NAME));
-        user.setEmail((String)usr.get(Constants.USER_COLUMN_EMAIL));
-        user.setGender((String)usr.get(Constants.USER_COLUMN_GENDER));
+        user.setEmail((String) usr.get(Constants.USER_COLUMN_EMAIL));
+        user.setGender((String) usr.get(Constants.USER_COLUMN_GENDER));
         user.setAge(((Long) usr.get(Constants.USER_COLUMN_AGE)).intValue());
-        user.setDesc((String)usr.get(Constants.USER_COLUMN_DESC));
+        user.setDesc((String) usr.get(Constants.USER_COLUMN_DESC));
         ArrayList interests = (ArrayList) usr.get(Constants.USER_COLUMN_INTERESTS);
         user.setInterests(interests);
         ArrayList location = (ArrayList) usr.get(Constants.USER_COLUMN_LOCATION);
         user.setLocation(location);
-        user.setTimestamp((Date)usr.get(Constants.USER_COLUMN_TIMESTAMP));
-        user.setProfilePicUrl((String)usr.get(Constants.USER_COLUMN_PROFILE_PIC_URL));
-        user.setLinkUrl((String)usr.get(Constants.USER_COLUMN_LINK_URL));
+        user.setTimestamp((Date) usr.get(Constants.USER_COLUMN_TIMESTAMP));
+        user.setProfilePicUrl((String) usr.get(Constants.USER_COLUMN_PROFILE_PIC_URL));
+        user.setLinkUrl((String) usr.get(Constants.USER_COLUMN_LINK_URL));
         return user;
     }
 }
