@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.frinder.frinder.activity.EditProfileActivity">
+
+    <TextView
+        android:id="@+id/tvEditProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="141dp"
+        android:layout_marginStart="141dp"
+        android:layout_marginTop="27dp"
+        android:text="EditProfile"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvAboutMe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tvEditProfile"
+        android:layout_marginLeft="34dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="55dp"
+        android:text="About You"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etAboutMe"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_alignLeft="@+id/tvAboutMe"
+        android:layout_alignStart="@+id/tvAboutMe"
+        android:layout_below="@+id/tvAboutMe"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:gravity="top"
+        android:hint="I am awesome"
+        android:inputType="text"
+        android:maxLength="140"
+        android:maxLines="3"
+        android:singleLine="false" />
+
+    <TextView
+        android:id="@+id/tvInterest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/etAboutMe"
+        android:layout_alignStart="@+id/etAboutMe"
+        android:layout_below="@+id/etAboutMe"
+        android:layout_marginTop="40dp"
+        android:text="Interests"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etInterests"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvInterest"
+        android:layout_alignStart="@+id/tvInterest"
+        android:layout_below="@+id/tvInterest"
+        android:layout_marginTop="35dp"
+        android:ems="10"
+        android:hint="Movies,Football"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/editProfileSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etInterests"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="51dp"
+        android:background="@color/com_facebook_blue"
+        android:text="Submit"
+        android:textColor="#ffffff"
+        android:textStyle="bold" />
+
+
+</RelativeLayout>
