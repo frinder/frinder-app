@@ -103,9 +103,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, loggedUser.toString());
                 //TODO persist user
                 Profile profile = Profile.getCurrentProfile();
-                Profile.setCurrentProfile(profile);
-                userFirebaseDas.addUser(loggedUser);
-                readProfile();
+                if(profile!=null) {
+                    userFirebaseDas.addUser(loggedUser);
+                    readProfile();
+                } else {
+                    Toast.makeText(this,"Profile is null",Toast.LENGTH_SHORT).show();
+                }
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 Log.d(TAG, "Login failed!");

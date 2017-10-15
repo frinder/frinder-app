@@ -7,12 +7,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.frinder.frinder.R;
@@ -37,7 +40,8 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
         callbackManager = CallbackManager.Factory.create();
-        loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
+
+//        loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -62,6 +66,15 @@ public class LoginActivity extends AppCompatActivity {
                 parameters.putString("fields", "id, name, email, gender, age_range, link");
                 request.setParameters(parameters);
                 request.executeAsync();
+                ProfileTracker profileTracker = new ProfileTracker() {
+                    @Override
+                    protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                        this.stopTracking();
+                        Profile.setCurrentProfile(currentProfile);
+
+                    }
+                };
+                profileTracker.startTracking();
             }
 
             @Override
