@@ -3,9 +3,7 @@ package com.frinder.frinder.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,22 +30,9 @@ public abstract class RequestsAdapter extends
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-
-        // Inflate the custom layout
-        View requestView = inflater.inflate(R.layout.item_request, parent, false);
-
-        // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(requestView);
-        return viewHolder;
-    }
-
-    @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         // Get the data model based on position
-        Request request = mRequests.get(position);
+        final Request request = mRequests.get(position);
 
         String userId = getUserId(request);
         holder.position = position;
@@ -60,6 +45,7 @@ public abstract class RequestsAdapter extends
                 // Ensure that the ViewHolder is still at the same position
                 if (user != null && holder.position == position) {
                     populateUserDetails(holder, user);
+                    holder.ivNewTag.setVisibility(request.unread ? View.VISIBLE : View.INVISIBLE);
                 }
             }
         });
@@ -79,7 +65,7 @@ public abstract class RequestsAdapter extends
                 .into(holder.ivUserImage);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.ivUserImage)
         ImageView ivUserImage;
