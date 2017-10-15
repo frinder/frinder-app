@@ -7,6 +7,13 @@
     <string name="tv_btn_request_to_meet_label">Meetup?</string>
     <string name="no_requests">No requests</string>
     <string name="tv_new_tag">New</string>
+<<<<<<< HEAD
+    <string name="tv_accept">Accept</string>
+    <string name="tv_deny">Deny</string>
+    <string name="tv_cancel">Cancel Request</string>
+    <string name="tv_message">Message</string>
+=======
+>>>>>>> b5beb069ab4545cd89419d83155a41140bd2f7f6
 
     <!-- TODO: Come up with better names-->
     <string name="title_incoming">Incoming</string>

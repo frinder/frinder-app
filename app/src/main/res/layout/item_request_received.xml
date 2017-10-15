@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <include layout="@layout/item_request" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_below="@id/rlBasicRequest"
+        android:layout_centerHorizontal="true"
+        android:paddingHorizontal="10dp"
+        android:weightSum="2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvAccept"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/button_text"
+            android:drawableLeft="@drawable/ic_check_white"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/tv_accept" />
+
+        <TextView
+            android:id="@+id/tvDeny"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/button_text"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:drawableLeft="@drawable/ic_close_white"
+            android:text="@string/tv_deny" />
+
+    </LinearLayout>
+
+</RelativeLayout>
