@@ -24,7 +24,7 @@ def addUser(db, ref_lat, ref_lon, range):
   lon = ref_lon + random.uniform(-range, range)
   doc_ref.set({
     u'desc': u'Test user created using a script',
-    u'id': uid,
+    u'id': unicode(uid),
     u'name': names.get_full_name(gender=gender),
     u'linkUrl': u'https://www.google.com',
     u'email': u'fake@gmail.com',
