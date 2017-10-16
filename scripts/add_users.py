@@ -1,6 +1,7 @@
 from google.cloud import firestore
 import argparse
 import datetime
+import helpers
 import names
 import random
 
@@ -8,12 +9,10 @@ genders = [u'male', u'female']
 interests = [u'Movies', u'Football', u'Books', u'Music']
 script_version=1
 
-def queryUsers(db):
-  users_ref = db.collection(u'users')
-  docs = users_ref.get()
-
+def printUsers(db):
+  docs = helpers.queryUsers(db)
   for doc in docs:
-    print(u'{} => {}'.format(doc.id, doc.to_dict()))
+    helpers.printSnapshot(doc)
 
 
 def addUser(db, ref_lat, ref_lon, range):
@@ -38,8 +37,7 @@ def addUser(db, ref_lat, ref_lon, range):
     u'scriptVersion': script_version
   })
   doc = doc_ref.get()
-  print(u'Created {} => {}'.format(doc.id, doc.to_dict()))
-
+  helpers.printSnapshot(doc)
 
 
 if __name__ == '__main__':
@@ -55,5 +53,5 @@ if __name__ == '__main__':
   for i in range(0, args.count):
     addUser(db, args.lat, args.lon, args.range)
 
-  # Uncomment to query all users
-  # queryUsers(db)
+  # Uncomment to print all users
+  # printUsers(db)
