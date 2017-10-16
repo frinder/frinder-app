@@ -60,7 +60,7 @@ This app links to your Facebook profile and has a profile that contains basic in
 
 ## Wireframe
 
-[Sprint 1 Walkthrough]<img src='https://imgur.com/gBtGWj1.gif' width="600" />
+![Sprint 1 Walkthrough](https://imgur.com/gBtGWj1.gif')
 
 ![Sprint 1 Wireframe](https://user-images.githubusercontent.com/1111292/31313212-b4bbb4d8-ab90-11e7-9346-af22cdf64056.JPG)
 
