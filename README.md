@@ -12,20 +12,20 @@ This app links to your Facebook profile and has a profile that contains basic in
 
 The following **required** functionality are completed (Sprint 1):
 
-* [ ] User can sign into Frinder using Facebook login
-  * [ ] Query user profile data from facebook
-  * [ ] Add User entry in firebase.
-* [ ] User can view list of active people nearby (discover)
-  * [ ] Ask for the required permissions (location)
-  * [ ] Error handling (permissions, internet connectivity) 
+* [X] User can sign into Frinder using Facebook login
+  * [X] Query user profile data from facebook
+  * [X] Add User entry in firebase.
+* [X] User can view list of active people nearby (discover)
+  * [X] Ask for the required permissions (location)
+  * [ ] Error handling (permissions, internet connectivity)
 * [ ] User can click on a person to view their profile (also allow sending a friend request)
-* [ ] In a notification view, user can view their friend request(s) and contact details of accepted friends
-  * [ ] Use Fragments + Tabs to differentiate between sent, received and accepted requests
+* [X] In a notification view, user can view their friend request(s) and contact details of accepted friends
+  * [X] Use Fragments + Tabs to differentiate between sent, received and accepted requests
   * [ ] Clicking on the phone number should open the phone/message app.
   * [ ] Add badging for unread notifications
 * [ ] Fire push notifications for events
 * [ ] Improve the UI of the app (icons, color scheme, launch screen)
-* [ ] Create scripts to fake data in Firebase so as to help with testing
+* [X] Create scripts to fake data in Firebase so as to help with testing
 
 The following **optional** features are implemented (Sprint 2):
 
@@ -59,9 +59,12 @@ The following **bonus** features are implemented (Sprint 3):
 
 ## Wireframe
 
+Sprint 1 Walkthrough]
+<img src='https://imgur.com/gBtGWj1.gif' width="600" />
+
 ![Sprint 1 Wireframe](https://user-images.githubusercontent.com/1111292/31313212-b4bbb4d8-ab90-11e7-9346-af22cdf64056.JPG)
 
 ## Open-source libraries used
 
 - [Glide](https://github.com/bumptech/glide) - Image loading and caching library for Android
-- [ButterKnife](https://github.com/JakeWharton/butterknife) - Bind Android views and callbacks to fields and methods 
+- [ButterKnife](https://github.com/JakeWharton/butterknife) - Bind Android views and callbacks to fields and methods
