@@ -1,30 +1,11 @@
 from google.cloud import firestore
 import argparse
 import datetime
+import helpers
 import names
 import random
 
 script_version=1
-
-def queryUsers(db):
-  users_ref = db.collection(u'users')
-  docs = users_ref.get()
-  docList = list()
-  for doc in docs:
-    docList.append(doc)
-  return docList
-
-def queryRequests(db):
-  requests_ref = db.collection(u'requests')
-  docs = requests_ref.get()
-  docList = list()
-  for doc in docs:
-    docList.append(doc)
-  return docList
-
-def printSnapshot(doc):
-  print(u'Created {} => {}'.format(doc.id, doc.to_dict()))
-
 
 def existsRequest(requests, userA, userB):
   for request in requests:
@@ -98,8 +79,8 @@ if __name__ == '__main__':
   args = parser.parse_args()
   db = firestore.Client()
 
-  users = queryUsers(db)
-  requests = queryRequests(db)
+  users = helpers.queryUsers(db)
+  requests = helpers.queryRequests(db)
   for i in range(0, args.count):
     if args.user is None:
       request = addRandomRequest(db, users, requests)
@@ -109,7 +90,7 @@ if __name__ == '__main__':
       print("Adding a request failed at count:" + str(i))
       break
     requests.append(request)
-    printSnapshot(request)
+    helpers.printSnapshot(request)
 
 
   # Uncomment to query all users
