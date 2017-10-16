@@ -34,7 +34,7 @@ def existsRequest(requests, userA, userB):
       return True
   return False
 
-def createRequest(sender, receiver):
+def createRequest(db, sender, receiver):
   doc_ref = db.collection(u'requests').document()
   unread = random.choice([True, False])
   accepted = random.choice([True, False, False])
@@ -55,28 +55,56 @@ def createRequest(sender, receiver):
   return doc
 
 # very sub-optimal (but it's just a script)
-def addRequest(db, users, requests):
+def addRandomRequest(db, users, requests):
   # try upto 50 times
   for i in range(50):
     userA = random.choice(users)
     userB = random.choice(users)
-    if userA.id == userB.id:
+    request = _addRequest(db, userA, userB, requests)
+    if request is None:
       continue
-    if existsRequest(requests, userA, userB):
-      continue
-    return createRequest(userA, userB)
+    return request
 
+def addUserRequest(db, user, users, requests):
+  # try upto 50 times
+  for i in range(50):
+    otherUser = random.choice(users)
+    request = _addRequest(db, user, otherUser, requests)
+    if request is None:
+      continue
+    return request
+
+def _addRequest(db, userA, userB, requests):
+  if userA.id == userB.id:
+    return None
+  if existsRequest(requests, userA, userB):
+    return None
+
+  # randomize in case the user was specified
+  users = [userA, userB]
+  random.shuffle(users)
+  return createRequest(db, users[0], users[1])
+
+def getUser(userId, users):
+  for user in users:
+    if user.id == userId:
+      return user
+  return None
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
-  parser.add_argument("-c", "--count", type=int, default=5)
+  parser.add_argument("-c", "--count", type=int, default=3)
+  parser.add_argument("--user")
   args = parser.parse_args()
   db = firestore.Client()
 
   users = queryUsers(db)
   requests = queryRequests(db)
   for i in range(0, args.count):
-    request = addRequest(db, users, requests)
+    if args.user is None:
+      request = addRandomRequest(db, users, requests)
+    else:
+      request = addUserRequest(db, getUser(args.user, users), users, requests)      
     if request is None:
       print("Adding a request failed at count:" + str(i))
       break
