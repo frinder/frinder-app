@@ -128,6 +128,27 @@ public class UserFirebaseDas {
                 });
     }
 
+    public void updateUserDescAndInterests(String userId, String aboutMe, ArrayList<String> interests) {
+        Map<String,Object> userData = new HashMap<>();
+        userData.put("desc",aboutMe);
+        userData.put("interests",interests);
+
+        DocumentReference userRef = db.collection("users").document(userId);
+        userRef.update(userData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Error updating document", e);
+                    }
+                });
+    }
+
 
     public static class OnCompletionListener {
         public void onUserReceived(User user) {
@@ -149,13 +170,13 @@ public class UserFirebaseDas {
         //TODO get from fb
         usr.put(Constants.USER_COLUMN_AGE, 25);
         //TODO get from user, via new activty
-        usr.put(Constants.USER_COLUMN_DESC, "from SJ");
+//        usr.put(Constants.USER_COLUMN_DESC, "from SJ");
 
         //TODO get from user, via new activty
-        List<String> interests = new ArrayList<>();
+/*        List<String> interests = new ArrayList<>();
         interests.add("Movies");
         interests.add("Football");
-        usr.put(Constants.USER_COLUMN_INTERESTS, interests);
+        usr.put(Constants.USER_COLUMN_INTERESTS, interests);*/
         usr.put(Constants.USER_COLUMN_LOCATION, user.getLocation());
         usr.put(Constants.USER_COLUMN_TIMESTAMP, new Date());
         usr.put(Constants.USER_COLUMN_PROFILE_PIC_URL, user.getProfilePicUrl());

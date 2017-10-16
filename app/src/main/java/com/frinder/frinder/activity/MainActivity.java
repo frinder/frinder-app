@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
+import com.frinder.frinder.EditProfileActivity;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.User;
 import com.google.firebase.FirebaseApp;
@@ -22,6 +23,7 @@ import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity {
     public static final int LOGIN_RESULT = 100;
+    public static final int EDIT_PROFILE_RESULT = 200;
     public static final String LOCATION_DENY_MSG = "Frinder requires your location!";
     private User loggedUser;
     private static final String TAG = "Main";
@@ -36,12 +38,6 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         Fabric.with(this, new Crashlytics());
         userFirebaseDas = new UserFirebaseDas(this);
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         logUser();
     }
     
@@ -77,6 +73,12 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, LOGIN_RESULT);
     }
 
+    private void editProfile() {
+        Intent intent = new Intent(this, EditProfileActivity.class);
+        intent.putExtra("userId", Profile.getCurrentProfile().getId());
+        startActivityForResult(intent, EDIT_PROFILE_RESULT);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == LOGIN_RESULT) {
@@ -87,13 +89,20 @@ public class MainActivity extends AppCompatActivity {
                 Profile profile = Profile.getCurrentProfile();
                 if(profile!=null) {
                     userFirebaseDas.addUser(loggedUser);
-                    readProfile();
+                    editProfile();
                 } else {
                     Toast.makeText(this,"Profile is null",Toast.LENGTH_SHORT).show();
                 }
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 Log.d(TAG, "Login failed!");
+            }
+        } else if (requestCode == EDIT_PROFILE_RESULT) {
+            if (resultCode == Activity.RESULT_OK) {
+                readProfile();
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                Log.d(TAG, "Profile Edit failed!");
             }
         }
     }

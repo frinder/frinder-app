@@ -71,7 +71,6 @@ public class LoginActivity extends AppCompatActivity {
                     protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
                         this.stopTracking();
                         Profile.setCurrentProfile(currentProfile);
-
                     }
                 };
                 profileTracker.startTracking();
