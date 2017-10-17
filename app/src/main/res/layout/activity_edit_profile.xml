@@ -7,18 +7,16 @@
     tools:context="com.frinder.frinder.activity.EditProfileActivity">
 
     <TextView
-        android:id="@+id/tvEditProfile"
+        android:id="@+id/tvSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="141dp"
-        android:layout_marginStart="141dp"
         android:layout_marginTop="27dp"
         android:text="EditProfile"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/cbFoodie"
+        android:layout_toStartOf="@+id/cbFoodie" />
 
     <TextView
         android:id="@+id/tvAboutMe"
@@ -26,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvEditProfile"
+        android:layout_below="@+id/tvSettings"
         android:layout_marginLeft="34dp"
         android:layout_marginStart="34dp"
         android:layout_marginTop="55dp"

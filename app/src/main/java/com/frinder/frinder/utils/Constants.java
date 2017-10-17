@@ -15,6 +15,7 @@ public final class Constants {
     public static final String USER_COLUMN_LOCATION = "location" ;
     public static final String USER_COLUMN_PROFILE_PIC_URL = "profilePicUrl";
     public static final String USER_COLUMN_TIMESTAMP = "timestamp";
+    public static final String USER_COLUMN_DISCOVERABLE = "discoverable";
 
     // Request Firebase Datastore Keys (Column Names)
     public static final String REQUEST_COLUMN_ACCEPTED = "accepted" ;

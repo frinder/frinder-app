@@ -22,6 +22,7 @@ public class User implements Serializable {
     private ArrayList<String> interests;
     private ArrayList<Double> location;
     private Date timestamp;
+    private Boolean discoverable = true;
 
     public User() {
         interests = new ArrayList<>();
@@ -58,6 +59,10 @@ public class User implements Serializable {
 
     public Date getTimestamp() {
         return timestamp;
+    }
+
+    public Boolean getDiscoverable() {
+        return discoverable;
     }
 
     public void setUid(String uid) {
@@ -116,6 +121,10 @@ public class User implements Serializable {
         this.location = location;
     }
 
+    public void setDiscoverable(Boolean discoverable) {
+        this.discoverable = discoverable;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -128,8 +137,9 @@ public class User implements Serializable {
                 ", age=" + age +
                 ", desc='" + desc + '\'' +
                 ", interests=" + interests +
-                ", location=" + location.toString() +
+                ", location=" + location +
                 ", timestamp=" + timestamp +
+                ", discoverable=" + discoverable +
                 '}';
     }
 
