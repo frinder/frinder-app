@@ -128,7 +128,7 @@ public class UserFirebaseDas {
                 });
     }
 
-    public void updateUserDescAndInterests(String userId, String aboutMe, ArrayList<String> interests) {
+    public void updateUserDescAndInterests(String userId, String aboutMe, HashMap<String, Boolean> interests) {
         Map<String,Object> userData = new HashMap<>();
         userData.put("desc",aboutMe);
         userData.put("interests",interests);
@@ -193,8 +193,12 @@ public class UserFirebaseDas {
         user.setGender((String) usr.get(Constants.USER_COLUMN_GENDER));
         user.setAge(((Long) usr.get(Constants.USER_COLUMN_AGE)).intValue());
         user.setDesc((String) usr.get(Constants.USER_COLUMN_DESC));
-        ArrayList interests = (ArrayList) usr.get(Constants.USER_COLUMN_INTERESTS);
-        user.setInterests(interests);
+        Map<String, Boolean> interests = (Map<String, Boolean>) usr.get(Constants.USER_COLUMN_INTERESTS);
+        ArrayList<String> interestList = new ArrayList<>();
+        for(String interest:interests.keySet()){
+            interestList.add(interest);
+        }
+        user.setInterests(interestList);
         ArrayList location = (ArrayList) usr.get(Constants.USER_COLUMN_LOCATION);
         user.setLocation(location);
         user.setTimestamp((Date) usr.get(Constants.USER_COLUMN_TIMESTAMP));
