@@ -3,9 +3,11 @@ package com.frinder.frinder.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -138,7 +140,9 @@ public class DiscoverActivity extends AppCompatActivity {
                             user.getLocation().get(0), user.getLocation().get(1), results);
                     float distance = results[0];
 
-                    if (distance <= 150F) {
+                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+                    int radius = pref.getInt("radius", 200);
+                    if (distance <= radius) {
                         Log.d(TAG, user.getName() + ", distance = " + distance);
                         nearbyUsers.add(user);
                         distanceFromCurrentUser.add(distance);
@@ -193,7 +197,8 @@ public class DiscoverActivity extends AppCompatActivity {
         }
 
         if (id == R.id.menu_action_settings) {
-            //ToDo Create Filter DialogFragment
+            Intent i = new Intent(this, SettingsActivity.class);
+            startActivity(i);
             return true;
         }
         if (id == R.id.menu_action_logout) {
@@ -260,7 +265,7 @@ public class DiscoverActivity extends AppCompatActivity {
                     Double.toString(location.getLatitude()) + "," +
                     Double.toString(location.getLongitude());
             Log.d(TAG, msg);
-            Toast.makeText(context,msg,Toast.LENGTH_LONG).show();
+            Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
 
             if(location!=null) {
                 ArrayList<Double> locationList = new ArrayList<>();

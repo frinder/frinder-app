@@ -45,13 +45,13 @@ public class UserFirebaseDas {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                        Log.d(TAG, "LocationUpdate: DocumentSnapshot successfully updated!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Error updating document", e);
+                        Log.e(TAG, "LocationUpdate: Error updating document", e);
                     }
                 });
     }
@@ -63,13 +63,13 @@ public class UserFirebaseDas {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        Log.d(TAG, "AddUser: DocumentSnapshot successfully written!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
+                        Log.w(TAG, "AddUser: Error writing document", e);
                     }
                 });
     }
@@ -83,7 +83,7 @@ public class UserFirebaseDas {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document != null && document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + task.getResult().getData());
+                        Log.d(TAG, "GetUser: DocumentSnapshot data: " + task.getResult().getData());
                         if (task.getResult() != null && task.getResult().getData() != null) {
                             User user = convertFromFirebaseObject(task.getResult().getData());
                             Log.d(TAG, user.toString());
@@ -91,10 +91,10 @@ public class UserFirebaseDas {
                             return;
                         }
                     } else {
-                        Log.d(TAG, "No such document");
+                        Log.d(TAG, "GetUser: No such document");
                     }
                 } else {
-                    Log.d(TAG, "get failed with ", task.getException());
+                    Log.d(TAG, "GetUser: get failed with ", task.getException());
                 }
                 listener.onUserReceived(null);
             }
@@ -115,13 +115,13 @@ public class UserFirebaseDas {
                                     User user = convertFromFirebaseObject(document.getData());
                                     userList.add(user);
                                 } else {
-                                    Log.d(TAG, "No such document");
+                                    Log.d(TAG, "GetAllUsers: No such document");
                                 }
                             }
 
                             listener.onUsersReceived(userList);
                         } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
+                            Log.d(TAG, "GetAllUsers: Error getting documents: ", task.getException());
                             listener.onUsersReceived(null);
                         }
                     }
@@ -138,13 +138,33 @@ public class UserFirebaseDas {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                        Log.d(TAG, "UpdateDescAndInterests: DocumentSnapshot successfully updated!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Error updating document", e);
+                        Log.e(TAG, "UpdateDescAndInterests: Error updating document", e);
+                    }
+                });
+    }
+
+    public void updateUserDiscoverability(String id, Boolean isDiscoverable) {
+        DocumentReference userRef = db.collection("users").document(id);
+        Map<String, Object> userData = new HashMap();
+        userData.put("discoverable", isDiscoverable);
+        userData.put("timestamp",new Date());
+        userRef.update(userData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "UpdateDiscoverability: DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "UpdateDiscoverability: Error updating document", e);
                     }
                 });
     }
@@ -177,6 +197,7 @@ public class UserFirebaseDas {
         interests.add("Movies");
         interests.add("Football");
         usr.put(Constants.USER_COLUMN_INTERESTS, interests);*/
+        usr.put(Constants.USER_COLUMN_DISCOVERABLE, user.getDiscoverable());
         usr.put(Constants.USER_COLUMN_LOCATION, user.getLocation());
         usr.put(Constants.USER_COLUMN_TIMESTAMP, new Date());
         usr.put(Constants.USER_COLUMN_PROFILE_PIC_URL, user.getProfilePicUrl());
@@ -193,10 +214,13 @@ public class UserFirebaseDas {
         user.setGender((String) usr.get(Constants.USER_COLUMN_GENDER));
         user.setAge(((Long) usr.get(Constants.USER_COLUMN_AGE)).intValue());
         user.setDesc((String) usr.get(Constants.USER_COLUMN_DESC));
+        user.setDiscoverable((Boolean) usr.get(Constants.USER_COLUMN_DISCOVERABLE));
         Map<String, Boolean> interests = (Map<String, Boolean>) usr.get(Constants.USER_COLUMN_INTERESTS);
         ArrayList<String> interestList = new ArrayList<>();
-        for(String interest:interests.keySet()){
-            interestList.add(interest);
+        if(interests!=null) {
+            for (String interest : interests.keySet()) {
+                interestList.add(interest);
+            }
         }
         user.setInterests(interestList);
         ArrayList location = (ArrayList) usr.get(Constants.USER_COLUMN_LOCATION);
