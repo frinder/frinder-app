@@ -64,6 +64,9 @@ freeline_project_description.json
 # node modules for cloud functions
 **/node_modules/*
 
+# bower components for cloud functions
+**/bower_components/*
+
 # Python compiled files
 *.pyc
 
