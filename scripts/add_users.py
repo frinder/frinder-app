@@ -31,7 +31,7 @@ def addUser(db, ref_lat, ref_lon, range):
     u'gender': gender,
     u'age': random.randint(14,80),
     u'timestamp': datetime.datetime.now(),
-    u'interests': [random.choice(interests)],
+    u'interests': {random.choice(interests):True},
     u'location': [lat, lon],
     u'createdByScript': True,
     u'scriptVersion': script_version

@@ -60,29 +60,78 @@
         android:text="Interests"
         android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/etInterests"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvInterest"
-        android:layout_alignStart="@+id/tvInterest"
-        android:layout_below="@+id/tvInterest"
-        android:layout_marginTop="35dp"
-        android:ems="10"
-        android:hint="Movies,Football"
-        android:inputType="textPersonName" />
-
     <Button
         android:id="@+id/editProfileSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etInterests"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="51dp"
         android:background="@color/com_facebook_blue"
         android:text="Submit"
         android:textColor="#ffffff"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp" />
+
+    <CheckBox
+        android:id="@+id/cbOutdoor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvInterest"
+        android:layout_alignStart="@+id/tvInterest"
+        android:layout_below="@+id/tvInterest"
+        android:layout_marginLeft="39dp"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="22dp"
+        android:text="Outdoor" />
+
+    <CheckBox
+        android:id="@+id/cbFoodie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/cbOutdoor"
+        android:layout_alignBottom="@+id/cbOutdoor"
+        android:layout_toEndOf="@+id/editProfileSubmit"
+        android:layout_toRightOf="@+id/editProfileSubmit"
+        android:text="Foodie" />
+
+    <CheckBox
+        android:id="@+id/cbGames"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/cbOutdoor"
+        android:layout_alignStart="@+id/cbOutdoor"
+        android:layout_below="@+id/cbOutdoor"
+        android:layout_marginTop="22dp"
+        android:text="Games" />
+
+    <CheckBox
+        android:id="@+id/cbParty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/cbGames"
+        android:layout_alignBottom="@+id/cbGames"
+        android:layout_alignLeft="@+id/cbFoodie"
+        android:layout_alignStart="@+id/cbFoodie"
+        android:text="Party" />
+
+    <CheckBox
+        android:id="@+id/cbCreative"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/cbGames"
+        android:layout_alignStart="@+id/cbGames"
+        android:layout_below="@+id/cbGames"
+        android:layout_marginTop="25dp"
+        android:text="Creative" />
+
+    <CheckBox
+        android:id="@+id/cbReading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/cbCreative"
+        android:layout_alignLeft="@+id/cbParty"
+        android:layout_alignStart="@+id/cbParty"
+        android:text="Reading" />
 
 
 </RelativeLayout>
