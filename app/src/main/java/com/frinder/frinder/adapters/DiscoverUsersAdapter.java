@@ -15,7 +15,6 @@ import com.frinder.frinder.R;
 import com.frinder.frinder.dataaccess.RequestFirebaseDas;
 import com.frinder.frinder.model.Request;
 import com.frinder.frinder.model.User;
-import com.frinder.frinder.utils.LocationUtils;
 
 import java.util.List;
 
@@ -63,7 +62,7 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
         final User user = mUsers.get(position);
 
         // Set item views based on your views and data model
-        if (user.getProfilePicUrl().isEmpty()) {
+        if (user.getProfilePicUrl() == null || user.getProfilePicUrl().isEmpty()) {
             if (user.getGender().contentEquals("female")) {
                 viewHolder.ivUserImage.setImageResource(R.drawable.profile_img_female);
             } else if (user.getGender().contentEquals("male")) {
