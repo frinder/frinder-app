@@ -28,7 +28,6 @@ import com.frinder.frinder.adapters.SpacesItemDecoration;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.User;
 import com.frinder.frinder.utils.LocationUtils;
-import com.google.android.gms.location.LocationCallback;
 
 import java.util.ArrayList;
 import java.util.Date;
