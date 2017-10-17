@@ -1,0 +1,21 @@
+{
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "main": "index.js",
+  "authors": [
+    "Mallika Viswas <mallikaviswas@users.noreply.github.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/frinder/frinder-app",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "geofire": "^4.1.2"
+  }
+}
