@@ -48,6 +48,13 @@ captures/
 
 # Google Services (e.g. APIs or Firebase)
 $app/google-services.json
+.firebaserc
+firebase.json
+scripts/ProjectFrinder-5aad63f44fd0.json
+
+#virtual env
+env/
+
 
 # Freeline
 freeline.py
