@@ -36,11 +36,9 @@ exports.updateUser = functions.firestore
     var previousLon = previousValue.location[1];
 
     if (newLat == previousLat && newLon == previousLon) {
-        console.log("User = " + userName + ", Location DID NOT CHANGE");
+        console.log('No location change for ' + userName + '(' + userId + ')');
     }
     else {
-      console.log("User = " + userName + ", Location CHANGED");
-
       //add value to GeoFire
 
       // Create a Firebase reference where GeoFire will store its information
@@ -54,7 +52,7 @@ exports.updateUser = functions.firestore
       var location = [newLat, newLon];
 
       geoFire.set(userId, location).then(() => {
-         console.log('GeoFire Update succesfull');
+         console.log('GeoFire Update successful for ' + userName + '(' + userId + ')');
       }).catch(error => {
          console.log(error);
       });
@@ -62,3 +60,36 @@ exports.updateUser = functions.firestore
 
     return true;
 });
+
+/*exports.createUser = functions.firestore
+  .document('users/{userId}')
+  .onCreate(event => {
+    // Get an object representing the document
+    var value = event.data.data();
+
+    var userName = value.name;
+    var userId = value.id;
+    var lat = value.location[0];
+    var lon = value.location[1];
+
+    //add value to GeoFire
+
+    // Create a Firebase reference where GeoFire will store its information
+    var dbRef = admin.database().ref('/users_location');
+
+    // Create a GeoFire index
+    var geoFire = new GeoFire(dbRef);
+
+    //var key = event.params.test;
+    var location = [lat, lon];
+
+      geoFire.set(userId, location).then(() => {
+         console.log('GeoFire Update successful for ' + userName + '(' + userId + ')');
+      }).catch(error => {
+         console.log(error);
+      });
+    }
+
+    return true;
+});
+*/
