@@ -28,6 +28,7 @@ def addUser(db, ref_lat, ref_lon, range):
     u'linkUrl': u'https://www.google.com',
     u'email': u'fake@gmail.com',
     u'profilePicUrl': None,
+    u'discoverable': True,
     u'gender': gender,
     u'age': random.randint(14,80),
     u'timestamp': datetime.datetime.utcnow(),
