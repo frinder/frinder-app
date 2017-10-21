@@ -1,13 +1,11 @@
 package com.frinder.frinder.dataaccess;
 
 import android.content.Context;
-import android.location.Location;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.frinder.frinder.model.User;
 import com.frinder.frinder.utils.Constants;
-import com.frinder.frinder.utils.LocationUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -16,24 +14,23 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
 public class UserFirebaseDas {
     FirebaseFirestore db;
+    FirebaseApp app;
     private static final String TAG = "UserFirebaseDAS";
     private Context context;
 
     public UserFirebaseDas(Context context) {
         this.context = context;
-        FirebaseApp.initializeApp(context);
-        db = FirebaseFirestore.getInstance();
+        this.app = FirebaseApp.initializeApp(context);
+        this.db = FirebaseFirestore.getInstance();
     }
 
     public void updateUserLocation(String id, ArrayList location) {
@@ -101,33 +98,6 @@ public class UserFirebaseDas {
         });
     }
 
-    // Get all records in users table in Frinder Firebase Firestore
-    public void getAllUsers(final OnCompletionListener listener) {
-        db.collection("users")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            ArrayList<User> userList = new ArrayList<User>();
-                            for (DocumentSnapshot document : task.getResult()) {
-                                if (document != null && document.exists()) {
-                                    User user = convertFromFirebaseObject(document.getData());
-                                    userList.add(user);
-                                } else {
-                                    Log.d(TAG, "GetAllUsers: No such document");
-                                }
-                            }
-
-                            listener.onUsersReceived(userList);
-                        } else {
-                            Log.d(TAG, "GetAllUsers: Error getting documents: ", task.getException());
-                            listener.onUsersReceived(null);
-                        }
-                    }
-                });
-    }
-
     public void updateUserDescAndInterests(String userId, String aboutMe, HashMap<String, Boolean> interests) {
         Map<String,Object> userData = new HashMap<>();
         userData.put("desc",aboutMe);
@@ -175,9 +145,13 @@ public class UserFirebaseDas {
             // override if required
         }
 
-        public void onUsersReceived(ArrayList<User> users) {
+ /*       public void onUsersReceived(ArrayList<User> users) {
             // override if required
         }
+
+        public void onDiscoverUsersReceived(ArrayList<DiscoverUser> users) {
+            // override if required
+        }*/
     }
 
     @NonNull

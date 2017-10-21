@@ -61,7 +61,7 @@ exports.updateUser = functions.firestore
     return true;
 });
 
-/*exports.createUser = functions.firestore
+exports.createUser = functions.firestore
   .document('users/{userId}')
   .onCreate(event => {
     // Get an object representing the document
@@ -83,13 +83,11 @@ exports.updateUser = functions.firestore
     //var key = event.params.test;
     var location = [lat, lon];
 
-      geoFire.set(userId, location).then(() => {
-         console.log('GeoFire Update successful for ' + userName + '(' + userId + ')');
-      }).catch(error => {
+    geoFire.set(userId, location).then(() => {
+       console.log('GeoFire Update successful for ' + userName + '(' + userId + ')');
+    }).catch(error => {
          console.log(error);
-      });
-    }
+    });
 
     return true;
 });
-*/
