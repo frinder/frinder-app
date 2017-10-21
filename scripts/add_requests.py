@@ -2,7 +2,6 @@ from google.cloud import firestore
 import argparse
 import datetime
 import helpers
-import names
 import random
 
 script_version=1
@@ -66,12 +65,6 @@ def _addRequest(db, userA, userB, requests):
   random.shuffle(users)
   return createRequest(db, users[0], users[1])
 
-def getUser(userId, users):
-  for user in users:
-    if user.id == userId:
-      return user
-  return None
-
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   parser.add_argument("-c", "--count", type=int, default=3)
@@ -85,7 +78,7 @@ if __name__ == '__main__':
     if args.user is None:
       request = addRandomRequest(db, users, requests)
     else:
-      request = addUserRequest(db, getUser(args.user, users), users, requests)      
+      request = addUserRequest(db, helpers.getUser(args.user, users), users, requests)
     if request is None:
       print("Adding a request failed at count:" + str(i))
       break
