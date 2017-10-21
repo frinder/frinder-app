@@ -18,3 +18,8 @@ def queryRequests(db):
     docList.append(doc)
   return docList
 
+def getUser(userId, users):
+  for user in users:
+    if user.id == userId:
+      return user
+  return None
