@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +19,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.Profile;
@@ -48,6 +52,9 @@ public class DiscoverActivity extends AppCompatActivity {
     private static final int REQUEST_FINE_LOCATION = 99;
     private LocationUtils locationUtilInstance;
     SwipeRefreshLayout srlDiscoverContainer;
+    ImageView ivDiscoverUserIcon;
+    ProgressBar pbDiscoverUser;
+    Handler handler;
 
     //Counts required for nearbyUsers
     int unFilteredNearbyUsersCount;
@@ -69,7 +76,6 @@ public class DiscoverActivity extends AppCompatActivity {
         if(requestLocationPermissions()) {
             getCurrentLocation();
         }
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -94,8 +100,11 @@ public class DiscoverActivity extends AppCompatActivity {
                 currentUser = user;
                 Log.d(TAG, "in onUserReceived");
                 Log.d(TAG, currentUser.toString());
-                if(user.getLocation()!=null && user.getLocation().size() > 0) {
+                if(currentUser.getLocation()!=null && currentUser.getLocation().size() > 0) {
                     getdiscoverUsers();
+                }
+                else {
+                    repeatGetDiscoverUsers();
                 }
             }
         });
@@ -105,9 +114,39 @@ public class DiscoverActivity extends AppCompatActivity {
         srlDiscoverContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getdiscoverUsers();
+                if(currentUser.getLocation()!=null && currentUser.getLocation().size() > 0) {
+                    getdiscoverUsers();
+                }
+                else {
+                    repeatGetDiscoverUsers();
+                }
             }
         });
+
+        pbDiscoverUser = (ProgressBar) findViewById(R.id.pbDiscoverUser);
+        ivDiscoverUserIcon = (ImageView) findViewById(R.id.ivDiscoverUserIcon);
+        pbDiscoverUser.setVisibility(View.VISIBLE);
+        ivDiscoverUserIcon.setVisibility(View.VISIBLE);
+
+        handler = new Handler();
+    }
+
+    private void repeatGetDiscoverUsers() {
+        handler.removeCallbacksAndMessages(null);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 100ms
+                if(currentUser.getLocation()!=null && currentUser.getLocation().size() > 0) {
+                    getdiscoverUsers();
+                }
+                else {
+                    repeatGetDiscoverUsers();
+                }
+            }
+        }, 2000);
+
     }
 
     private void getCurrentLocation() {
@@ -115,21 +154,14 @@ public class DiscoverActivity extends AppCompatActivity {
     }
 
     public void getdiscoverUsers() {
+        pbDiscoverUser.setVisibility(View.VISIBLE);
+        ivDiscoverUserIcon.setVisibility(View.VISIBLE);
+
         //Clear the list each time discover menu button is clicked as user list will change based on who is nearby
         if (!nearbyUsers.isEmpty()) {
             nearbyUsers.clear();
             adapter.notifyDataSetChanged();
         }
-
-        /*
-        // ToDo Mallika - change userFirebaseDas.getAllUsers() to return users based on current filters
-        userFirebaseDas.getAllUsers(new UserFirebaseDas.OnCompletionListener() {
-            @Override
-            public void onUsersReceived(ArrayList<User> users) {
-                readAllUsersComplete(users);
-            }
-        });
-        */
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         double searchRadius = pref.getInt("radius", 200);
@@ -154,9 +186,9 @@ public class DiscoverActivity extends AppCompatActivity {
                             @Override
                             public void onUserReceived(User user) {
                                 Log.d(TAG, "Checking if user " + user.getName() + " matches filters");
+
                                 //check if user matches filters
 
-                                //TODO uncomment when discoverable field is included
                                 boolean isDiscoverable = user.getDiscoverable();
 
                                 boolean correctTimestamp = false;
@@ -200,8 +232,10 @@ public class DiscoverActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    Toast.makeText(DiscoverActivity.this, "No one closeby right now. Consider increasing the radius", Toast.LENGTH_SHORT).show();
+                    //TODO Show message in snackbar
+                    Toast.makeText(DiscoverActivity.this, "Found nobody. Trying increasing search radius.", Toast.LENGTH_SHORT).show();
                     srlDiscoverContainer.setRefreshing(false);
+                    repeatGetDiscoverUsers();
                 }
             }
         });
@@ -213,9 +247,13 @@ public class DiscoverActivity extends AppCompatActivity {
             if (nearbyUsers.size() > 0) {
                 adapter.notifyDataSetChanged();
                 srlDiscoverContainer.setRefreshing(false);
+                pbDiscoverUser.setVisibility(View.GONE);
+                ivDiscoverUserIcon.setVisibility(View.GONE);
             } else {
-                Toast.makeText(DiscoverActivity.this, "No one closeby right now. Consider increasing the radius", Toast.LENGTH_SHORT).show();
+                //TODO Show message in snackbar
+                Toast.makeText(DiscoverActivity.this, "Found nobody. Trying increasing search radius.", Toast.LENGTH_SHORT).show();
                 srlDiscoverContainer.setRefreshing(false);
+                repeatGetDiscoverUsers();
             }
         }
     }
@@ -233,10 +271,14 @@ public class DiscoverActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.menu_action_discover) {
-            getdiscoverUsers();
+        /*if (id == R.id.menu_action_discover) {
+            if (currentUser.getLocation() != null && currentUser.getLocation().size() > 0) {
+                getdiscoverUsers();
+            } else {
+                repeatGetDiscoverUsers();
+            }
             return true;
-        }
+        }*/
 
         if (id == R.id.menu_action_notifications) {
             Intent i = new Intent(this, NotificationsActivity.class);
@@ -312,15 +354,31 @@ public class DiscoverActivity extends AppCompatActivity {
             String msg = "Updated Location: " +
                     Double.toString(location.getLatitude()) + "," +
                     Double.toString(location.getLongitude());
-            //Log.d(TAG, msg);
+            Log.d(TAG, msg);
             Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
 
             if(location!=null) {
                 ArrayList<Double> locationList = new ArrayList<>();
                 locationList.add(location.getLatitude());
                 locationList.add(location.getLongitude());
-                //Log.d(TAG, "Updating user " + Profile.getCurrentProfile().getId() + " location with " + locationList.toString());
+                Log.d(TAG, "Updating user " + Profile.getCurrentProfile().getId() + " location with " + locationList.toString());
                 userFirebaseDas.updateUserLocation(profile.getId(), locationList);
+
+                if(currentUser!=null && (currentUser.getLocation()==null || currentUser.getLocation().size() == 0)) {
+                    userFirebaseDas.getUser(profile.getId(), new UserFirebaseDas.OnCompletionListener() {
+                        @Override
+                        public void onUserReceived(User user) {
+                            currentUser = user;
+                            Log.d(TAG, "in onUserReceived");
+                            Log.d(TAG, currentUser.toString());
+                            if (currentUser.getLocation() != null && currentUser.getLocation().size() > 0) {
+                                getdiscoverUsers();
+                            } else {
+                                repeatGetDiscoverUsers();
+                            }
+                        }
+                    });
+                }
             }
         }
     };
