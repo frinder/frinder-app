@@ -13,9 +13,9 @@ import com.bumptech.glide.Glide;
 import com.facebook.Profile;
 import com.frinder.frinder.R;
 import com.frinder.frinder.dataaccess.RequestFirebaseDas;
+import com.frinder.frinder.model.DiscoverUser;
 import com.frinder.frinder.model.Request;
 import com.frinder.frinder.model.User;
-import com.frinder.frinder.utils.LocationUtils;
 
 import java.util.List;
 
@@ -29,11 +29,11 @@ import butterknife.ButterKnife;
 public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdapter.ViewHolder> {
 
     private static final String TAG = "DiscoverUsersAdapter";
-    private List<User> mUsers;
+    private List<DiscoverUser> mUsers;
     private Context mContext;
 
     // Pass in the contact array into the constructor
-    public DiscoverUsersAdapter(Context context, List<User> users) {
+    public DiscoverUsersAdapter(Context context, List<DiscoverUser> users) {
         mUsers = users;
         mContext = context;
     }
@@ -60,10 +60,11 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
     @Override
     public void onBindViewHolder(final DiscoverUsersAdapter.ViewHolder viewHolder, int position) {
         // Get the data model based on position
-        final User user = mUsers.get(position);
+        final DiscoverUser discoverUser = mUsers.get(position);
+        final User user = discoverUser.getUser();
 
         // Set item views based on your views and data model
-        if (user.getProfilePicUrl().isEmpty()) {
+        if (user.getProfilePicUrl() == null || user.getProfilePicUrl().isEmpty()) {
             if (user.getGender().contentEquals("female")) {
                 viewHolder.ivUserImage.setImageResource(R.drawable.profile_img_female);
             } else if (user.getGender().contentEquals("male")) {

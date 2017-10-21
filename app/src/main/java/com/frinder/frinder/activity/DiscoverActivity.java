@@ -25,27 +25,33 @@ import com.facebook.login.LoginManager;
 import com.frinder.frinder.R;
 import com.frinder.frinder.adapters.DiscoverUsersAdapter;
 import com.frinder.frinder.adapters.SpacesItemDecoration;
+import com.frinder.frinder.dataaccess.DiscoverFirebaseDas;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
+import com.frinder.frinder.model.DiscoverUser;
 import com.frinder.frinder.model.User;
 import com.frinder.frinder.utils.LocationUtils;
-import com.google.android.gms.location.LocationCallback;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.TreeSet;
 
 import static com.frinder.frinder.activity.MainActivity.LOCATION_DENY_MSG;
 
 public class DiscoverActivity extends AppCompatActivity {
     private static final String TAG = "DiscoverActivity";
-    ArrayList<User> users;
+    ArrayList<DiscoverUser> nearbyUsers;
+    ArrayList<DiscoverUser> buildNearbyUsersList;
     DiscoverUsersAdapter adapter;
     Profile profile;
     User currentUser;
     UserFirebaseDas userFirebaseDas;
+    DiscoverFirebaseDas discoverFirebaseDas;
     private static final int REQUEST_FINE_LOCATION = 99;
     private LocationUtils locationUtilInstance;
     SwipeRefreshLayout srlDiscoverContainer;
+
+    //Counts required for nearbyUsers
+    int unFilteredNearbyUsersCount;
+    int filteredNearbyUsersCount;
 
     //ToDo Mallika - Remove this constant when filters/settings screen is ready
     //Assuming that we are looking for people in a radius of 150m which is about 574.147ft.
@@ -69,30 +75,37 @@ public class DiscoverActivity extends AppCompatActivity {
 
         srlDiscoverContainer = (SwipeRefreshLayout) findViewById(R.id.srlDiscoverContainer);
         RecyclerView rvDiscoverusers = (RecyclerView) findViewById(R.id.rvDiscoverUsers);
-        users = new ArrayList<>();
-        adapter = new DiscoverUsersAdapter(this, users);
+        nearbyUsers = new ArrayList<>();
+        adapter = new DiscoverUsersAdapter(this, nearbyUsers);
         rvDiscoverusers.setAdapter(adapter);
         rvDiscoverusers.setLayoutManager(new LinearLayoutManager(this));
         SpacesItemDecoration decoration = new SpacesItemDecoration(24);
         rvDiscoverusers.addItemDecoration(decoration);
-        userFirebaseDas = new UserFirebaseDas(DiscoverActivity.this);
+
+        unFilteredNearbyUsersCount = 0;
+        filteredNearbyUsersCount = 0;
+
         profile = Profile.getCurrentProfile();
+
+        userFirebaseDas = new UserFirebaseDas(DiscoverActivity.this);
         userFirebaseDas.getUser(profile.getId(), new UserFirebaseDas.OnCompletionListener() {
             @Override
             public void onUserReceived(User user) {
                 currentUser = user;
                 Log.d(TAG, "in onUserReceived");
                 Log.d(TAG, currentUser.toString());
-                if(user.getLocation()!=null) {
-                    getNearbyUsers();
+                if(user.getLocation()!=null && user.getLocation().size() > 0) {
+                    getdiscoverUsers();
                 }
             }
         });
 
+        discoverFirebaseDas = new DiscoverFirebaseDas(DiscoverActivity.this);
+
         srlDiscoverContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getNearbyUsers();
+                getdiscoverUsers();
             }
         });
     }
@@ -101,13 +114,14 @@ public class DiscoverActivity extends AppCompatActivity {
         locationUtilInstance.startLocationUpdates(this,locationUtilsCallback);
     }
 
-    public void getNearbyUsers() {
+    public void getdiscoverUsers() {
         //Clear the list each time discover menu button is clicked as user list will change based on who is nearby
-        if (!users.isEmpty()) {
-            users.clear();
+        if (!nearbyUsers.isEmpty()) {
+            nearbyUsers.clear();
             adapter.notifyDataSetChanged();
         }
 
+        /*
         // ToDo Mallika - change userFirebaseDas.getAllUsers() to return users based on current filters
         userFirebaseDas.getAllUsers(new UserFirebaseDas.OnCompletionListener() {
             @Override
@@ -115,60 +129,94 @@ public class DiscoverActivity extends AppCompatActivity {
                 readAllUsersComplete(users);
             }
         });
+        */
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        double searchRadius = pref.getInt("radius", 200);
+
+        //get filterInterests
+        final ArrayList<String> filterInterests = new ArrayList<>();
+        filterInterests.add("Music");
+        filterInterests.add("Movies");
+        filterInterests.add("Football");
+        filterInterests.add("Books");
+
+        unFilteredNearbyUsersCount = 0;
+        filteredNearbyUsersCount = 0;
+
+        discoverFirebaseDas.getNearbyUsers(currentUser, searchRadius, new DiscoverFirebaseDas.OnCompletionListener() {
+            @Override
+            public void onNearbyUserListReceived(ArrayList<String> userIdList) {
+                if (userIdList != null) {
+                    unFilteredNearbyUsersCount = userIdList.size();
+                    for (String userId : userIdList) {
+                        discoverFirebaseDas.getUser(userId, new DiscoverFirebaseDas.OnCompletionListener() {
+                            @Override
+                            public void onUserReceived(User user) {
+                                Log.d(TAG, "Checking if user " + user.getName() + " matches filters");
+                                //check if user matches filters
+
+                                //TODO uncomment when discoverable field is included
+                                boolean isDiscoverable = user.getDiscoverable();
+
+                                boolean correctTimestamp = false;
+                                Date currentTimestamp = new Date();
+                                if (currentTimestamp.getTime() - user.getTimestamp().getTime() < (TIME_USER_LAST_ACTIVE * 60000)) {
+                                    correctTimestamp = true;
+                                }
+
+                                Log.d(TAG, user.getName() + ", user interests =" + user.getInterests().toString());
+                                Log.d(TAG, user.getName() + ", filter interests =" + filterInterests.toString());
+                                boolean interestMatch = false;
+                                if (filterInterests.size() > 0) {
+                                    if (user.getInterests() != null && user.getInterests().size() > 0) {
+                                        ArrayList<String> filterInterestsCopy = new ArrayList<String>(filterInterests);
+                                        filterInterestsCopy.retainAll(user.getInterests());
+                                        if (filterInterestsCopy.size() > 0) interestMatch = true;
+                                        Log.d(TAG, user.getName() + ", common interests =" + filterInterestsCopy.toString());
+                                    }
+                                }
+
+                                //TODO uncomment line below and comment the next one when discoverable field is included
+                                if (isDiscoverable && correctTimestamp && interestMatch) {
+                                //if (correctTimestamp && interestMatch) {
+                                //if (isDiscoverable && correctTimestamp) {
+                                    //find distance from AppUser
+                                    float[] results = new float[1];
+                                    Location.distanceBetween(currentUser.getLocation().get(0), currentUser.getLocation().get(1),
+                                            user.getLocation().get(0), user.getLocation().get(1), results);
+                                    float distance = results[0];
+                                    //Log.d(TAG, "Added user to result");
+
+                                    nearbyUsers.add(new DiscoverUser(user, distance, filterInterests));
+                                    Log.d(TAG, "Added " + user.getName() + "to recyclerview");
+                                }
+
+                                ++filteredNearbyUsersCount;
+                                checkAllNearbyUsers(unFilteredNearbyUsersCount, filteredNearbyUsersCount);
+                                Log.d(TAG, "unFilteredNearbyUsersCount=" + unFilteredNearbyUsersCount + ", filteredNearbyUsersCount=" + filteredNearbyUsersCount);
+                            }
+                        });
+                    }
+                }
+                else {
+                    Toast.makeText(DiscoverActivity.this, "No one closeby right now. Consider increasing the radius", Toast.LENGTH_SHORT).show();
+                    srlDiscoverContainer.setRefreshing(false);
+                }
+            }
+        });
     }
 
-
-
-    public void readAllUsersComplete(ArrayList<User> userList) {
-        Log.d(TAG, "in readAllUsersComplete");
-        Log.d(TAG, userList.toString());
-
-        //ToDo - transfer this logic to Firebase if possible
-
-        ArrayList<User> nearbyUsers = new ArrayList<>();
-        ArrayList<Float> distanceFromCurrentUser = new ArrayList<>();
-        TreeSet<Float> distances = new TreeSet<>();
-
-        for (User user : userList) {
-            //Check that current app user is not added to nearby users list
-            if (!user.getUid().contentEquals(currentUser.getUid())) {
-                //Check that user was nearby/active (timestamp) within past 15 mins
-                Date currentTimestamp = new Date();
-                if (currentTimestamp.getTime() - user.getTimestamp().getTime() < (TIME_USER_LAST_ACTIVE * 60000)) {
-                    float[] results = new float[1];
-                    Location.distanceBetween(currentUser.getLocation().get(0), currentUser.getLocation().get(1),
-                            user.getLocation().get(0), user.getLocation().get(1), results);
-                    float distance = results[0];
-
-                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-                    int radius = pref.getInt("radius", 200);
-                    if (distance <= radius) {
-                        Log.d(TAG, user.getName() + ", distance = " + distance);
-                        nearbyUsers.add(user);
-                        distanceFromCurrentUser.add(distance);
-                        distances.add(distance);
-                    }
-                }
+    private void checkAllNearbyUsers(int checkUnFilteredNearbyUsersCount, int checkFilteredNearbyUsersCount) {
+        Log.d(TAG, "checkUnFilteredNearbyUsersCount=" + checkUnFilteredNearbyUsersCount + ", checkFilteredNearbyUsersCount=" + checkFilteredNearbyUsersCount);
+        if (checkUnFilteredNearbyUsersCount == checkFilteredNearbyUsersCount) {
+            if (nearbyUsers.size() > 0) {
+                adapter.notifyDataSetChanged();
+                srlDiscoverContainer.setRefreshing(false);
+            } else {
+                Toast.makeText(DiscoverActivity.this, "No one closeby right now. Consider increasing the radius", Toast.LENGTH_SHORT).show();
+                srlDiscoverContainer.setRefreshing(false);
             }
-        }
-
-        Log.d(TAG, "Sorted List");
-        if (distanceFromCurrentUser != null && !distanceFromCurrentUser.isEmpty()) {
-            for (Float distance : distances) {
-                for (int i=0; i<distanceFromCurrentUser.size(); i++) {
-                    Float tDistance = distanceFromCurrentUser.get(i);
-                    if (tDistance.floatValue() == distance.floatValue()) {
-                        Log.d(TAG, nearbyUsers.get(i).getName());
-                        users.add(nearbyUsers.get(i));
-                    }
-                }
-            }
-
-            adapter.notifyDataSetChanged();
-            srlDiscoverContainer.setRefreshing(false);
-        }
-        else {
-            Toast.makeText(this, "No one closeby right now. Consider increasing the radius", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -186,7 +234,7 @@ public class DiscoverActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.menu_action_discover) {
-            getNearbyUsers();
+            getdiscoverUsers();
             return true;
         }
 
@@ -264,14 +312,14 @@ public class DiscoverActivity extends AppCompatActivity {
             String msg = "Updated Location: " +
                     Double.toString(location.getLatitude()) + "," +
                     Double.toString(location.getLongitude());
-            Log.d(TAG, msg);
+            //Log.d(TAG, msg);
             Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
 
             if(location!=null) {
                 ArrayList<Double> locationList = new ArrayList<>();
                 locationList.add(location.getLatitude());
                 locationList.add(location.getLongitude());
-                Log.d(TAG, "Updating user " + Profile.getCurrentProfile().getId() + " location with " + locationList.toString());
+                //Log.d(TAG, "Updating user " + Profile.getCurrentProfile().getId() + " location with " + locationList.toString());
                 userFirebaseDas.updateUserLocation(profile.getId(), locationList);
             }
         }
