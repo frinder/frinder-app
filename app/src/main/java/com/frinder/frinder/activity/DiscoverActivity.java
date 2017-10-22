@@ -419,12 +419,14 @@ public class DiscoverActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        handler.removeCallbacksAndMessages(null);
         locationUtilInstance.stopLocationUpdates(this);
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
         locationUtilInstance.stopLocationUpdates(this);
         super.onDestroy();
     }
