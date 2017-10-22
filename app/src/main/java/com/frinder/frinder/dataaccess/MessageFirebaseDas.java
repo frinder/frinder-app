@@ -39,6 +39,63 @@ public class MessageFirebaseDas {
         db = FirebaseFirestore.getInstance();
     }
 
+    public void getOrCreateThread(final String inUser1, final String inUser2, final OnCompletionListener listener) {
+        getDocument(inUser1, inUser2).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists() && document.getData() != null) {
+                        MessageThread thread = convertThreadFromFirebaseObject(document.getId(), document.getData());
+                        listener.onThreadReceived(thread);
+                        return;
+                    } else {
+                        Log.d(TAG, "GetThread: No such document");
+                    }
+                } else {
+                    Log.d(TAG, "GetThread: get failed with ", task.getException());
+                }
+                createThread(inUser1, inUser2, listener);
+            }
+        });
+    }
+
+    private void createThread(String inUser1, String inUser2, final OnCompletionListener listener) {
+        // TODO: This code can race between users (fix this)
+        HashMap<String, String> map = new HashMap<>();
+        final String user1, user2;
+        if (inUser1.compareTo(inUser2) > 0) {
+            user1 = inUser2;
+            user2 = inUser1;
+        } else {
+            user1 = inUser1;
+            user2 = inUser2;
+        }
+        map.put(Constants.THREAD_COLUMN_USER1, user1);
+        map.put(Constants.THREAD_COLUMN_USER2, user2);
+        final String threadId = getDocumentId(inUser1, inUser2);
+        getDocument(threadId)
+                .set(map)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "LocationUpdate: DocumentSnapshot successfully updated!");
+                        MessageThread thread = new MessageThread();
+                        thread.uid = threadId;
+                        thread.userId = getThreadUserId(user1, user2);
+                        listener.onThreadReceived(thread);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "LocationUpdate: Error updating document", e);
+                        listener.onThreadReceived(null);
+                    }
+                });
+    }
+
     public void getThreads(final OnCompletionListener listener) {
         String loggedInUserId = Profile.getCurrentProfile().getId();
         OnCompletionListener inListener = new OnCompletionListener() {
@@ -156,6 +213,10 @@ public class MessageFirebaseDas {
     }
 
     public static class OnCompletionListener {
+        public void onThreadReceived(MessageThread thread) {
+            // override if required
+        }
+
         public void onThreadsReceived(ArrayList<MessageThread> threads) {
             // override if required
         }
@@ -166,23 +227,33 @@ public class MessageFirebaseDas {
     }
 
     private static MessageThread convertThreadFromFirebaseObject(String id, Map<String, Object> threadMap) {
-        String loggedInUserId = Profile.getCurrentProfile().getId();
         MessageThread thread = new MessageThread();
         thread.uid = id;
-        thread.unread = (boolean)threadMap.get(Constants.THREAD_COLUMN_UNREAD);
-        thread.lastTimestamp = (Date)threadMap.get(Constants.THREAD_COLUMN_LAST_TIMESTAMP);
+        thread.unread = threadMap.containsKey(Constants.THREAD_COLUMN_UNREAD) ?
+                (boolean)threadMap.get(Constants.THREAD_COLUMN_UNREAD) : false;
+        thread.lastTimestamp = threadMap.containsKey(Constants.THREAD_COLUMN_LAST_TIMESTAMP) ?
+                (Date)threadMap.get(Constants.THREAD_COLUMN_LAST_TIMESTAMP) : null;
         String user1 = (String)threadMap.get(Constants.THREAD_COLUMN_USER1);
         String user2 = (String)threadMap.get(Constants.THREAD_COLUMN_USER2);
-        if (!user1.equals(loggedInUserId) && user2.equals(loggedInUserId)) {
-            thread.userId = user1;
-        } else if (!user2.equals(loggedInUserId) && user1.equals(loggedInUserId)) {
-            thread.userId = user2;
-        } else {
+        thread.userId = getThreadUserId(user1, user2);
+        if (thread.userId == null) {
             Log.i(TAG, "Message with inconsistent user ids");
             return null;
         }
-        thread.messageSnippet = (String)threadMap.get(Constants.THREAD_COLUMN_LAST_MESSAGE);
+        thread.messageSnippet = threadMap.containsKey(Constants.THREAD_COLUMN_LAST_MESSAGE) ?
+                (String)threadMap.get(Constants.THREAD_COLUMN_LAST_MESSAGE) : null;
         return thread;
+    }
+
+    private static String getThreadUserId(String user1, String user2) {
+        String loggedInUserId = Profile.getCurrentProfile().getId();
+        if (!user1.equals(loggedInUserId) && user2.equals(loggedInUserId)) {
+            return user1;
+        } else if (!user2.equals(loggedInUserId) && user1.equals(loggedInUserId)) {
+            return user2;
+        } else {
+            return null;
+        }
     }
 
     private static Message convertMessageFromFirebaseObject(MessageThread thread, Map<String, Object> messageMap) {

@@ -74,6 +74,10 @@ public abstract class RequestsAdapter extends
         }
     }
 
+    protected Context getContext() {
+        return mContext;
+    }
+
     private void populateUserDetails(ViewHolder holder, User user) {
         holder.tvUserName.setText(user.getName());
         holder.tvUserDesc.setText(user.getDesc());
