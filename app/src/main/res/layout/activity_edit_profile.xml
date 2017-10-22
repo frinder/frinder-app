@@ -4,19 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.frinder.frinder.activity.EditProfileActivity">
+    tools:context="com.frinder.frinder.activity.EditProfileActivity"
+    android:padding="@dimen/activity_padding">
 
     <TextView
         android:id="@+id/tvSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="27dp"
         android:text="EditProfile"
-        android:textSize="18sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textStyle="bold"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/cbFoodie"
-        android:layout_toStartOf="@+id/cbFoodie" />
+        android:layout_alignParentTop="true" />
 
     <TextView
         android:id="@+id/tvAboutMe"
@@ -25,20 +23,19 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tvSettings"
-        android:layout_marginLeft="34dp"
-        android:layout_marginStart="34dp"
-        android:layout_marginTop="55dp"
-        android:text="About You"
+        android:layout_margin="@dimen/view_margin"
+        android:text="About You:"
         android:textStyle="bold" />
 
     <EditText
         android:id="@+id/etAboutMe"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:layout_below="@+id/tvAboutMe"
         android:layout_alignLeft="@+id/tvAboutMe"
         android:layout_alignStart="@+id/tvAboutMe"
-        android:layout_below="@+id/tvAboutMe"
-        android:layout_marginTop="28dp"
+        android:layout_marginBottom="@dimen/view_margin"
+        android:layout_marginRight="@dimen/view_margin"
         android:ems="10"
         android:gravity="top"
         android:hint="I am awesome"
@@ -51,85 +48,57 @@
         android:id="@+id/tvInterest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/etAboutMe"
         android:layout_alignLeft="@+id/etAboutMe"
         android:layout_alignStart="@+id/etAboutMe"
-        android:layout_below="@+id/etAboutMe"
-        android:layout_marginTop="40dp"
-        android:text="Interests"
+        android:layout_marginTop="@dimen/view_margin"
+        android:layout_marginBottom="@dimen/view_margin"
+        android:text="Interests:"
         android:textStyle="bold" />
+
+    <TableLayout
+        android:id="@+id/tlInterestLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvInterest"
+        android:layout_alignLeft="@+id/etAboutMe"
+        android:layout_alignStart="@+id/etAboutMe"
+        android:layout_alignRight="@+id/etAboutMe"
+        android:layout_alignEnd="@+id/etAboutMe">
+        <!-- Child views added programatically -->
+    </TableLayout>
 
     <Button
         android:id="@+id/editProfileSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/com_facebook_blue"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:background="@color/colorPrimary"
+        android:padding="@dimen/text_padding"
+        android:includeFontPadding="false"
         android:text="Submit"
         android:textColor="#ffffff"
         android:textStyle="bold"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="24dp" />
+        android:layout_alignRight="@id/tlInterestLayout"
+        android:layout_marginBottom="@dimen/view_margin" />
 
-    <CheckBox
-        android:id="@+id/cbOutdoor"
+    <Button
+        android:id="@+id/editProfileSkip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvInterest"
-        android:layout_alignStart="@+id/tvInterest"
-        android:layout_below="@+id/tvInterest"
-        android:layout_marginLeft="39dp"
-        android:layout_marginStart="39dp"
-        android:layout_marginTop="22dp"
-        android:text="Outdoor" />
-
-    <CheckBox
-        android:id="@+id/cbFoodie"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/cbOutdoor"
-        android:layout_alignBottom="@+id/cbOutdoor"
-        android:layout_toEndOf="@+id/editProfileSubmit"
-        android:layout_toRightOf="@+id/editProfileSubmit"
-        android:text="Foodie" />
-
-    <CheckBox
-        android:id="@+id/cbGames"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/cbOutdoor"
-        android:layout_alignStart="@+id/cbOutdoor"
-        android:layout_below="@+id/cbOutdoor"
-        android:layout_marginTop="22dp"
-        android:text="Games" />
-
-    <CheckBox
-        android:id="@+id/cbParty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/cbGames"
-        android:layout_alignBottom="@+id/cbGames"
-        android:layout_alignLeft="@+id/cbFoodie"
-        android:layout_alignStart="@+id/cbFoodie"
-        android:text="Party" />
-
-    <CheckBox
-        android:id="@+id/cbCreative"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/cbGames"
-        android:layout_alignStart="@+id/cbGames"
-        android:layout_below="@+id/cbGames"
-        android:layout_marginTop="25dp"
-        android:text="Creative" />
-
-    <CheckBox
-        android:id="@+id/cbReading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/cbCreative"
-        android:layout_alignLeft="@+id/cbParty"
-        android:layout_alignStart="@+id/cbParty"
-        android:text="Reading" />
-
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:background="@color/darkGray"
+        android:padding="@dimen/text_padding"
+        android:includeFontPadding="false"
+        android:text="Skip"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@id/tlInterestLayout"
+        android:layout_marginTop="@dimen/view_margin"
+        android:layout_marginBottom="@dimen/view_margin" />
 
 </RelativeLayout>
