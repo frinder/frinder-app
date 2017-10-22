@@ -24,4 +24,15 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="button_image">
+        <item name="android:background">@color/dark_orange</item>
+        <item name="android:clickable">true</item>
+        <item name="android:drawablePadding">@dimen/textview_drawable_padding</item>
+        <item name="android:paddingTop">@dimen/text_button_vertical_padding</item>
+        <item name="android:paddingBottom">@dimen/text_button_vertical_padding</item>
+        <item name="android:paddingLeft">@dimen/text_button_horizontal_padding</item>
+        <item name="android:paddingRight">@dimen/text_button_horizontal_padding</item>
+        <item name="android:gravity">center</item>
+    </style>
+
 </resources>

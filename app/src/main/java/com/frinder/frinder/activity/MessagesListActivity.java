@@ -20,8 +20,8 @@ public class MessagesListActivity extends AppCompatActivity {
     private ArrayList<MessageThread> mThreads;
     private ThreadsAdapter mAdapter;
 
-    @BindView(R.id.rvMessages)
-    RecyclerView rvMessages;
+    @BindView(R.id.rvThreads)
+    RecyclerView rvThreads;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -36,8 +36,8 @@ public class MessagesListActivity extends AppCompatActivity {
 
         mThreads = new ArrayList<>();
         mAdapter = new ThreadsAdapter(this, mThreads);
-        rvMessages.setAdapter(mAdapter);
-        rvMessages.setLayoutManager(new LinearLayoutManager(this));
+        rvThreads.setAdapter(mAdapter);
+        rvThreads.setLayoutManager(new LinearLayoutManager(this));
 
         // TODO: add logic to query threads
     }

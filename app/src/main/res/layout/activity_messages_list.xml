@@ -11,7 +11,7 @@
         layout="@layout/toolbar" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvMessages"
+        android:id="@+id/rvThreads"
         android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
