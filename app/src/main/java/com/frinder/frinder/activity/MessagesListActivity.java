@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.frinder.frinder.R;
 import com.frinder.frinder.adapters.ThreadsAdapter;
+import com.frinder.frinder.dataaccess.MessageFirebaseDas;
 import com.frinder.frinder.model.MessageThread;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class MessagesListActivity extends AppCompatActivity {
 
     private ArrayList<MessageThread> mThreads;
     private ThreadsAdapter mAdapter;
+    private MessageFirebaseDas mMessageFirebaseDas;
 
     @BindView(R.id.rvThreads)
     RecyclerView rvThreads;
@@ -39,6 +41,13 @@ public class MessagesListActivity extends AppCompatActivity {
         rvThreads.setAdapter(mAdapter);
         rvThreads.setLayoutManager(new LinearLayoutManager(this));
 
-        // TODO: add logic to query threads
+        mMessageFirebaseDas = new MessageFirebaseDas(this);
+        mMessageFirebaseDas.getThreads(new MessageFirebaseDas.OnCompletionListener() {
+            public void onThreadsReceived(ArrayList<MessageThread> threads) {
+                mThreads.clear();
+                mThreads.addAll(threads);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }

@@ -12,7 +12,6 @@ public class Message {
         TYPE_RECEIVED
     }
 
-    public String uid;
     public MessageThread thread;
     public String text;
     public Type type;
