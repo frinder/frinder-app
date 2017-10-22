@@ -18,12 +18,26 @@ public final class Constants {
     public static final String USER_COLUMN_DISCOVERABLE = "discoverable";
 
     // Request Firebase Datastore Keys (Column Names)
-    public static final String REQUEST_COLUMN_ACCEPTED = "accepted" ;
-    public static final String REQUEST_COLUMN_ACCEPTED_TIMESTAMP = "acceptedTimestamp" ;
-    public static final String REQUEST_COLUMN_RECEIVER_ID = "receiverId" ;
+    public static final String REQUEST_COLUMN_ACCEPTED = "accepted";
+    public static final String REQUEST_COLUMN_ACCEPTED_TIMESTAMP = "acceptedTimestamp";
+    public static final String REQUEST_COLUMN_RECEIVER_ID = "receiverId";
     public static final String REQUEST_COLUMN_SENDER_ID = "senderId";
-    public static final String REQUEST_COLUMN_SENT_TIMESTAMP = "sentTimestamp" ;
-    public static final String REQUEST_COLUMN_UNREAD = "unread" ;
+    public static final String REQUEST_COLUMN_SENT_TIMESTAMP = "sentTimestamp";
+    public static final String REQUEST_COLUMN_UNREAD = "unread";
+
+    // Thread Firebase Datastore Keys (Column Names)
+    public static final String THREAD_COLUMN_MESSAGES = "messages";
+    public static final String THREAD_COLUMN_UNREAD = "unread";
+    public static final String THREAD_COLUMN_USER1 = "user1";
+    public static final String THREAD_COLUMN_USER2 = "user2";
+    public static final String THREAD_COLUMN_LAST_MESSAGE = "lastMessage";
+    public static final String THREAD_COLUMN_LAST_TIMESTAMP = "lastTimestamp";
+    public static final String THREAD_COLUMN_LAST_SENDERID = "lastSenderId";
+
+    // Message Firebase Datastore Keys (Column Names)
+    public static final String MESSAGE_COLUMN_SENDERID = "senderId";
+    public static final String MESSAGE_COLUMN_TEXT = "text";
+    public static final String MESSAGE_COLUMN_TIMESTAMP = "timestamp";
 
     // Facebook data access keys
     public static final String FACEBOOK_PROFILE_ID = "id";
