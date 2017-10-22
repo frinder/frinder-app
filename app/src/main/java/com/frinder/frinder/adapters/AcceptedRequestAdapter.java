@@ -1,6 +1,7 @@
 package com.frinder.frinder.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,13 @@ import android.widget.TextView;
 
 import com.facebook.Profile;
 import com.frinder.frinder.R;
+import com.frinder.frinder.activity.MessageDetailActivity;
+import com.frinder.frinder.dataaccess.MessageFirebaseDas;
+import com.frinder.frinder.model.MessageThread;
 import com.frinder.frinder.model.Request;
+import com.frinder.frinder.utils.Constants;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -17,8 +24,11 @@ import butterknife.ButterKnife;
 
 public class AcceptedRequestAdapter extends RequestsAdapter {
 
+    private MessageFirebaseDas mMessageFirebaseDas;
+
     public AcceptedRequestAdapter(Context context, List<Request> requests) {
         super(context, requests);
+        mMessageFirebaseDas = new MessageFirebaseDas(getContext());
     }
 
     String getUserId(Request request) {
@@ -37,6 +47,29 @@ public class AcceptedRequestAdapter extends RequestsAdapter {
         // Return a new holder instance
         AcceptedViewHolder viewHolder = new AcceptedViewHolder(requestView);
         return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        super.onBindViewHolder(holder, position);
+
+        final Request request = getRequest(position);
+        AcceptedViewHolder viewHolder = (AcceptedViewHolder)holder;
+        viewHolder.tvMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMessageFirebaseDas.getOrCreateThread(Profile.getCurrentProfile().getId(),
+                        getUserId(request),
+                        new MessageFirebaseDas.OnCompletionListener() {
+                            @Override
+                            public void onThreadReceived(MessageThread thread) {
+                                Intent i = new Intent(getContext(), MessageDetailActivity.class);
+                                i.putExtra(Constants.INTENT_EXTRA_THREAD, Parcels.wrap(thread));
+                                getContext().startActivity(i);
+                            }
+                        });
+            }
+        });
     }
 
     public class AcceptedViewHolder extends RequestsAdapter.ViewHolder {
