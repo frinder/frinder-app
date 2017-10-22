@@ -10,8 +10,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivUserImage"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
@@ -27,44 +27,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/tvUserName"
+            android:id="@+id/tvMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@color/colorPrimaryDark"
-            android:textStyle="bold"
-            tools:text="User Name" />
-
-        <ImageView
-            android:id="@+id/ivNewTag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:background="@drawable/ic_fiber_new"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/tvUserName" />
+            android:textSize="16sp"
+            tools:text="Sample message" />
 
         <TextView
             android:id="@+id/tvTimestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            tools:text="5 days ago"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
-        <TextView
-            android:id="@+id/tvSnippet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_alignLeft="@id/tvUserName"
             android:layout_alignStart="@id/tvUserName"
-            android:layout_below="@id/tvUserName"
+            android:layout_below="@id/tvMessage"
             android:textColor="@color/black"
-            tools:text="This is a short description about the user" />
+            android:textSize="10sp"
+            android:textStyle="italic"
+            tools:text="May 3, 2017" />
 
     </RelativeLayout>
 

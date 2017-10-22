@@ -2,6 +2,7 @@ package com.frinder.frinder.adapters;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +12,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.frinder.frinder.R;
+import com.frinder.frinder.activity.MessageDetailActivity;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.MessageThread;
 import com.frinder.frinder.model.User;
+import com.frinder.frinder.utils.Constants;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -50,7 +55,7 @@ public class ThreadsAdapter extends
 
         holder.position = position;
         holder.tvSnippet.setText(thread.messageSnippet);
-        mUserDas.getUser(thread.senderId, new UserFirebaseDas.OnCompletionListener() {
+        mUserDas.getUser(thread.userId, new UserFirebaseDas.OnCompletionListener() {
             @Override
             public void onUserReceived(User user) {
                 // Ensure that the ViewHolder is still at the same position
@@ -58,6 +63,15 @@ public class ThreadsAdapter extends
                     populateUserDetails(holder, user);
                     holder.ivNewTag.setVisibility(thread.unread ? View.VISIBLE : View.INVISIBLE);
                 }
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(mContext, MessageDetailActivity.class);
+                i.putExtra(Constants.INTENT_EXTRA_THREAD, Parcels.wrap(thread));
+                mContext.startActivity(i);
             }
         });
 

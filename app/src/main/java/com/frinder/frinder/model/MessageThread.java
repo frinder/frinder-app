@@ -8,7 +8,7 @@ import java.util.Date;
 public class MessageThread {
 
     public String uid;
-    public String senderId;
+    public String userId;
     public String messageSnippet;
     public boolean unread;
     public Date lastTimestamp;
