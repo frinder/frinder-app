@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.frinder.frinder.R;
 import com.frinder.frinder.adapters.MessagesAdapter;
+import com.frinder.frinder.dataaccess.MessageFirebaseDas;
 import com.frinder.frinder.model.Message;
 import com.frinder.frinder.model.MessageThread;
 import com.frinder.frinder.utils.Constants;
@@ -24,6 +25,7 @@ public class MessageDetailActivity extends AppCompatActivity {
     private ArrayList<Message> mMessages;
     private MessagesAdapter mAdapter;
     private MessageThread mThread;
+    private MessageFirebaseDas mMessageFirebaseDas;
 
     @BindView(R.id.rvMessages)
     RecyclerView rvMessages;
@@ -47,6 +49,14 @@ public class MessageDetailActivity extends AppCompatActivity {
         rvMessages.setAdapter(mAdapter);
         rvMessages.setLayoutManager(new LinearLayoutManager(this));
 
-        // TODO: add logic to query messages
+        mMessageFirebaseDas = new MessageFirebaseDas(this);
+        mMessageFirebaseDas.getMessages(mThread, new MessageFirebaseDas.OnCompletionListener() {
+            @Override
+            public void onMessagesReceived(ArrayList<Message> messages) {
+                mMessages.clear();
+                mMessages.addAll(messages);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }

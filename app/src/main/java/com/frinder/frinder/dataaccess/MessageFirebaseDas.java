@@ -23,6 +23,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MessageFirebaseDas {
@@ -62,6 +64,29 @@ public class MessageFirebaseDas {
         Query query2 = getCollection().whereEqualTo(Constants.THREAD_COLUMN_USER2, loggedInUserId);
         setupThreadCompletionListeners(query1, inListener);
         setupThreadCompletionListeners(query2, inListener);
+    }
+
+    public void getMessages(final MessageThread thread, final OnCompletionListener listener) {
+        getDocument(thread.uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        Log.d(TAG, "GetUser: DocumentSnapshot data: " + task.getResult().getData());
+                        if (task.getResult() != null && task.getResult().getData() != null) {
+                            listener.onMessagesReceived(parseMessageList(document, thread));
+                            return;
+                        }
+                    } else {
+                        Log.d(TAG, "GetUser: No such document");
+                    }
+                } else {
+                    Log.d(TAG, "GetUser: get failed with ", task.getException());
+                }
+                listener.onMessagesReceived(null);
+            }
+        });
     }
 
     private void setupThreadCompletionListeners(Query query, final OnCompletionListener listener) {
@@ -186,4 +211,15 @@ public class MessageFirebaseDas {
         }
         return threadList;
     }
+
+        @NonNull
+        private static ArrayList<Message> parseMessageList(DocumentSnapshot snapshot, MessageThread thread) {
+            ArrayList<Message> messageList = new ArrayList<>();
+            List<HashMap> messages = (List<HashMap>)snapshot.get(Constants.THREAD_COLUMN_MESSAGES);
+            for (HashMap data : messages) {
+                Message message = convertMessageFromFirebaseObject(thread, data);
+                messageList.add(message);
+            }
+            return messageList;
+        }
 }
