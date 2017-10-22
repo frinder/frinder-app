@@ -19,7 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MessagesAdapter extends
-        RecyclerView.Adapter<MessagesAdapter.ViewHolder> {
+        RecyclerView.Adapter<MessagesAdapter.BaseViewHolder> {
 
     private List<Message> mMessages;
     private Context mContext;
@@ -32,24 +32,39 @@ public class MessagesAdapter extends
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MessagesAdapter.BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        // Inflate the custom layout
-        View view = inflater.inflate(R.layout.item_message, parent, false);
-        return new ViewHolder(view);
+        View view;
+        switch (Message.Type.values()[viewType]) {
+            case TYPE_RECEIVED:
+                view = inflater.inflate(R.layout.item_received_message, parent, false);
+                return new MessagesAdapter.ReceivedViewHolder(view);
+            case TYPE_SENT:
+            default:
+                view = inflater.inflate(R.layout.item_message, parent, false);
+                return new MessagesAdapter.BaseViewHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final BaseViewHolder holder, final int position) {
         // Get the data model based on position
         final Message message = mMessages.get(position);
 
         holder.position = position;
         holder.tvMessage.setText(message.text);
-        // TODO: Add user image
         // TODO: Add last timestamp
+
+        switch (message.type) {
+            case TYPE_RECEIVED:
+                // TODO: Add user image
+                break;
+            case TYPE_SENT:
+            default:
+                break;
+        }
     }
 
     @Override
@@ -57,21 +72,36 @@ public class MessagesAdapter extends
         return mMessages.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getItemViewType(int position) {
+        final Message message = mMessages.get(position);
+        return message.type.ordinal();
+    }
 
-        @BindView(R.id.ivUserImage)
-        ImageView ivUserImage;
+    public class BaseViewHolder extends RecyclerView.ViewHolder {
+
         @BindView(R.id.tvMessage)
         TextView tvMessage;
         @BindView(R.id.tvTimestamp)
         TextView tvTimestamp;
-
         int position;
 
-        public ViewHolder(View itemView) {
+        public BaseViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    public class ReceivedViewHolder extends BaseViewHolder {
+
+        @BindView(R.id.ivUserImage)
+        ImageView ivUserImage;
+
+        public ReceivedViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
     }
 
 }
