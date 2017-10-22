@@ -17,4 +17,52 @@
     <string name="title_incoming">Incoming</string>
     <string name="title_outgoing">Outgoing</string>
     <string name="title_accepted">Accepted</string>
+
+    <!-- For interest filter in discover activity -->
+    <string-array name="filter_interest_label">
+        <item>Arts &amp; Crafts</item>
+        <item>Auto</item>
+        <item>Board Games\nPuzzles</item>
+        <item>Cooking</item>
+        <item>Dancing</item>
+        <item>DIY Projects</item>
+        <item>Economy\nCurrent Affairs</item>
+        <item>Fitness\nWellness</item>
+        <item>Food &amp; Spirits</item>
+        <item>Movies</item>
+        <item>Music</item>
+        <item>Parenting\nFamily</item>
+        <item>Pets</item>
+        <item>Photography</item>
+        <item>Reading/Writing\nLiterature</item>
+        <item>Shopping</item>
+        <item>Spirituality\nGood Karma</item>
+        <item>Sports</item>
+        <item>Technology\nScience</item>
+        <item>Travel\nOutdoor</item>
+        <item>Video Games</item>
+    </string-array>
+    <string-array name="filter_interest_forDB">
+        <item>ArtsCrafts</item>
+        <item>Auto</item>
+        <item>BoardGamesPuzzles</item>
+        <item>Cooking</item>
+        <item>Dancing</item>
+        <item>DIYProjects</item>
+        <item>EconomyCurrentAffairs</item>
+        <item>FitnessWellness</item>
+        <item>FoodSpirits</item>
+        <item>Movies</item>
+        <item>Music</item>
+        <item>ParentingFamily</item>
+        <item>Pets</item>
+        <item>Photography</item>
+        <item>ReadingWritingLiterature</item>
+        <item>Shopping</item>
+        <item>SpiritualityGoodKarma</item>
+        <item>Sports</item>
+        <item>TechnologyScience</item>
+        <item>TravelOutdoor</item>
+        <item>VideoGames</item>
+    </string-array>
 </resources>

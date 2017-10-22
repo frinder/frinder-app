@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--TODO get vector icons for all interests-->
+    <integer-array name="filter_interest_icon">
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_location_user_gray</item>
+    </integer-array>
+</resources>
