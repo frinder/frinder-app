@@ -55,7 +55,8 @@ public class MessagesAdapter extends
 
         holder.position = position;
         holder.tvMessage.setText(message.text);
-        // TODO: Add last timestamp
+        holder.tvTimestamp.setText(message.timestamp.toString());
+        // TODO: Add relative timestamp
 
         switch (message.type) {
             case TYPE_RECEIVED:
