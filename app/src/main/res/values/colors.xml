@@ -9,4 +9,6 @@
     <color name="light_orange">#FFF3E0</color>
     <color name="black">#000000</color>
     <color name="new_tag">#E65100</color>
+    <color name="gray">#CCCCCC</color>
+    <color name="darkGray">#777777</color>
 </resources>

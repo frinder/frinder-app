@@ -6,7 +6,8 @@ import names
 import random
 
 genders = [u'male', u'female']
-interests = [u'Movies', u'Football', u'Books', u'Music']
+interests = [u'ArtsCrafts', u'Auto', u'BoardGamesPuzzles', u'Cooking', u'Dancing', u'DIYProjects', u'EconomyCurrentAffairs', u'FitnessWellness', u'FoodSpirits', u'Movies', u'Music', u'ParentingFamily', u'Pets', u'Photography', u'ReadingWritingLiterature', u'Shopping', u'SpiritualityGoodKarma', u'Sports', u'TechnologyScience', u'TravelOutdoor', u'VideoGames']
+
 script_version=1
 
 def printUsers(db):

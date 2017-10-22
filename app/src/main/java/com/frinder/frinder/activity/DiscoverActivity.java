@@ -28,10 +28,12 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.frinder.frinder.R;
 import com.frinder.frinder.adapters.DiscoverUsersAdapter;
+import com.frinder.frinder.adapters.InterestsAdapter;
 import com.frinder.frinder.adapters.SpacesItemDecoration;
 import com.frinder.frinder.dataaccess.DiscoverFirebaseDas;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.DiscoverUser;
+import com.frinder.frinder.model.Interest;
 import com.frinder.frinder.model.User;
 import com.frinder.frinder.utils.LocationUtils;
 
@@ -43,7 +45,6 @@ import static com.frinder.frinder.activity.MainActivity.LOCATION_DENY_MSG;
 public class DiscoverActivity extends AppCompatActivity {
     private static final String TAG = "DiscoverActivity";
     ArrayList<DiscoverUser> nearbyUsers;
-    ArrayList<DiscoverUser> buildNearbyUsersList;
     DiscoverUsersAdapter adapter;
     Profile profile;
     User currentUser;
@@ -55,6 +56,10 @@ public class DiscoverActivity extends AppCompatActivity {
     ImageView ivDiscoverUserIcon;
     ProgressBar pbDiscoverUser;
     Handler handler;
+    String filterInterest = "";
+    ArrayList<Interest> interests;
+    RecyclerView rvInterests;
+    InterestsAdapter interestsAdapter;
 
     //Counts required for nearbyUsers
     int unFilteredNearbyUsersCount;
@@ -78,6 +83,26 @@ public class DiscoverActivity extends AppCompatActivity {
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //Note: This is to support filtering by multiple interests
+        //filterInterestList = new ArrayList<>();
+
+        // Lookup the recyclerview in activity layout
+        rvInterests = (RecyclerView) findViewById(R.id.rvInterests);
+        interests = Interest.createFilterInterestList(getResources().getStringArray(R.array.filter_interest_label),
+                getResources().obtainTypedArray(R.array.filter_interest_icon),
+                getResources().getStringArray(R.array.filter_interest_forDB));
+        interestsAdapter = new InterestsAdapter(this, interests);
+        rvInterests.setAdapter(interestsAdapter);
+        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        rvInterests.setLayoutManager(horizontalLayoutManagaer);
+
+        interestsAdapter.setOnItemClickListener(new InterestsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                getSelectedInterest(position);
+            }
+        });
 
         srlDiscoverContainer = (SwipeRefreshLayout) findViewById(R.id.srlDiscoverContainer);
         RecyclerView rvDiscoverusers = (RecyclerView) findViewById(R.id.rvDiscoverUsers);
@@ -131,6 +156,67 @@ public class DiscoverActivity extends AppCompatActivity {
         handler = new Handler();
     }
 
+    private void getSelectedInterest(int position) {
+        //Note: This is to support filtering by multiple interests
+        //But the clicked interests will remain in original position and not jump to beginning of list
+                /*Interest interestClicked = interests.get(position);
+                String interestClickedDBValue = interestClicked.getDBValue();
+
+                if (filterInterestList.contains(interestClickedDBValue)) {
+                    filterInterestList.remove(interestClickedDBValue);
+                    interestClicked.setSelected(false);
+                }
+                else {
+                    filterInterestList.add(interestClickedDBValue);
+                    interestClicked.setSelected(true);
+                }
+
+                interestsAdapter.notifyItemChanged(position);
+
+                Log.d(TAG, "Interests picked = " + filterInterestList.toString());
+                */
+
+        Interest interestClicked = interests.get(position);
+        String interestClickedDBValue = interestClicked.getDBValue();
+
+        if (filterInterest.isEmpty()) {
+            interests.remove(interestClicked);
+            interestClicked.setSelected(true);
+            interests.add(0, interestClicked);
+            filterInterest = interestClickedDBValue;
+        }
+        else {
+            if (interestClickedDBValue.contentEquals(filterInterest)) {
+                interests.remove(interestClicked);
+                interestClicked.setSelected(false);
+                interests.add(interestClicked.getOrigArrayPosition(), interestClicked);
+                filterInterest = "";
+            } else {
+                Interest previousInterest = interests.remove(0);
+                previousInterest.setSelected(false);
+                interests.add(previousInterest.getOrigArrayPosition(), previousInterest);
+
+                interests.remove(interestClicked);
+                interestClicked.setSelected(true);
+                interests.add(0, interestClicked);
+                filterInterest = interestClickedDBValue;
+            }
+        }
+
+        interestsAdapter.notifyDataSetChanged();
+        rvInterests.scrollToPosition(0);
+
+        Log.d(TAG, "Interest picked = " + filterInterest);
+
+        //ToDo Call method to refresh Discover UI
+        if(currentUser.getLocation()!=null && currentUser.getLocation().size() > 0) {
+            getdiscoverUsers();
+        }
+        else {
+            repeatGetDiscoverUsers();
+        }
+    }
+
     private void repeatGetDiscoverUsers() {
         handler.removeCallbacksAndMessages(null);
 
@@ -168,10 +254,9 @@ public class DiscoverActivity extends AppCompatActivity {
 
         //get filterInterests
         final ArrayList<String> filterInterests = new ArrayList<>();
-        filterInterests.add("Music");
-        filterInterests.add("Movies");
-        filterInterests.add("Football");
-        filterInterests.add("Books");
+        if (!filterInterest.isEmpty()) {
+            filterInterests.add(filterInterest);
+        }
 
         unFilteredNearbyUsersCount = 0;
         filteredNearbyUsersCount = 0;
@@ -197,9 +282,9 @@ public class DiscoverActivity extends AppCompatActivity {
                                     correctTimestamp = true;
                                 }
 
+                                boolean interestMatch = false;
                                 Log.d(TAG, user.getName() + ", user interests =" + user.getInterests().toString());
                                 Log.d(TAG, user.getName() + ", filter interests =" + filterInterests.toString());
-                                boolean interestMatch = false;
                                 if (filterInterests.size() > 0) {
                                     if (user.getInterests() != null && user.getInterests().size() > 0) {
                                         ArrayList<String> filterInterestsCopy = new ArrayList<String>(filterInterests);
@@ -207,6 +292,9 @@ public class DiscoverActivity extends AppCompatActivity {
                                         if (filterInterestsCopy.size() > 0) interestMatch = true;
                                         Log.d(TAG, user.getName() + ", common interests =" + filterInterestsCopy.toString());
                                     }
+                                }
+                                else {
+                                    interestMatch = true;
                                 }
 
                                 //TODO uncomment line below and comment the next one when discoverable field is included
