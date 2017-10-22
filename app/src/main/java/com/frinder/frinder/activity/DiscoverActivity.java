@@ -280,23 +280,23 @@ public class DiscoverActivity extends AppCompatActivity {
             return true;
         }*/
 
-        if (id == R.id.menu_action_notifications) {
-            Intent i = new Intent(this, NotificationsActivity.class);
-            startActivity(i);
-            return true;
+        switch (id) {
+            case R.id.menu_action_notifications:
+                startActivity(new Intent(this, NotificationsActivity.class));
+                return true;
+            case R.id.menu_action_messages:
+                startActivity(new Intent(this, MessagesListActivity.class));
+                return true;
+            case R.id.menu_action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+            case R.id.menu_action_logout:
+                Toast.makeText(this, "User logged out ", Toast.LENGTH_LONG).show();
+                LoginManager.getInstance().logOut();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        if (id == R.id.menu_action_settings) {
-            Intent i = new Intent(this, SettingsActivity.class);
-            startActivity(i);
-            return true;
-        }
-        if (id == R.id.menu_action_logout) {
-            Toast.makeText(this, "User logged out ", Toast.LENGTH_LONG).show();
-            LoginManager.getInstance().logOut();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private boolean requestLocationPermissions() {
