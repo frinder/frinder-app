@@ -2,81 +2,89 @@ package com.frinder.frinder.adapters;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.frinder.frinder.R;
-import com.frinder.frinder.dataaccess.RequestFirebaseDas;
+import com.frinder.frinder.activity.MessageDetailActivity;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
-import com.frinder.frinder.model.Request;
+import com.frinder.frinder.model.MessageThread;
 import com.frinder.frinder.model.User;
+import com.frinder.frinder.utils.Constants;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class RequestsAdapter extends
-        RecyclerView.Adapter<RequestsAdapter.ViewHolder> {
+public class ThreadsAdapter extends
+        RecyclerView.Adapter<ThreadsAdapter.ViewHolder> {
 
-    private List<Request> mRequests;
+    private List<MessageThread> mThreads;
     private Context mContext;
     private UserFirebaseDas mUserDas;
-    private RequestFirebaseDas mRequestDas;
 
-    public RequestsAdapter(Context context, List<Request> requests) {
-        mRequests = requests;
+    public ThreadsAdapter(Context context, List<MessageThread> threads) {
+        mThreads = threads;
         mContext = context;
         mUserDas = new UserFirebaseDas(mContext);
-        mRequestDas = new RequestFirebaseDas(mContext);
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        // Inflate the custom layout
+        View view = inflater.inflate(R.layout.item_thread, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         // Get the data model based on position
-        final Request request = getRequest(position);
+        final MessageThread thread = mThreads.get(position);
 
-        String userId = getUserId(request);
         holder.position = position;
-        // TODO: Move this to a static variable/cache this
-        mUserDas.getUser(userId, new UserFirebaseDas.OnCompletionListener() {
+        holder.tvSnippet.setText(thread.messageSnippet);
+        mUserDas.getUser(thread.userId, new UserFirebaseDas.OnCompletionListener() {
             @Override
             public void onUserReceived(User user) {
                 // Ensure that the ViewHolder is still at the same position
                 if (user != null && holder.position == position) {
                     populateUserDetails(holder, user);
-                    holder.ivNewTag.setVisibility(request.unread ? View.VISIBLE : View.INVISIBLE);
+                    holder.ivNewTag.setVisibility(thread.unread ? View.VISIBLE : View.INVISIBLE);
                 }
             }
         });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(mContext, MessageDetailActivity.class);
+                i.putExtra(Constants.INTENT_EXTRA_THREAD, Parcels.wrap(thread));
+                mContext.startActivity(i);
+            }
+        });
+
+        // TODO: Add last timestamp
     }
 
     @Override
     public int getItemCount() {
-        return mRequests.size();
-    }
-
-    protected RequestFirebaseDas getRequestDas() {
-        return mRequestDas;
-    }
-
-    protected Request getRequest(int position) {
-        return mRequests.get(position);
-    }
-
-    protected void deleteItem(int position) {
-        if (position < mRequests.size()) {
-            mRequests.remove(position);
-            notifyItemRemoved(position);
-        }
+        return mThreads.size();
     }
 
     private void populateUserDetails(ViewHolder holder, User user) {
         holder.tvUserName.setText(user.getName());
-        holder.tvUserDesc.setText(user.getDesc());
         Glide.with(mContext)
                 .load(user.getProfilePicUrl())
                 .centerCrop()
@@ -89,8 +97,10 @@ public abstract class RequestsAdapter extends
         ImageView ivUserImage;
         @BindView(R.id.tvUserName)
         TextView tvUserName;
-        @BindView(R.id.tvUserDesc)
-        TextView tvUserDesc;
+        @BindView(R.id.tvSnippet)
+        TextView tvSnippet;
+        @BindView(R.id.tvTimestamp)
+        TextView tvTimestamp;
         @BindView(R.id.ivNewTag)
         ImageView ivNewTag;
 
@@ -101,7 +111,5 @@ public abstract class RequestsAdapter extends
             ButterKnife.bind(this, itemView);
         }
     }
-
-    abstract String getUserId(Request request);
 
 }

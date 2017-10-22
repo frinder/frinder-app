@@ -34,4 +34,7 @@ public final class Constants {
     public static final String FACEBOOK_PROFILE_LINK = "link";
     public static final String FACEBOOK_PROFILE_PUBLIC_PROFILE = "public_profile";
 
+    // Intent extra
+    public static final String INTENT_EXTRA_THREAD = "thread";
+
 }
