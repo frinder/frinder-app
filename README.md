@@ -61,7 +61,7 @@ This app links to your Facebook profile and has a profile that contains basic in
 ## Wireframe
 [Sprint 2 Walkthrough - User logging into app for the first time](https://drive.google.com/file/d/0B6O9uP4XCesfbzRZM0tXYlN1ZVU/view?usp=sharing)
 
-[Sprint 2 Walkthrough - User logging into app again](https://drive.google.com/file/d/0B6O9uP4XCesfbzRZM0tXYlN1ZVU/view?usp=sharing)
+[Sprint 2 Walkthrough - User logging into app again](https://drive.google.com/file/d/0B6O9uP4XCesfa1pNRVZCUlRjbDA/view?usp=sharing)
 
 [Sprint 2 Walkthrough - Showing settings screen](https://drive.google.com/file/d/0B6O9uP4XCesfMHY4N3BSc2ZMcG8/view?usp=sharing)
 
