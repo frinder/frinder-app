@@ -1,12 +1,15 @@
 package com.frinder.frinder.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +20,7 @@ import com.frinder.frinder.model.DiscoverUser;
 import com.frinder.frinder.model.Request;
 import com.frinder.frinder.model.User;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import butterknife.BindView;
@@ -81,7 +85,37 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
         }
 
         viewHolder.tvUserName.setText(user.getName());
+
+        double dInMtr = discoverUser.getDistanceFromAppUser();
+        double dInMiles = dInMtr/1609;
+        double dInFeet = dInMtr*3.2808;
+        DecimalFormat numberFormat = new DecimalFormat("#.##");
+        double distance = Double.parseDouble(numberFormat.format(dInMiles));
+        if (distance == 0) {
+            distance = Double.parseDouble(numberFormat.format(dInFeet));
+            viewHolder.tvDistance.setText(distance + "ft");
+            //Log.d(TAG, "FINAL: " + user.getName() + " @ " + distance + "ft");
+        }
+        else {
+            viewHolder.tvDistance.setText(distance + "mi");
+            //Log.d(TAG, "FINAL: " + user.getName() + " @ " + distance + "mi");
+        }
+
         viewHolder.tvUserDesc.setText(user.getDesc());
+
+        viewHolder.llUserInterests.removeAllViews();
+        TextView tvLikesLabel = new TextView(mContext);
+        tvLikesLabel.setText("Likes:");
+        tvLikesLabel.setTypeface(tvLikesLabel.getTypeface(), Typeface.BOLD);
+        viewHolder.llUserInterests.addView(tvLikesLabel);
+        for (String interest : user.getInterests()) {
+            TextView textView = new TextView(mContext);
+            textView.setText(interest);
+            if (discoverUser.getCommonInterests().contains(interest)) {
+                textView.setTextColor(ContextCompat.getColor(mContext, R.color.dark_orange));
+            }
+            viewHolder.llUserInterests.addView(textView);
+        }
 
         // TODO: Set this based on status of request
         viewHolder.tvBtnRequestToMeet.setClickable(true);
@@ -109,8 +143,12 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
         ImageView ivUserImage;
         @BindView(R.id.tvUserName)
         TextView tvUserName;
+        @BindView(R.id.tvDistance)
+        TextView tvDistance;
         @BindView(R.id.tvUserDesc)
         TextView tvUserDesc;
+        @BindView(R.id.llUserInterests)
+        LinearLayout llUserInterests;
         @BindView(R.id.tvBtnRequestToMeet)
         TextView tvBtnRequestToMeet;
 

@@ -42,6 +42,17 @@
             tools:text="User Name" />
 
         <TextView
+            android:id="@+id/tvDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tvUserName"
+            android:layout_alignBottom="@+id/tvUserName"
+            android:gravity="center_vertical"
+            tools:text="10 feet away" />
+
+        <TextView
             android:id="@+id/tvUserDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -60,14 +71,27 @@
             android:drawableLeft="@drawable/ic_request_to_meet_white"
             android:drawablePadding="@dimen/textview_drawable_padding"
             android:drawableStart="@drawable/ic_request_to_meet_white"
-            android:drawableTint="@color/light_orange"
             android:padding="@dimen/text_padding"
             android:text="@string/tv_btn_request_to_meet_label"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/light_orange"
+            android:textColor="@color/white"
             android:textStyle="bold"
             android:layout_alignBottom="@+id/ivUserImage"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
+
+        <LinearLayout
+            android:id="@+id/llUserInterests"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignLeft="@id/tvUserDesc"
+            android:layout_alignStart="@id/tvUserDesc"
+            android:layout_toStartOf="@id/tvBtnRequestToMeet"
+            android:layout_toLeftOf="@id/tvBtnRequestToMeet"
+            android:layout_alignBottom="@id/ivUserImage"
+            android:layout_below="@id/tvUserDesc"
+            android:textColor="@color/black">
+        </LinearLayout>
     </RelativeLayout>
 </android.support.v7.widget.CardView>
