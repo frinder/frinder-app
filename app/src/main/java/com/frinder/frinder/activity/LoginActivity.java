@@ -18,6 +18,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.frinder.frinder.R;
 import com.frinder.frinder.model.User;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONObject;
 
@@ -55,6 +56,10 @@ public class LoginActivity extends BaseActivity {
                                     @Override
                                     public void onCompleted(JSONObject object, GraphResponse response) {
                                         User user = User.fromJSON(object);
+                                        String token = FirebaseInstanceId.getInstance().getToken();
+                                        if (token != null) {
+                                            user.setToken(token);
+                                        }
                                         Log.d(TAG, "Returning logged user info " + user.getName() + " " + " " + user.getEmail());
                                         //On Successful login
                                         Intent returnIntent = new Intent();

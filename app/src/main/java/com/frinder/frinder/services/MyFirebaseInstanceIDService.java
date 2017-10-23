@@ -2,6 +2,8 @@ package com.frinder.frinder.services;
 
 import android.util.Log;
 
+import com.facebook.Profile;
+import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
@@ -10,6 +12,13 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
     private static final String TAG = "MyFirebaseIIDService";
+    private UserFirebaseDas mUserFirebaseDas;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mUserFirebaseDas = new UserFirebaseDas(this);
+    }
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -39,6 +48,9 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
+        Profile profile = Profile.getCurrentProfile();
+        if (profile != null) {
+            mUserFirebaseDas.updateUserToken(profile.getId(), token);
+        }
     }
 }

@@ -119,6 +119,29 @@ public class UserFirebaseDas {
                 });
     }
 
+    public void updateUserToken(String id, String token) {
+        if (id == null || token == null) {
+            Log.e(TAG, "Skipping updating token since either the user or token is null");
+            return;
+        }
+        DocumentReference userRef = db.collection("users").document(id);
+        Map<String, Object> userData = new HashMap();
+        userData.put(Constants.USER_COLUMN_TOKEN, token);
+        userRef.update(userData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "UpdateDiscoverability: DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "UpdateDiscoverability: Error updating document", e);
+                    }
+                });
+    }
+
     public void updateUserDiscoverability(String id, Boolean isDiscoverable) {
         DocumentReference userRef = db.collection("users").document(id);
         Map<String, Object> userData = new HashMap();
@@ -138,7 +161,6 @@ public class UserFirebaseDas {
                     }
                 });
     }
-
 
     public static class OnCompletionListener {
         public void onUserReceived(User user) {
@@ -176,6 +198,9 @@ public class UserFirebaseDas {
         usr.put(Constants.USER_COLUMN_TIMESTAMP, new Date());
         usr.put(Constants.USER_COLUMN_PROFILE_PIC_URL, user.getProfilePicUrl());
         usr.put(Constants.USER_COLUMN_LINK_URL, user.getLinkUrl());
+        if (user.getToken() != null) {
+            usr.put(Constants.USER_COLUMN_TOKEN, user.getToken());
+        }
         return usr;
     }
 
@@ -189,6 +214,9 @@ public class UserFirebaseDas {
         user.setAge(((Long) usr.get(Constants.USER_COLUMN_AGE)).intValue());
         user.setDesc((String) usr.get(Constants.USER_COLUMN_DESC));
         user.setDiscoverable((Boolean) usr.get(Constants.USER_COLUMN_DISCOVERABLE));
+        if (usr.containsKey(Constants.USER_COLUMN_TOKEN)) {
+            user.setToken((String) usr.get(Constants.USER_COLUMN_TOKEN));
+        }
         Map<String, Boolean> interests = (Map<String, Boolean>) usr.get(Constants.USER_COLUMN_INTERESTS);
         ArrayList<String> interestList = new ArrayList<>();
         if(interests!=null) {
