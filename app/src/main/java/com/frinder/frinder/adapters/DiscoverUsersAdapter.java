@@ -2,6 +2,7 @@ package com.frinder.frinder.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,7 +16,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.facebook.Profile;
 import com.frinder.frinder.R;
+import com.frinder.frinder.activity.DiscoverActivity;
 import com.frinder.frinder.dataaccess.RequestFirebaseDas;
+import com.frinder.frinder.fragments.ShowFullProfileFragment;
 import com.frinder.frinder.model.DiscoverUser;
 import com.frinder.frinder.model.Request;
 import com.frinder.frinder.model.User;
@@ -138,7 +141,7 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
         return mUsers.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.ivUserImage)
         ImageView ivUserImage;
         @BindView(R.id.tvUserName)
@@ -155,6 +158,22 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition(); // gets item position
+            if (position != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
+                DiscoverUser discoverUser = mUsers.get(position);
+                User user = discoverUser.getUser();
+
+                DiscoverActivity myActivity = (DiscoverActivity)mContext;
+                FragmentManager fm = myActivity.getSupportFragmentManager();
+                ShowFullProfileFragment showFullProfileFragment = ShowFullProfileFragment.newInstance(user.getUid());
+                showFullProfileFragment.show(fm, "fragment_show_full_profile");
+            }
         }
     }
 
