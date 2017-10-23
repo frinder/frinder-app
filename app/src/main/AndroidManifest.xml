@@ -52,7 +52,7 @@
         <activity android:name=".activity.EditProfileActivity" />
         <activity android:name=".activity.SettingsActivity" />
         <activity android:name=".activity.MessagesListActivity" />
-        <activity android:name=".activity.MessageDetailActivity"></activity>
+        <activity android:name=".activity.MessageDetailActivity" />
     </application>
 
 </manifest>
