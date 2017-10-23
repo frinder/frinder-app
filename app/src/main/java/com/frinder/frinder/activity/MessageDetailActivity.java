@@ -5,6 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.frinder.frinder.R;
 import com.frinder.frinder.adapters.MessagesAdapter;
@@ -18,6 +23,7 @@ import com.frinder.frinder.utils.Constants;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +38,10 @@ public class MessageDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.rvMessages)
     RecyclerView rvMessages;
+    @BindView(R.id.ibSend)
+    ImageButton ibSend;
+    @BindView(R.id.etSend)
+    EditText etSend;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -60,7 +70,6 @@ public class MessageDetailActivity extends AppCompatActivity {
             }
         });
 
-
         mMessageFirebaseDas = new MessageFirebaseDas(this);
         mMessageFirebaseDas.getMessages(mThread, new MessageFirebaseDas.OnCompletionListener() {
             @Override
@@ -68,6 +77,33 @@ public class MessageDetailActivity extends AppCompatActivity {
                 mMessages.clear();
                 mMessages.addAll(messages);
                 mAdapter.notifyDataSetChanged();
+            }
+        });
+
+        ibSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String text = etSend.getText().toString();
+                if (!TextUtils.isEmpty(text)) {
+                    Message message = new Message();
+                    message.text = text;
+                    message.timestamp = new Date();
+                    message.thread = mThread;
+                    message.type = Message.Type.TYPE_SENT;
+                    mMessages.add(message);
+                    mAdapter.notifyItemInserted(mMessages.size() - 1);
+                    mMessageFirebaseDas.addMessage(mThread, message, new MessageFirebaseDas.OnMessageSendCompletionListener() {
+                        @Override
+                        public void onSuccess() {
+                            Toast.makeText(getBaseContext(), "Sending message succeeded", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            Toast.makeText(getBaseContext(), "Sending message failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
     }
