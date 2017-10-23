@@ -23,6 +23,7 @@ public class User implements Serializable {
     private ArrayList<Double> location;
     private Date timestamp;
     private Boolean discoverable = true;
+    private String token;
 
     public User() {
         interests = new ArrayList<>();
@@ -51,6 +52,10 @@ public class User implements Serializable {
 
     public String getDesc() {
         return desc;
+    }
+
+    public String getToken() {
+        return token;
     }
 
     public ArrayList<String> getInterests() {
@@ -117,6 +122,10 @@ public class User implements Serializable {
         this.linkUrl = linkUrl;
     }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public void setLocation(ArrayList<Double> location) {
         this.location = location;
     }
@@ -140,6 +149,7 @@ public class User implements Serializable {
                 ", location=" + location +
                 ", timestamp=" + timestamp +
                 ", discoverable=" + discoverable +
+                ", token=" + token +
                 '}';
     }
 

@@ -5,6 +5,7 @@ public final class Constants {
 
     // User Firebase Datastore Keys (Column Names)
     public static final String USER_COLUMN_ID = "id" ;
+    public static final String USER_COLUMN_TOKEN = "token" ;
     public static final String USER_COLUMN_NAME = "name" ;
     public static final String USER_COLUMN_GENDER = "gender" ;
     public static final String USER_COLUMN_EMAIL = "email" ;
