@@ -24,14 +24,14 @@ This app links to your Facebook profile and has a profile that contains basic in
 * [X] Setup automated builds to catch build failures
 * [ ] Improve the UI of the app (icons, color scheme, launch screen)
 * [ ] Fire push notifications for events
-* [ ] User can click on a person to view their profile (also allow sending a friend request)
+* [X] User can click on a person to view their profile (also allow sending a friend request)
 
 **Sprint 2** (advanced features):
 
-* [ ] User can edit/fill their profile (desc, choose interests)
-* [ ] User can edit their search settings (radius, gender, age, interest, turn off discoverability)
-* [ ] User can send/receive messages in the app
-  * [ ] Add a messages view to view all your recent messages
+* [X] User can edit/fill their profile (desc, choose interests)
+* [X] User can edit their search settings (radius, gender, age, interest, turn off discoverability)
+* [X] User can send/receive messages in the app
+  * [X] Add a messages view to view all your recent messages
   * [ ] Server sends notifications for received messages
 * [ ] Improvements to app UI
   * [ ] Add a navigation drawer
@@ -41,7 +41,7 @@ This app links to your Facebook profile and has a profile that contains basic in
 * [ ] Support sharing contact details with accepted contacts
 * [ ] Add a location service that runs in the background even when the app is not running
 * [ ] Support sharing contact details with accepted contact
-* [ ] Auto refresh UI (discover feed and notifications)
+* [X] Auto refresh UI (discover feed and notifications)
 
 **Sprint 3** (bonus features):
 * [ ] Find common attributes with the person
@@ -59,6 +59,11 @@ This app links to your Facebook profile and has a profile that contains basic in
 
 
 ## Wireframe
+[Sprint 2 Walkthrough - User logging into app for the first time](https://drive.google.com/file/d/0B6O9uP4XCesfbzRZM0tXYlN1ZVU/view?usp=sharing)
+
+[Sprint 2 Walkthrough - User logging into app again](https://drive.google.com/file/d/0B6O9uP4XCesfbzRZM0tXYlN1ZVU/view?usp=sharing)
+
+[Sprint 2 Walkthrough - Showing settings screen](https://drive.google.com/file/d/0B6O9uP4XCesfMHY4N3BSc2ZMcG8/view?usp=sharing)
 
 ![Sprint 1 Walkthrough](https://imgur.com/gBtGWj1.gif')
 
