@@ -297,18 +297,14 @@ public class DiscoverActivity extends AppCompatActivity {
                                     interestMatch = true;
                                 }
 
-                                //TODO uncomment line below and comment the next one when discoverable field is included
                                 if (isDiscoverable && correctTimestamp && interestMatch) {
-                                //if (correctTimestamp && interestMatch) {
-                                //if (isDiscoverable && correctTimestamp) {
                                     //find distance from AppUser
                                     float[] results = new float[1];
                                     Location.distanceBetween(currentUser.getLocation().get(0), currentUser.getLocation().get(1),
                                             user.getLocation().get(0), user.getLocation().get(1), results);
-                                    float distance = results[0];
-                                    //Log.d(TAG, "Added user to result");
+                                    double dInMtr = Double.parseDouble("" + results[0]);
 
-                                    nearbyUsers.add(new DiscoverUser(user, distance, filterInterests));
+                                    nearbyUsers.add(new DiscoverUser(user, dInMtr, filterInterests));
                                     Log.d(TAG, "Added " + user.getName() + "to recyclerview");
                                 }
 
@@ -320,10 +316,7 @@ public class DiscoverActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    //TODO Show message in snackbar
-                    Toast.makeText(DiscoverActivity.this, "Found nobody. Trying increasing search radius.", Toast.LENGTH_SHORT).show();
-                    srlDiscoverContainer.setRefreshing(false);
-                    repeatGetDiscoverUsers();
+                    displayMsgRepeatDiscover();
                 }
             }
         });
@@ -338,12 +331,16 @@ public class DiscoverActivity extends AppCompatActivity {
                 pbDiscoverUser.setVisibility(View.GONE);
                 ivDiscoverUserIcon.setVisibility(View.GONE);
             } else {
-                //TODO Show message in snackbar
-                Toast.makeText(DiscoverActivity.this, "Found nobody. Trying increasing search radius.", Toast.LENGTH_SHORT).show();
-                srlDiscoverContainer.setRefreshing(false);
-                repeatGetDiscoverUsers();
+                displayMsgRepeatDiscover();
             }
         }
+    }
+
+    private void displayMsgRepeatDiscover() {
+        //TODO Show message in snackbar
+        Toast.makeText(DiscoverActivity.this, "Found nobody. Trying increasing search radius.", Toast.LENGTH_SHORT).show();
+        srlDiscoverContainer.setRefreshing(false);
+        repeatGetDiscoverUsers();
     }
 
     @Override
@@ -357,16 +354,6 @@ public class DiscoverActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.menu_action_discover) {
-            if (currentUser.getLocation() != null && currentUser.getLocation().size() > 0) {
-                getdiscoverUsers();
-            } else {
-                repeatGetDiscoverUsers();
-            }
-            return true;
-        }*/
 
         switch (id) {
             case R.id.menu_action_notifications:

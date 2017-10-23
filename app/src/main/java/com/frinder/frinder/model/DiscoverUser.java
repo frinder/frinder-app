@@ -9,10 +9,10 @@ import java.util.ArrayList;
 //TODO convert to Parcel
 public class DiscoverUser {
     private User user;
-    private Float distanceFromAppUser;
+    private Double distanceFromAppUser;
     private ArrayList<String> commonInterests;
 
-    public DiscoverUser(User user, Float distance, ArrayList<String> interests) {
+    public DiscoverUser(User user, Double distance, ArrayList<String> interests) {
         this.user = user;
         this.distanceFromAppUser = distance;
         this.commonInterests = interests;
@@ -26,11 +26,11 @@ public class DiscoverUser {
         this.user = user;
     }
 
-    public Float getDistanceFromAppUser() {
+    public Double getDistanceFromAppUser() {
         return distanceFromAppUser;
     }
 
-    public void setDistanceFromAppUser(Float distanceFromAppUser) {
+    public void setDistanceFromAppUser(Double distanceFromAppUser) {
         this.distanceFromAppUser = distanceFromAppUser;
     }
 
