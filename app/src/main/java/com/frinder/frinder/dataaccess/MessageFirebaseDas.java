@@ -146,6 +146,34 @@ public class MessageFirebaseDas {
         });
     }
 
+    public void addMessage(final MessageThread thread,
+                           final Message message,
+                           final OnMessageSendCompletionListener inListener) {
+        getMessages(thread, new OnCompletionListener() {
+            @Override
+            public void onMessagesReceived(ArrayList<Message> inMessages) {
+                ArrayList<Message> messages = new ArrayList<Message>();
+                messages.addAll(inMessages);
+                messages.add(message);
+                List fMessages = convertMessageListToFirebaseObjectList(thread, messages);
+                getDocument(thread.uid)
+                        .update(Constants.THREAD_COLUMN_MESSAGES, fMessages)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                inListener.onSuccess();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                inListener.onFailure();
+                            }
+                        });
+            }
+        });
+    }
+
     private void setupThreadCompletionListeners(Query query, final OnCompletionListener listener) {
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -226,6 +254,11 @@ public class MessageFirebaseDas {
         }
     }
 
+    public abstract static class OnMessageSendCompletionListener {
+        public abstract void onSuccess();
+        public abstract void onFailure();
+    }
+
     private static MessageThread convertThreadFromFirebaseObject(String id, Map<String, Object> threadMap) {
         MessageThread thread = new MessageThread();
         thread.uid = id;
@@ -266,6 +299,31 @@ public class MessageFirebaseDas {
         message.type = thread.userId.equals(senderId) ? Message.Type.TYPE_RECEIVED : Message.Type.TYPE_SENT;
 
         return message;
+    }
+
+    @NonNull
+    private Map<String, Object> convertMessageToFirebaseObject(MessageThread thread, Message message) {
+        Map<String, Object> msg = new HashMap<>();
+        msg.put(Constants.MESSAGE_COLUMN_TIMESTAMP, message.timestamp);
+        msg.put(Constants.MESSAGE_COLUMN_TEXT, message.text);
+        switch (message.type) {
+            case TYPE_RECEIVED:
+                msg.put(Constants.MESSAGE_COLUMN_SENDERID, thread.userId);
+                break;
+            default:
+                msg.put(Constants.MESSAGE_COLUMN_SENDERID, Profile.getCurrentProfile().getId());
+                break;
+        }
+        return msg;
+    }
+
+    @NonNull
+    private List<Map> convertMessageListToFirebaseObjectList(MessageThread thread, List<Message> inMessages) {
+        ArrayList<Map> messages = new ArrayList<>();
+        for (Message message : inMessages) {
+            messages.add(convertMessageToFirebaseObject(thread, message));
+        }
+        return messages;
     }
 
     @NonNull
