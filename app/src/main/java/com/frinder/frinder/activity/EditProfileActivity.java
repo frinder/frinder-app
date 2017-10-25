@@ -19,7 +19,7 @@ import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class EditProfileActivity extends AppCompatActivity {
+public class EditProfileActivity extends BaseActivity {
     String userId;
     private UserFirebaseDas userFirebaseDas;
     private ArrayList<CheckBox> cbInterestList;

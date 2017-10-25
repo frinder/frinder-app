@@ -28,7 +28,7 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MessageDetailActivity extends AppCompatActivity {
+public class MessageDetailActivity extends BaseActivity {
 
     private ArrayList<Message> mMessages;
     private MessagesAdapter mAdapter;

@@ -17,6 +17,8 @@
     <string name="title_incoming">Incoming</string>
     <string name="title_outgoing">Outgoing</string>
     <string name="title_accepted">Accepted</string>
+    <string name="snackbar_no_internet_action">Quit</string>
+    <string name="snackbar_no_internet_message">No Internet connection!</string>
 
     <!-- For interest filter in discover activity -->
     <string-array name="filter_interest_label">

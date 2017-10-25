@@ -42,7 +42,7 @@ import java.util.Date;
 
 import static com.frinder.frinder.activity.MainActivity.LOCATION_DENY_MSG;
 
-public class DiscoverActivity extends AppCompatActivity {
+public class DiscoverActivity extends BaseActivity {
     private static final String TAG = "DiscoverActivity";
     ArrayList<DiscoverUser> nearbyUsers;
     DiscoverUsersAdapter adapter;
@@ -74,7 +74,7 @@ public class DiscoverActivity extends AppCompatActivity {
     private final static long TIME_USER_LAST_ACTIVE = 15; //unit is minutes
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discover);
         locationUtilInstance = LocationUtils.getInstance();
