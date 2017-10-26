@@ -14,6 +14,7 @@ public class Request {
     public boolean unread;
     public Date sentTimestamp;
     public Date acceptedTimestamp;
+    public boolean locationShare;
 
     public static Request newInstance(String senderId, String receiverId) {
         Request request = new Request();
@@ -22,6 +23,7 @@ public class Request {
         request.unread = true;
         request.accepted = false;
         request.sentTimestamp = new Date();
+        request.locationShare = true;
         return request;
     }
 
