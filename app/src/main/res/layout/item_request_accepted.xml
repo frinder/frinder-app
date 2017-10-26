@@ -33,7 +33,7 @@
             style="@style/button_text"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:drawableLeft="@drawable/ic_request_to_meet_white"
+            android:drawableLeft="@drawable/ic_directions_walk_white"
             android:text="@string/tv_navigate_to" />
 
 
