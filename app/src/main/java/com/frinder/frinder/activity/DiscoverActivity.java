@@ -362,6 +362,11 @@ public class DiscoverActivity extends BaseActivity {
             case R.id.menu_action_messages:
                 startActivity(new Intent(this, MessagesListActivity.class));
                 return true;
+            case R.id.menu_action_edit_profile:
+                Intent intent = new Intent(this,EditProfileActivity.class);
+                intent.putExtra("userId",Profile.getCurrentProfile().getId());
+                startActivity(intent);
+                return true;
             case R.id.menu_action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;

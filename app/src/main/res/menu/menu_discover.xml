@@ -27,6 +27,14 @@
         android:visible="true"
         app:showAsAction="always" />
     <item
+        android:id="@+id/menu_action_edit_profile"
+        android:checkable="false"
+        android:enabled="true"
+        android:icon="@drawable/ic_settings_white_24dp"
+        android:title="Edit Profile"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/menu_action_settings"
         android:checkable="false"
         android:enabled="true"
