@@ -1,7 +1,11 @@
 package com.frinder.frinder.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +15,15 @@ import com.facebook.Profile;
 import com.frinder.frinder.R;
 import com.frinder.frinder.activity.MessageDetailActivity;
 import com.frinder.frinder.dataaccess.MessageFirebaseDas;
+import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.MessageThread;
 import com.frinder.frinder.model.Request;
+import com.frinder.frinder.model.User;
 import com.frinder.frinder.utils.Constants;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -25,10 +32,12 @@ import butterknife.ButterKnife;
 public class AcceptedRequestAdapter extends RequestsAdapter {
 
     private MessageFirebaseDas mMessageFirebaseDas;
+    private UserFirebaseDas mUserFirebaseDas;
 
     public AcceptedRequestAdapter(Context context, List<Request> requests) {
         super(context, requests);
         mMessageFirebaseDas = new MessageFirebaseDas(getContext());
+        mUserFirebaseDas = new UserFirebaseDas(getContext());
     }
 
     String getUserId(Request request) {
@@ -70,12 +79,51 @@ public class AcceptedRequestAdapter extends RequestsAdapter {
                         });
             }
         });
+
+        viewHolder.tvNavigateTo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userId = getUserId(request);
+                mUserFirebaseDas.getUser(userId, new UserFirebaseDas.OnCompletionListener() {
+                    @Override
+                    public void onUserReceived(User user) {
+                        ArrayList<Double> location = user.getLocation();
+                        Uri gmmIntentUri = Uri.parse("google.navigation:q="+location.get(0)+","+location.get(1)+"&mode=w");
+                        try {
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                            mapIntent.setPackage("com.google.android.apps.maps");
+                            getContext().startActivity(mapIntent);
+                        }
+                        catch (Exception e)
+                        {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setMessage("Please install Google Maps");
+                            builder.setCancelable(false);
+                            builder.setPositiveButton("Install", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.google.android.apps.maps"));
+                                    getContext().startActivity(intent);
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }
+                    }
+                });
+
+
+            }
+        });
     }
 
     public class AcceptedViewHolder extends RequestsAdapter.ViewHolder {
 
         @BindView(R.id.tvMessage)
         TextView tvMessage;
+
+        @BindView(R.id.tvNavigateTo)
+        TextView tvNavigateTo;
 
         public AcceptedViewHolder(View itemView) {
             super(itemView);

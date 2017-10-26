@@ -12,6 +12,8 @@
     <string name="tv_deny">Deny</string>
     <string name="tv_cancel">Cancel Request</string>
     <string name="tv_message">Message</string>
+    <string name="tv_navigate_to">Navigate To</string>
+
 
     <!-- TODO: Come up with better names-->
     <string name="title_incoming">Incoming</string>
