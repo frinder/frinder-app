@@ -11,7 +11,7 @@ import com.frinder.frinder.adapters.RequestsFragmentPagerAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NotificationsActivity extends AppCompatActivity {
+public class NotificationsActivity extends BaseActivity {
 
     @BindView(R.id.tlTabs)
     TabLayout tlTabs;

@@ -26,7 +26,7 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     CallbackManager callbackManager;
     private LoginButton loginButton;

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MessagesListActivity extends AppCompatActivity {
+public class MessagesListActivity extends BaseActivity {
 
     private ArrayList<MessageThread> mThreads;
     private ThreadsAdapter mAdapter;

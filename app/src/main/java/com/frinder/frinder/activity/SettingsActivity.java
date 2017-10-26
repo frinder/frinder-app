@@ -17,7 +17,7 @@ import com.frinder.frinder.dataaccess.UserFirebaseDas;
 
 import static com.frinder.frinder.R.id.sbRadius;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends BaseActivity {
     private UserFirebaseDas userFirebaseDas;
     private SharedPreferences pref;
     private int radiusVal, radiusProgressVal;

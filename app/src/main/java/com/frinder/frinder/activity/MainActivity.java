@@ -3,7 +3,6 @@ package com.frinder.frinder.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -19,7 +18,7 @@ import com.google.firebase.FirebaseApp;
 import io.fabric.sdk.android.Fabric;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     public static final int LOGIN_RESULT = 100;
     public static final int EDIT_PROFILE_RESULT = 200;
     public static final String LOCATION_DENY_MSG = "Frinder requires your location!";
