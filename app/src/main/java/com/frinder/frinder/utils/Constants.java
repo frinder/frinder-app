@@ -24,6 +24,7 @@ public final class Constants {
     public static final String REQUEST_COLUMN_SENDER_ID = "senderId";
     public static final String REQUEST_COLUMN_SENT_TIMESTAMP = "sentTimestamp";
     public static final String REQUEST_COLUMN_UNREAD = "unread";
+    public static final String REQUEST_COLUMN_LOCATION_SHARE = "locationShare";
 
     // Thread Firebase Datastore Keys (Column Names)
     public static final String THREAD_COLUMN_MESSAGES = "messages";

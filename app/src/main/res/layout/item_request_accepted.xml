@@ -27,14 +27,15 @@
 
         <TextView
             android:id="@+id/tvNavigateTo"
-            android:layout_weight="1"
+            style="@style/button_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/button_text"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:drawableLeft="@drawable/ic_request_to_meet_white"
             android:text="@string/tv_navigate_to" />
+            android:layout_weight="1"
+            android:visibility="invisible" />
 
 
     </LinearLayout>

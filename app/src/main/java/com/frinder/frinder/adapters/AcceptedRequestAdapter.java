@@ -63,7 +63,7 @@ public class AcceptedRequestAdapter extends RequestsAdapter {
         super.onBindViewHolder(holder, position);
 
         final Request request = getRequest(position);
-        AcceptedViewHolder viewHolder = (AcceptedViewHolder)holder;
+        final AcceptedViewHolder viewHolder = (AcceptedViewHolder)holder;
         viewHolder.tvMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,7 +79,9 @@ public class AcceptedRequestAdapter extends RequestsAdapter {
                         });
             }
         });
-
+        if(request.locationShare) {
+            viewHolder.tvNavigateTo.setVisibility(View.VISIBLE);
+        }
         viewHolder.tvNavigateTo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,12 +92,15 @@ public class AcceptedRequestAdapter extends RequestsAdapter {
                         ArrayList<Double> location = user.getLocation();
                         Uri gmmIntentUri = Uri.parse("google.navigation:q="+location.get(0)+","+location.get(1)+"&mode=w");
                         try {
+                            viewHolder.tvNavigateTo.setVisibility(View.INVISIBLE);
                             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                             mapIntent.setPackage("com.google.android.apps.maps");
                             getContext().startActivity(mapIntent);
+                            getRequestDas().updateOneTimeLocation(request, false);
                         }
                         catch (Exception e)
                         {
+                            getRequestDas().updateOneTimeLocation(request, true);
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                             builder.setMessage("Please install Google Maps");
                             builder.setCancelable(false);
