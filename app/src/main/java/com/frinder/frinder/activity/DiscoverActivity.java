@@ -36,10 +36,12 @@ import com.frinder.frinder.model.DiscoverUser;
 import com.frinder.frinder.model.Interest;
 import com.frinder.frinder.model.User;
 import com.frinder.frinder.utils.LocationUtils;
+import com.skyfishjy.library.RippleBackground;
 
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.frinder.frinder.R.id.pbDiscoverUser;
 import static com.frinder.frinder.activity.MainActivity.LOCATION_DENY_MSG;
 
 public class DiscoverActivity extends BaseActivity {
@@ -54,7 +56,7 @@ public class DiscoverActivity extends BaseActivity {
     private LocationUtils locationUtilInstance;
     SwipeRefreshLayout srlDiscoverContainer;
     ImageView ivDiscoverUserIcon;
-    ProgressBar pbDiscoverUser;
+    RippleBackground rippleBackground;
     Handler handler;
     String filterInterest = "";
     ArrayList<Interest> interests;
@@ -148,11 +150,15 @@ public class DiscoverActivity extends BaseActivity {
             }
         });
 
-        pbDiscoverUser = (ProgressBar) findViewById(R.id.pbDiscoverUser);
+        rippleBackground=(RippleBackground)findViewById(R.id.pbDiscoverUser);
         ivDiscoverUserIcon = (ImageView) findViewById(R.id.ivDiscoverUserIcon);
-        pbDiscoverUser.setVisibility(View.VISIBLE);
-        ivDiscoverUserIcon.setVisibility(View.VISIBLE);
-
+        ivDiscoverUserIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rippleBackground.startRippleAnimation();
+                ivDiscoverUserIcon.setVisibility(View.VISIBLE);
+            }
+        });
         handler = new Handler();
     }
 
@@ -240,7 +246,7 @@ public class DiscoverActivity extends BaseActivity {
     }
 
     public void getdiscoverUsers() {
-        pbDiscoverUser.setVisibility(View.VISIBLE);
+        rippleBackground.startRippleAnimation();
         ivDiscoverUserIcon.setVisibility(View.VISIBLE);
 
         //Clear the list each time discover menu button is clicked as user list will change based on who is nearby
@@ -328,7 +334,7 @@ public class DiscoverActivity extends BaseActivity {
             if (nearbyUsers.size() > 0) {
                 adapter.notifyDataSetChanged();
                 srlDiscoverContainer.setRefreshing(false);
-                pbDiscoverUser.setVisibility(View.GONE);
+                rippleBackground.stopRippleAnimation();
                 ivDiscoverUserIcon.setVisibility(View.GONE);
             } else {
                 displayMsgRepeatDiscover();
