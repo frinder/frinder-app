@@ -2,28 +2,28 @@
 <resources>
     <!--TODO get vector icons for all interests-->
     <integer-array name="filter_interest_icon">
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
-        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
+        <item>@drawable/ic_interest_icon_placeholder</item>
     </integer-array>
 
     <integer-array name="filter_interest_color">

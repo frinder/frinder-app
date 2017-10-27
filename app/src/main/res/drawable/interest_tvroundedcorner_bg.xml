@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="@dimen/textview_roundedcorner_radius"/>
+    <padding android:bottom="@dimen/interest_text_padding"
+        android:left="@dimen/interest_text_padding"
+        android:right="@dimen/interest_text_padding"
+        android:top="@dimen/interest_text_padding"/>
+</shape>

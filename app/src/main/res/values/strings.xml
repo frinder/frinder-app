@@ -21,6 +21,7 @@
     <string name="title_accepted">Accepted</string>
     <string name="snackbar_no_internet_action">Quit</string>
     <string name="snackbar_no_internet_message">No Internet connection!</string>
+    <string name="interests_label">Interests:</string>
 
     <!-- For interest filter in discover activity -->
     <string-array name="filter_interest_label">
@@ -33,6 +34,7 @@
         <item>Economy\nCurrent Affairs</item>
         <item>Fitness\nWellness</item>
         <item>Food &amp; Spirits</item>
+        <item>Gardening</item>
         <item>Movies</item>
         <item>Music</item>
         <item>Parenting\nFamily</item>
@@ -56,6 +58,7 @@
         <item>EconomyCurrentAffairs</item>
         <item>FitnessWellness</item>
         <item>FoodSpirits</item>
+        <item>Gardening</item>
         <item>Movies</item>
         <item>Music</item>
         <item>ParentingFamily</item>

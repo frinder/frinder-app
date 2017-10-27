@@ -7,49 +7,64 @@
     tools:context="com.frinder.frinder.activity.EditProfileActivity"
     android:padding="@dimen/activity_padding">
 
+    <LinearLayout
+        android:id="@+id/llLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true">
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/colorPrimary"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        tools:text="User Name"
+        android:padding="@dimen/text_padding"
+        />
+
+    <ImageView
+        android:id="@+id/ivBtnProfileClose"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_close_white"
+        android:padding="@dimen/text_padding"
+        android:clickable="true"/>
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/ivUserImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/llLayout"
         android:layout_margin="@dimen/activity_vertical_margin"
         tools:src="@drawable/profile_img_neutral" />
-
-    <TextView
-        android:id="@+id/tvUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/colorPrimaryDark"
-        android:textStyle="bold"
-        tools:text="User Name"
-        android:layout_alignTop="@+id/ivUserImage"
-        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/tvAge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvUserName"
-        android:layout_alignStart="@+id/tvUserName"
-        android:layout_below="@+id/tvUserName"
-        android:layout_marginTop="16dp"
-        tools:text="35 yrs" />
+        android:layout_below="@id/llLayout"
+        android:layout_alignTop="@id/ivUserImage"
+        android:layout_toEndOf="@id/ivUserImage"
+        android:layout_toRightOf="@id/ivUserImage"
+        tools:text="35 yrs, " />
 
     <TextView
         android:id="@+id/tvGender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Female"
-        android:layout_alignBaseline="@+id/tvAge"
-        android:layout_alignBottom="@+id/tvAge"
-        android:layout_toRightOf="@+id/tvAge"
-        android:layout_toEndOf="@+id/tvAge"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp" />
+        android:layout_alignBaseline="@id/tvAge"
+        android:layout_alignBottom="@id/tvAge"
+        android:layout_toRightOf="@id/tvAge"
+        android:layout_toEndOf="@id/tvAge" />
 
     <TextView
         android:id="@+id/tvUserDesc"
@@ -57,48 +72,38 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         tools:text="This is a short description about the user"
-        android:layout_below="@+id/ivUserImage"
-        android:layout_alignLeft="@+id/ivUserImage"
-        android:layout_alignStart="@+id/ivUserImage"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="@dimen/view_margin"
+        android:layout_below="@id/tvAge"
+        android:layout_toRightOf="@id/ivUserImage"
+        android:layout_toEndOf="@id/ivUserImage" />
 
     <TextView
         android:id="@+id/tvInterest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Interests:"
+        android:text="@string/interests_label"
         android:textStyle="bold"
-        android:layout_marginTop="14dp"
-        android:layout_below="@+id/tvUserDesc"
-        android:layout_alignLeft="@+id/tvUserDesc"
-        android:layout_alignStart="@+id/tvUserDesc" />
+        android:layout_below="@id/ivUserImage"
+        android:layout_alignLeft="@id/ivUserImage"
+        android:layout_alignStart="@id/ivUserImage" />
 
-    <LinearLayout
-        android:id="@+id/llUserInterests"
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:id="@+id/svInterests"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_below="@+id/tvInterest"
-        android:layout_alignLeft="@+id/tvInterest"
-        android:layout_alignStart="@+id/tvInterest"
-        android:textColor="@color/black"
-        android:layout_toRightOf="@+id/ivUserImage"
-        android:layout_toEndOf="@+id/ivUserImage">
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btnProfileClose"
-        android:layout_width="wrap_content"
+        android:layout_alignLeft="@id/tvInterest"
+        android:layout_alignStart="@id/tvInterest"
+        android:layout_toRightOf="@id/ivUserImage"
+        android:layout_toEndOf="@id/ivUserImage"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false">
+    <LinearLayout
+        android:id="@+id/llInterestsLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="0dp"
-        android:minWidth="0dp"
-        android:background="@color/colorPrimary"
-        android:padding="@dimen/text_padding"
-        android:includeFontPadding="false"
-        android:text="Close"
-        android:textColor="#ffffff"
-        android:textStyle="bold"
-        android:layout_below="@id/llUserInterests"
-        android:layout_centerHorizontal="true" />
-
+        android:orientation="vertical">
+        <!-- Child Textviews added in code ShowFUllProfileFragment.java-->
+    </LinearLayout>
+    </ScrollView>
 </RelativeLayout>
