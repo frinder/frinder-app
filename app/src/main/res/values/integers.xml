@@ -2,26 +2,52 @@
 <resources>
     <!--TODO get vector icons for all interests-->
     <integer-array name="filter_interest_icon">
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
-        <item>@drawable/ic_location_user_gray</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+        <item>@drawable/ic_star_white_24dp</item>
+    </integer-array>
+
+    <integer-array name="filter_interest_color">
+        <item>@color/red_a700</item>
+        <item>@color/pink_a700</item>
+        <item>@color/purple_a700</item>
+        <item>@color/deep_purple_a700</item>
+        <item>@color/indigo_a700</item>
+        <item>@color/blue_a700</item>
+        <item>@color/light_blue_a700</item>
+        <item>@color/cyan_a700</item>
+        <item>@color/teal_a700</item>
+        <item>@color/green_a700</item>
+        <item>@color/light_green_a700</item>
+        <item>@color/lime_a700</item>
+        <item>@color/yellow_a700</item>
+        <item>@color/amber_a700</item>
+        <item>@color/orange_a700</item>
+        <item>@color/deep_orange_a700</item>
+        <item>@color/red_a200</item>
+        <item>@color/pink_a200</item>
+        <item>@color/purple_a200</item>
+        <item>@color/deep_purple_a200</item>
+        <item>@color/brown_400</item>
+        <item>@color/brown_700</item>
     </integer-array>
 </resources>
