@@ -193,7 +193,8 @@ public class RequestFirebaseDas {
         request.senderId = (String)requestMap.get(Constants.REQUEST_COLUMN_SENDER_ID);
         request.sentTimestamp = (Date)requestMap.get(Constants.REQUEST_COLUMN_SENT_TIMESTAMP);
         request.unread = (boolean)requestMap.get(Constants.REQUEST_COLUMN_UNREAD);
-        request.locationShare = (boolean) requestMap.get(Constants.REQUEST_COLUMN_LOCATION_SHARE);
+        request.locationShare = requestMap.containsKey(Constants.REQUEST_COLUMN_LOCATION_SHARE) ?
+                (boolean) requestMap.get(Constants.REQUEST_COLUMN_LOCATION_SHARE) : false;
         return request;
     }
 
