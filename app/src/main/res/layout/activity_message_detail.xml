@@ -38,12 +38,12 @@
 
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvMessages"
+
+    <com.stfalcon.chatkit.messages.MessagesList
+        android:id="@+id/mlMessages"
         android:layout_below="@id/toolbar"
         android:layout_above="@id/rlSendMessage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

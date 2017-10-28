@@ -39,7 +39,10 @@ public class Message implements IMessage{
 
     @Override
     public IUser getUser() {
-        return null;
+        // Only used to satisfy ChatKit
+        User user = new User();
+        user.setUid(senderId);
+        return user;
     }
 
     @Override
