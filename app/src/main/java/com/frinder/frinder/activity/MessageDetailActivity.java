@@ -35,7 +35,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MessageDetailActivity extends BaseActivity {
+public class MessageDetailActivity extends BaseActivity implements PlacesAdapter.OnSelectedListener {
 
     private static final String TAG = "MessageDetailActivity";
 
@@ -211,5 +211,15 @@ public class MessageDetailActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onSelected(Place place) {
+        if (place == null) {
+            return;
+        }
+
+        String message = "Let's meet at " + place.name + ", " + place.address + "?";
+        addMessage(message);
     }
 }
