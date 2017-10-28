@@ -17,7 +17,6 @@
         android:id="@+id/tvInterestLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#88000000"
         android:textColor="@color/white"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textStyle="bold|italic"
