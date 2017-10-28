@@ -14,9 +14,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -96,7 +100,8 @@ public class MessageFirebaseDas {
                 });
     }
 
-    public void getThreads(final OnCompletionListener listener) {
+    public List<ListenerRegistration> getThreads(final OnCompletionListener listener,
+                                                 final OnThreadUpdateListener updateListener) {
         String loggedInUserId = Profile.getCurrentProfile().getId();
         OnCompletionListener inListener = new OnCompletionListener() {
 
@@ -121,6 +126,41 @@ public class MessageFirebaseDas {
         Query query2 = getCollection().whereEqualTo(Constants.THREAD_COLUMN_USER2, loggedInUserId);
         setupThreadCompletionListeners(query1, inListener);
         setupThreadCompletionListeners(query2, inListener);
+
+        EventListener<QuerySnapshot> eventListener = new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "listen:error", e);
+                    return;
+                }
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                    DocumentSnapshot document = dc.getDocument();
+                    MessageThread thread = convertThreadFromFirebaseObject(document.getId(), document.getData());
+                    switch (dc.getType()) {
+                        case ADDED:
+                            updateListener.onThreadAdded(thread);
+                            break;
+                        case MODIFIED:
+                            updateListener.onThreadUpdated(thread);
+                            break;
+                        case REMOVED:
+                            updateListener.onThreadRemoved(thread);
+                            break;
+                    }
+                }
+            }
+        };
+        ArrayList<ListenerRegistration> listenerRegistrations = new ArrayList<>();
+        listenerRegistrations.add(query1.addSnapshotListener(eventListener));
+        listenerRegistrations.add(query2.addSnapshotListener(eventListener));
+        return listenerRegistrations;
+    }
+
+    public void removeRegistrations(List<ListenerRegistration> listenerRegistrations) {
+        for (ListenerRegistration registration : listenerRegistrations) {
+            registration.remove();
+        }
     }
 
     public void getMessages(final MessageThread thread, final OnCompletionListener listener) {
@@ -258,6 +298,12 @@ public class MessageFirebaseDas {
         public void onMessagesReceived(ArrayList<Message> messages) {
             // override if required
         }
+    }
+
+    public abstract  static class OnThreadUpdateListener {
+        public  abstract void onThreadAdded(MessageThread thread);
+        public  abstract void onThreadUpdated(MessageThread thread);
+        public  abstract void onThreadRemoved(MessageThread thread);
     }
 
     public abstract static class OnMessageSendCompletionListener {
