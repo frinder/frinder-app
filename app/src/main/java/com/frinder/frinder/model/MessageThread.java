@@ -70,7 +70,7 @@ public class MessageThread implements Comparable<MessageThread>, IDialog {
 
     @Override
     public int getUnreadCount() {
-        if (isCurrentUser(userId)) {
+        if (isCurrentUser(lastSenderId)) {
             return 0;
         }
         return unread ? 1 : 0;

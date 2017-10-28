@@ -2,10 +2,6 @@ package com.frinder.frinder.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.facebook.Profile;
@@ -18,6 +14,7 @@ import com.frinder.frinder.model.User;
 import com.frinder.frinder.utils.Constants;
 import com.frinder.frinder.views.IncomingMessageViewHolder;
 import com.stfalcon.chatkit.messages.MessageHolders;
+import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
@@ -37,10 +34,8 @@ public class MessageDetailActivity extends BaseActivity {
 
     @BindView(R.id.mlMessages)
     MessagesList mlMessages;
-    @BindView(R.id.ibSend)
-    ImageButton ibSend;
-    @BindView(R.id.etSend)
-    EditText etSend;
+    @BindView(R.id.miInput)
+    MessageInput miInput;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -78,25 +73,13 @@ public class MessageDetailActivity extends BaseActivity {
             }
         });
 
-        ibSend.setOnClickListener(new View.OnClickListener() {
+        miInput.setInputListener(new MessageInput.InputListener() {
             @Override
-            public void onClick(View view) {
-                String text = etSend.getText().toString();
-                if (!TextUtils.isEmpty(text)) {
-                    Message message = createMessage(text);
-                    adapter.addToStart(message, true);
-                    mMessageFirebaseDas.addMessage(mThread, message, new MessageFirebaseDas.OnMessageSendCompletionListener() {
-                        @Override
-                        public void onSuccess() {
-                            Toast.makeText(getBaseContext(), "Sending message succeeded", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onFailure() {
-                            Toast.makeText(getBaseContext(), "Sending message failed", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
+            public boolean onSubmit(CharSequence input) {
+                Message message = createMessage(input.toString());
+                adapter.addToStart(message, true);
+                postMessage(message);
+                return true;
             }
         });
     }
@@ -107,6 +90,21 @@ public class MessageDetailActivity extends BaseActivity {
         message.timestamp = new Date();
         message.thread = mThread;
         message.type = Message.Type.TYPE_SENT;
+        message.senderId = Profile.getCurrentProfile().getId();
         return  message;
+    }
+
+    private void postMessage(Message message) {
+        mMessageFirebaseDas.addMessage(mThread, message, new MessageFirebaseDas.OnMessageSendCompletionListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(getBaseContext(), "Sending message succeeded", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(getBaseContext(), "Sending message failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
