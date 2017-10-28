@@ -1,16 +1,13 @@
 package com.frinder.frinder.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.frinder.frinder.R;
@@ -69,23 +66,24 @@ public class InterestsAdapter extends RecyclerView.Adapter<InterestsAdapter.View
         viewHolder.tvInterestLabel.setText(interest.getLabel());
         viewHolder.ivInterestIcon.setImageResource(interest.getIcon());
 
-        int color = 0;
         if (interest.isSelected()) {
             //color = ContextCompat.getColor(mContext, R.color.colorPrimary);
-            color = interest.getColor();
-            Log.d(TAG, "Interest index = " + interest.getOrigArrayPosition() + ", Color=" + color);
-            viewHolder.tvInterestLabel.setTextColor(color);
-            viewHolder.ivInterestIcon.setBackgroundColor(color);
+            //viewHolder.ivInterestIcon.setBackgroundColor(color);
 
-            Drawable myIcon = viewHolder.ivInterestIcon.getDrawable();
-            myIcon.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-            viewHolder.ivInterestIcon.setImageDrawable(myIcon);
+            int selectedColor = interest.getColor();
+            viewHolder.tvInterestLabel.setTextColor(selectedColor);
+            //viewHolder.ivInterestIcon.setBackgroundColor(selectedBgTxtColor);
+            viewHolder.ivInterestIcon.setColorFilter(selectedColor);
+
+            //Drawable myIcon = viewHolder.ivInterestIcon.getDrawable();
+            //myIcon.setColorFilter(selectedBgTxtColor, PorterDuff.Mode.SRC_ATOP);
+            //viewHolder.ivInterestIcon.setImageDrawable(myIcon);
         }
         else {
-            color = ContextCompat.getColor(mContext, R.color.black);
-            viewHolder.tvInterestLabel.setTextColor(color);
-            viewHolder.ivInterestIcon.setBackgroundColor(Color.TRANSPARENT);
-            viewHolder.ivInterestIcon.setColorFilter(color);
+            int unselectedColor = ContextCompat.getColor(mContext, R.color.black);
+            viewHolder.tvInterestLabel.setTextColor(unselectedColor);
+            //viewHolder.ivInterestIcon.setBackgroundColor(Color.TRANSPARENT);
+            viewHolder.ivInterestIcon.setColorFilter(unselectedColor);
         }
     }
 
@@ -98,10 +96,12 @@ public class InterestsAdapter extends RecyclerView.Adapter<InterestsAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder{
         public ImageView ivInterestIcon;
         public TextView tvInterestLabel;
+        public LinearLayout llInterestContainer;
 
         public ViewHolder(final View itemView) {
             super(itemView);
 
+            llInterestContainer = (LinearLayout) itemView.findViewById(R.id.llInterestContainer);
             ivInterestIcon = (ImageView) itemView.findViewById(R.id.ivInterestIcon);
             tvInterestLabel = (TextView) itemView.findViewById(R.id.tvInterestLabel);
 

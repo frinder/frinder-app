@@ -20,8 +20,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.Profile;
@@ -42,7 +42,8 @@ import com.skyfishjy.library.RippleBackground;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.frinder.frinder.R.id.pbDiscoverUser;
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
+
 import static com.frinder.frinder.activity.MainActivity.LOCATION_DENY_MSG;
 
 public class DiscoverActivity extends BaseActivity {
@@ -63,6 +64,7 @@ public class DiscoverActivity extends BaseActivity {
     ArrayList<Interest> interests;
     RecyclerView rvInterests;
     InterestsAdapter interestsAdapter;
+    int previousInterestClickedPosition = -1;
 
     //Counts required for nearbyUsers
     int unFilteredNearbyUsersCount;
@@ -90,16 +92,20 @@ public class DiscoverActivity extends BaseActivity {
         //Note: This is to support filtering by multiple interests
         //filterInterestList = new ArrayList<>();
 
+        SpacesItemDecoration decoration = new SpacesItemDecoration(24);
+
         // Lookup the recyclerview in activity layout
         rvInterests = (RecyclerView) findViewById(R.id.rvInterests);
+        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        rvInterests.setLayoutManager(horizontalLayoutManagaer);
+        LandingAnimator animator = new LandingAnimator(new OvershootInterpolator(1f));
+        rvInterests.setItemAnimator(animator);
         interests = Interest.createFilterInterestList(getResources().getStringArray(R.array.filter_interest_label),
                 getResources().obtainTypedArray(R.array.filter_interest_icon),
-                getResources().obtainTypedArray(R.array.filter_interest_color),
+                getResources().getIntArray(R.array.filter_interest_color),
                 getResources().getStringArray(R.array.filter_interest_forDB));
         interestsAdapter = new InterestsAdapter(this, interests);
         rvInterests.setAdapter(interestsAdapter);
-        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        rvInterests.setLayoutManager(horizontalLayoutManagaer);
 
         interestsAdapter.setOnItemClickListener(new InterestsAdapter.OnItemClickListener() {
             @Override
@@ -114,7 +120,6 @@ public class DiscoverActivity extends BaseActivity {
         adapter = new DiscoverUsersAdapter(this, nearbyUsers);
         rvDiscoverusers.setAdapter(adapter);
         rvDiscoverusers.setLayoutManager(new LinearLayoutManager(this));
-        SpacesItemDecoration decoration = new SpacesItemDecoration(24);
         rvDiscoverusers.addItemDecoration(decoration);
 
         unFilteredNearbyUsersCount = 0;
@@ -186,7 +191,10 @@ public class DiscoverActivity extends BaseActivity {
 
         Interest interestClicked = interests.get(position);
         String interestClickedDBValue = interestClicked.getDBValue();
+        int originalArrayPosition = interestClicked.getOrigArrayPosition();
 
+        //TODO: Uncomment if you want the selected interest to move to the beginning of the recyclerview
+        /*
         if (filterInterest.isEmpty()) {
             interests.remove(interestClicked);
             interestClicked.setSelected(true);
@@ -213,8 +221,46 @@ public class DiscoverActivity extends BaseActivity {
 
         interestsAdapter.notifyDataSetChanged();
         rvInterests.scrollToPosition(0);
+        */
 
-        Log.d(TAG, "Interest picked = " + filterInterest);
+        Log.d(TAG, "\nINTERESTPICK previousInterestClickedPosition = " + previousInterestClickedPosition
+                + "\ncurrent selected position =" + position);
+        if (previousInterestClickedPosition != -1) {
+            Log.d(TAG, "INTERESTPICK previous position selected? " + interests.get(previousInterestClickedPosition).isSelected()
+                    + "\ncurrent position selected = " + interestClicked.isSelected());
+        }
+        else {
+            Log.d(TAG, "INTERESTPICK previous position selected? NA"
+                    + "\ncurrent position selected = " + interestClicked.isSelected());
+        }
+        if (filterInterest.isEmpty()) {
+            interestClicked.setSelected(true);
+            filterInterest = interestClickedDBValue;
+            previousInterestClickedPosition = position;
+            interestsAdapter.notifyItemChanged(position);
+        }
+        else {
+            if (interestClickedDBValue.contentEquals(filterInterest)) {
+                interestClicked.setSelected(false);
+                filterInterest = "";
+                previousInterestClickedPosition = -1;
+                interestsAdapter.notifyItemChanged(position);
+            } else {
+                interests.get(previousInterestClickedPosition).setSelected(false);
+                interestsAdapter.notifyItemChanged(previousInterestClickedPosition);
+
+                interestClicked.setSelected(true);
+                filterInterest = interestClickedDBValue;
+                previousInterestClickedPosition = position;
+                interestsAdapter.notifyItemChanged(position);
+            }
+        }
+
+        //interests.remove(interestClicked);
+        //interests.add(position, interestClicked);
+        //rvInterests.scrollToPosition(0);
+
+        Log.d(TAG, "INTERESTPICK Interest picked = " + filterInterest);
 
         //ToDo Call method to refresh Discover UI
         if(currentUser.getLocation()!=null && currentUser.getLocation().size() > 0) {
