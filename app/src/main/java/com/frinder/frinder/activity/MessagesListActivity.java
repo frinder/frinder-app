@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 public class MessagesListActivity extends BaseActivity {
 
     private MessageFirebaseDas mMessageFirebaseDas;
+    private DialogsListAdapter mAdapter;
 
     @BindView(R.id.dlThreads)
     DialogsList dlThreads;
@@ -37,9 +38,8 @@ public class MessagesListActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Messages");
 
-        final DialogsListAdapter dialogsListAdapter =
-                new DialogsListAdapter<>(R.layout.item_dialog, ThreadDialogViewHolder.class, null);
-        dialogsListAdapter.setOnDialogClickListener(new DialogsListAdapter.OnDialogClickListener<MessageThread>() {
+        mAdapter = new DialogsListAdapter<>(R.layout.item_dialog, ThreadDialogViewHolder.class, null);
+        mAdapter.setOnDialogClickListener(new DialogsListAdapter.OnDialogClickListener<MessageThread>() {
             @Override
             public void onDialogClick(MessageThread thread) {
                 Intent i = new Intent(MessagesListActivity.this, MessageDetailActivity.class);
@@ -47,13 +47,18 @@ public class MessagesListActivity extends BaseActivity {
                 MessagesListActivity.this.startActivity(i);
             }
         });
-        
-        dlThreads.setAdapter(dialogsListAdapter);
+
+        dlThreads.setAdapter(mAdapter);
         mMessageFirebaseDas = new MessageFirebaseDas(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         mMessageFirebaseDas.getThreads(new MessageFirebaseDas.OnCompletionListener() {
             public void onThreadsReceived(ArrayList<MessageThread> threads) {
-                dialogsListAdapter.setItems(threads);
-                dialogsListAdapter.notifyDataSetChanged();
+                mAdapter.setItems(threads);
+                mAdapter.notifyDataSetChanged();
             }
         });
     }
