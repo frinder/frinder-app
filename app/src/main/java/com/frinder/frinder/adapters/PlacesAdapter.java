@@ -54,6 +54,14 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
         if (distance != null) {
             holder.tvDistance.setText(distance);
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OnSelectedListener listener = (OnSelectedListener)mContext;
+                listener.onSelected(place);
+            }
+        });
     }
 
     private String getDistanceString(List<Double> l1, List<Double> l2) {
@@ -79,6 +87,10 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
             location.add(cachedLocation.getLongitude());
         }
         return location;
+    }
+
+    public interface OnSelectedListener {
+        abstract void onSelected(Place place);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
