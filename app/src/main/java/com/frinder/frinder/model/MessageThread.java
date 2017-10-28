@@ -16,6 +16,10 @@ public class MessageThread implements Comparable<MessageThread> {
 
     @Override
     public int compareTo(MessageThread o) {
+        if (lastTimestamp == null || o.lastTimestamp == null) {
+            return 0;
+        }
+
         return lastTimestamp.compareTo(o.lastTimestamp);
     }
 }
