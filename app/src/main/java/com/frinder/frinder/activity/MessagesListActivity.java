@@ -9,12 +9,14 @@ import com.frinder.frinder.dataaccess.MessageFirebaseDas;
 import com.frinder.frinder.model.MessageThread;
 import com.frinder.frinder.utils.Constants;
 import com.frinder.frinder.views.ThreadDialogViewHolder;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.stfalcon.chatkit.dialogs.DialogsList;
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,6 +25,7 @@ public class MessagesListActivity extends BaseActivity {
 
     private MessageFirebaseDas mMessageFirebaseDas;
     private DialogsListAdapter mAdapter;
+    private List<ListenerRegistration> mRegistrations;
 
     @BindView(R.id.dlThreads)
     DialogsList dlThreads;
@@ -55,11 +58,31 @@ public class MessagesListActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mMessageFirebaseDas.getThreads(new MessageFirebaseDas.OnCompletionListener() {
+        mRegistrations = mMessageFirebaseDas.getThreads(new MessageFirebaseDas.OnCompletionListener() {
             public void onThreadsReceived(ArrayList<MessageThread> threads) {
                 mAdapter.setItems(threads);
-                mAdapter.notifyDataSetChanged();
+            }
+        }, new MessageFirebaseDas.OnThreadUpdateListener() {
+            @Override
+            public void onThreadAdded(MessageThread thread) {
+                mAdapter.addItem(thread);
+            }
+
+            @Override
+            public void onThreadUpdated(MessageThread thread) {
+                mAdapter.updateItemById(thread);
+            }
+
+            @Override
+            public void onThreadRemoved(MessageThread thread) {
+                mAdapter.deleteById(thread.getId());
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mMessageFirebaseDas.removeRegistrations(mRegistrations);
     }
 }
