@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.frinder.frinder.R;
+import com.frinder.frinder.dataaccess.RequestFirebaseDas;
 import com.frinder.frinder.model.Request;
 
 import java.util.List;
@@ -16,8 +17,11 @@ import butterknife.ButterKnife;
 
 public class ReceivedRequestAdapter extends RequestsAdapter {
 
+    private RequestFirebaseDas mRequestFirebaseDas;
+
     public ReceivedRequestAdapter(Context context, List<Request> requests) {
         super(context, requests);
+        mRequestFirebaseDas = new RequestFirebaseDas(getContext());
     }
 
     String getUserId(Request request) {
@@ -58,6 +62,10 @@ public class ReceivedRequestAdapter extends RequestsAdapter {
                 deleteItem(position);
             }
         });
+
+        if (request.unread) {
+            mRequestFirebaseDas.updateUnread(request, false);
+        }
     }
 
     public class ReceivedViewHolder extends RequestsAdapter.ViewHolder {
