@@ -12,7 +12,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -93,6 +92,7 @@ public class DiscoverActivity extends BaseActivity {
         rvInterests = (RecyclerView) findViewById(R.id.rvInterests);
         interests = Interest.createFilterInterestList(getResources().getStringArray(R.array.filter_interest_label),
                 getResources().obtainTypedArray(R.array.filter_interest_icon),
+                getResources().obtainTypedArray(R.array.filter_interest_color),
                 getResources().getStringArray(R.array.filter_interest_forDB));
         interestsAdapter = new InterestsAdapter(this, interests);
         rvInterests.setAdapter(interestsAdapter);

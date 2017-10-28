@@ -11,15 +11,17 @@ import java.util.ArrayList;
 public class Interest {
 
     int mIcon;
+    int mColor;
     String mLabel;
     String mDBValue;
     Boolean mselected;
     int origArrayPosition;
 
-    public Interest(int mIcon, String mLabel, String mDBValue, int origArrayPosition) {
-        this.mIcon = mIcon;
-        this.mLabel = mLabel;
-        this.mDBValue = mDBValue;
+    public Interest(int icon, int color, String label, String dbValue, int origArrayPosition) {
+        this.mIcon = icon;
+        this.mColor = color;
+        this.mLabel = label;
+        this.mDBValue = dbValue;
         this.mselected = false;
         this.origArrayPosition = origArrayPosition;
     }
@@ -28,24 +30,32 @@ public class Interest {
         return mIcon;
     }
 
-    public void setIcon(int mIcon) {
-        this.mIcon = mIcon;
+    public void setIcon(int icon) {
+        this.mIcon = icon;
+    }
+
+    public int getColor() {
+        return mColor;
+    }
+
+    public void setColor(int color) {
+        this.mColor = color;
     }
 
     public String getLabel() {
         return mLabel;
     }
 
-    public void setLabel(String mLabel) {
-        this.mLabel = mLabel;
+    public void setLabel(String label) {
+        this.mLabel = label;
     }
 
     public String getDBValue() {
         return mDBValue;
     }
 
-    public void setDBValue(String mDBValue) {
-        this.mDBValue = mDBValue;
+    public void setDBValue(String dbValue) {
+        this.mDBValue = dbValue;
     }
 
     public Boolean isSelected() {
@@ -64,11 +74,11 @@ public class Interest {
         this.origArrayPosition = origArrayPosition;
     }
 
-    public static ArrayList<Interest> createFilterInterestList(String[] filterInterestLabelArray, TypedArray filterInterestIconArray, String[] filterInterestDBValueArray) {
+    public static ArrayList<Interest> createFilterInterestList(String[] filterInterestLabelArray, TypedArray filterInterestIconArray, TypedArray filterInterestColorArray, String[] filterInterestDBValueArray) {
         ArrayList<Interest> filterInterestList = new ArrayList<Interest>();
 
         for (int i = 0; i < filterInterestLabelArray.length; i++) {
-            filterInterestList.add(new Interest(filterInterestIconArray.getResourceId(i, 0), filterInterestLabelArray[i], filterInterestDBValueArray[i], i));
+            filterInterestList.add(new Interest(filterInterestIconArray.getResourceId(i, 0), filterInterestColorArray.getResourceId(i, 0), filterInterestLabelArray[i], filterInterestDBValueArray[i], i));
         }
 
         return filterInterestList;

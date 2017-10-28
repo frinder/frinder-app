@@ -15,4 +15,5 @@
     <dimen name="filter_text_size">10sp</dimen>
     <dimen name="textview_roundedcorner_radius">30dp</dimen>
     <dimen name="interest_text_padding">5dp</dimen>
+    <dimen name="activity_margin">8dp</dimen>
 </resources>

@@ -1,8 +1,12 @@
 package com.frinder.frinder.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +23,7 @@ import java.util.List;
  */
 
 public class InterestsAdapter extends RecyclerView.Adapter<InterestsAdapter.ViewHolder> {
+    private final static String TAG = "InterestsAdapter";
     private Context mContext;
     private List<Interest> mInterests;
     private OnItemClickListener listener;
@@ -66,13 +71,22 @@ public class InterestsAdapter extends RecyclerView.Adapter<InterestsAdapter.View
 
         int color = 0;
         if (interest.isSelected()) {
-            color = ContextCompat.getColor(mContext, R.color.colorPrimary);
+            //color = ContextCompat.getColor(mContext, R.color.colorPrimary);
+            color = interest.getColor();
+            Log.d(TAG, "Interest index = " + interest.getOrigArrayPosition() + ", Color=" + color);
+            viewHolder.tvInterestLabel.setTextColor(color);
+            viewHolder.ivInterestIcon.setBackgroundColor(color);
+
+            Drawable myIcon = viewHolder.ivInterestIcon.getDrawable();
+            myIcon.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+            viewHolder.ivInterestIcon.setImageDrawable(myIcon);
         }
         else {
             color = ContextCompat.getColor(mContext, R.color.black);
+            viewHolder.tvInterestLabel.setTextColor(color);
+            viewHolder.ivInterestIcon.setBackgroundColor(Color.TRANSPARENT);
+            viewHolder.ivInterestIcon.setColorFilter(color);
         }
-        viewHolder.tvInterestLabel.setTextColor(color);
-        viewHolder.ivInterestIcon.setColorFilter(color);
     }
 
     // Returns the total count of items in the list
