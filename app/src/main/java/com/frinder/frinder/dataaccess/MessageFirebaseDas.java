@@ -160,6 +160,7 @@ public class MessageFirebaseDas {
                 threadData.put(Constants.THREAD_COLUMN_MESSAGES, fMessages);
                 threadData.put(Constants.THREAD_COLUMN_LAST_MESSAGE, message.text);
                 threadData.put(Constants.THREAD_COLUMN_LAST_TIMESTAMP, message.timestamp);
+                threadData.put(Constants.THREAD_COLUMN_UNREAD, true);
                 getDocument(thread.uid)
                         .update(threadData)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
