@@ -160,6 +160,7 @@ public class MessageFirebaseDas {
                 threadData.put(Constants.THREAD_COLUMN_MESSAGES, fMessages);
                 threadData.put(Constants.THREAD_COLUMN_LAST_MESSAGE, message.text);
                 threadData.put(Constants.THREAD_COLUMN_LAST_TIMESTAMP, message.timestamp);
+                threadData.put(Constants.THREAD_COLUMN_LAST_SENDERID, message);
                 threadData.put(Constants.THREAD_COLUMN_UNREAD, true);
                 getDocument(thread.uid)
                         .update(threadData)
@@ -280,6 +281,8 @@ public class MessageFirebaseDas {
         }
         thread.messageSnippet = threadMap.containsKey(Constants.THREAD_COLUMN_LAST_MESSAGE) ?
                 (String)threadMap.get(Constants.THREAD_COLUMN_LAST_MESSAGE) : null;
+        thread.lastSenderId = threadMap.containsKey(Constants.THREAD_COLUMN_LAST_SENDERID) ?
+                (String)threadMap.get(Constants.THREAD_COLUMN_LAST_SENDERID) : null;
         return thread;
     }
 
@@ -299,9 +302,8 @@ public class MessageFirebaseDas {
         message.thread = thread;
         message.timestamp = (Date)messageMap.get(Constants.MESSAGE_COLUMN_TIMESTAMP);
         message.text = (String)messageMap.get(Constants.MESSAGE_COLUMN_TEXT);
-
-        String senderId = (String)messageMap.get(Constants.MESSAGE_COLUMN_SENDERID);
-        message.type = thread.userId.equals(senderId) ? Message.Type.TYPE_RECEIVED : Message.Type.TYPE_SENT;
+        message.senderId = (String)messageMap.get(Constants.MESSAGE_COLUMN_SENDERID);
+        message.type = thread.userId.equals(message.senderId) ? Message.Type.TYPE_RECEIVED : Message.Type.TYPE_SENT;
 
         return message;
     }
