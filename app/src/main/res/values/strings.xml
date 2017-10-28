@@ -51,9 +51,9 @@
     <string-array name="filter_interest_forDB">
         <item>ArtsCrafts</item>
         <item>Auto</item>
-        <item>Board Games</item>
+        <item>BoardGames</item>
         <item>Cooking</item>
-        <item>Current Affairs</item>
+        <item>CurrentAffairs</item>
         <item>Dancing</item>
         <item>DIYProjects</item>
         <item>Fashion</item>
