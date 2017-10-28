@@ -26,6 +26,7 @@ public class MessagesListActivity extends BaseActivity {
     private MessageFirebaseDas mMessageFirebaseDas;
     private DialogsListAdapter mAdapter;
     private List<ListenerRegistration> mRegistrations;
+    private ArrayList<MessageThread> mThreads;
 
     @BindView(R.id.dlThreads)
     DialogsList dlThreads;
@@ -41,6 +42,7 @@ public class MessagesListActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Messages");
 
+        mThreads = new ArrayList<>();
         mAdapter = new DialogsListAdapter<>(R.layout.item_dialog, ThreadDialogViewHolder.class, null);
         mAdapter.setOnDialogClickListener(new DialogsListAdapter.OnDialogClickListener<MessageThread>() {
             @Override
@@ -60,12 +62,17 @@ public class MessagesListActivity extends BaseActivity {
         super.onResume();
         mRegistrations = mMessageFirebaseDas.getThreads(new MessageFirebaseDas.OnCompletionListener() {
             public void onThreadsReceived(ArrayList<MessageThread> threads) {
+                mThreads.clear();
+                mThreads.addAll(threads);
                 mAdapter.setItems(threads);
             }
         }, new MessageFirebaseDas.OnThreadUpdateListener() {
             @Override
             public void onThreadAdded(MessageThread thread) {
-                mAdapter.addItem(thread);
+                if (!containsThread(thread)) {
+                    mThreads.add(thread);
+                    mAdapter.addItem(thread);
+                }
             }
 
             @Override
@@ -75,7 +82,7 @@ public class MessagesListActivity extends BaseActivity {
 
             @Override
             public void onThreadRemoved(MessageThread thread) {
-                mAdapter.deleteById(thread.getId());
+                // Not yet supported
             }
         });
     }
@@ -84,5 +91,14 @@ public class MessagesListActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         mMessageFirebaseDas.removeRegistrations(mRegistrations);
+    }
+
+    private boolean containsThread(MessageThread inThread) {
+        for (MessageThread thread : mThreads) {
+            if (inThread.uid != null && inThread.uid.equals(thread.uid)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

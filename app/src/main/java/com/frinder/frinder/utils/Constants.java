@@ -36,6 +36,7 @@ public final class Constants {
     public static final String THREAD_COLUMN_LAST_SENDERID = "lastSenderId";
 
     // Message Firebase Datastore Keys (Column Names)
+    public static final String MESSAGE_COLUMN_ID = "messageId";
     public static final String MESSAGE_COLUMN_SENDERID = "senderId";
     public static final String MESSAGE_COLUMN_TEXT = "text";
     public static final String MESSAGE_COLUMN_TIMESTAMP = "timestamp";
