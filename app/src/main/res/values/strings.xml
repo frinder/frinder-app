@@ -27,49 +27,49 @@
     <string-array name="filter_interest_label">
         <item>Arts &amp; Crafts</item>
         <item>Auto</item>
-        <item>Board Games\nPuzzles</item>
+        <item>Board Games</item>
         <item>Cooking</item>
+        <item>Current Affairs</item>
         <item>Dancing</item>
         <item>DIY Projects</item>
-        <item>Economy\nCurrent Affairs</item>
-        <item>Fitness\nWellness</item>
-        <item>Food &amp; Spirits</item>
+        <item>Fashion</item>
+        <item>Fitness</item>
+        <item>Food</item>
+        <item>Gadgets</item>
         <item>Gardening</item>
         <item>Movies</item>
         <item>Music</item>
-        <item>Parenting\nFamily</item>
+        <item>Parenting</item>
         <item>Pets</item>
         <item>Photography</item>
-        <item>Reading/Writing\nLiterature</item>
-        <item>Shopping</item>
-        <item>Spirituality\nGood Karma</item>
+        <item>Reading</item>
+        <item>Spirituality</item>
         <item>Sports</item>
-        <item>Technology\nScience</item>
-        <item>Travel\nOutdoor</item>
+        <item>Travel</item>
         <item>Video Games</item>
     </string-array>
     <string-array name="filter_interest_forDB">
         <item>ArtsCrafts</item>
         <item>Auto</item>
-        <item>BoardGamesPuzzles</item>
+        <item>Board Games</item>
         <item>Cooking</item>
+        <item>Current Affairs</item>
         <item>Dancing</item>
         <item>DIYProjects</item>
-        <item>EconomyCurrentAffairs</item>
-        <item>FitnessWellness</item>
-        <item>FoodSpirits</item>
+        <item>Fashion</item>
+        <item>Fitness</item>
+        <item>Food</item>
+        <item>Gadgets</item>
         <item>Gardening</item>
         <item>Movies</item>
         <item>Music</item>
-        <item>ParentingFamily</item>
+        <item>Parenting</item>
         <item>Pets</item>
         <item>Photography</item>
-        <item>ReadingWritingLiterature</item>
-        <item>Shopping</item>
-        <item>SpiritualityGoodKarma</item>
+        <item>Reading</item>
+        <item>Spirituality</item>
         <item>Sports</item>
-        <item>TechnologyScience</item>
-        <item>TravelOutdoor</item>
+        <item>Travel</item>
         <item>VideoGames</item>
     </string-array>
 </resources>

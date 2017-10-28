@@ -116,7 +116,7 @@ public class ShowFullProfileFragment extends DialogFragment implements View.OnCl
 
         for (String interest : user.getInterests()) {
             int index = filterInterestForDB.indexOf(interest);
-            String interestLabel = filterInterestLabel.get(index).replace("\n", "/");
+            String interestLabel = filterInterestLabel.get(index);
 
             TextView textView = new TextView(context);
             textView.setTypeface(null, Typeface.ITALIC);
