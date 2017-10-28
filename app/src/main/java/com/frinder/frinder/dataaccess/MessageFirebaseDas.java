@@ -156,8 +156,12 @@ public class MessageFirebaseDas {
                 messages.addAll(inMessages);
                 messages.add(message);
                 List fMessages = convertMessageListToFirebaseObjectList(thread, messages);
+                Map<String,Object> threadData = new HashMap<>();
+                threadData.put(Constants.THREAD_COLUMN_MESSAGES, fMessages);
+                threadData.put(Constants.THREAD_COLUMN_LAST_MESSAGE, message.text);
+                threadData.put(Constants.THREAD_COLUMN_LAST_TIMESTAMP, message.timestamp);
                 getDocument(thread.uid)
-                        .update(Constants.THREAD_COLUMN_MESSAGES, fMessages)
+                        .update(threadData)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
