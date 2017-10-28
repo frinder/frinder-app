@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
@@ -122,6 +123,12 @@ public class MessageDetailActivity extends BaseActivity implements PlacesAdapter
     protected void onPause() {
         super.onPause();
         mMessageFirebaseDas.removeRegistrations(mRegistrations);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.menu_action_messages).setVisible(false);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     private void addMessage(String text) {
