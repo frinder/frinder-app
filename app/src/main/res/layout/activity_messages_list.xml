@@ -10,10 +10,14 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvThreads"
+    <com.stfalcon.chatkit.dialogs.DialogsList
+        android:id="@+id/dlThreads"
+        app:dialogUnreadBubbleBackgroundColor="@color/red"
+        app:dialogUnreadBubbleTextColor="@color/red"
+        app:dialogUnreadMessageTextColor="@color/black"
+        app:dialogUnreadMessageTextStyle="bold"
         android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

@@ -1,5 +1,7 @@
 package com.frinder.frinder.model;
+
 import com.frinder.frinder.utils.Constants;
+import com.stfalcon.chatkit.commons.models.IUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,7 +12,7 @@ import java.util.Date;
 
 
 //TODO change to parcelable
-public class User implements Serializable {
+public class User implements Serializable, IUser {
     private String uid;
     private String name;
     private String email;
@@ -33,8 +35,19 @@ public class User implements Serializable {
         return uid;
     }
 
+    @Override
+    public String getId() {
+        return uid;
+    }
+
+    @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getAvatar() {
+        return profilePicUrl;
     }
 
     public String getEmail() {
