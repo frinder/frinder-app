@@ -2,6 +2,7 @@ package com.frinder.frinder.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.Toast;
 
 import com.facebook.Profile;
@@ -19,6 +20,7 @@ import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
+import org.lucasr.twowayview.TwoWayView;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -41,6 +43,8 @@ public class MessageDetailActivity extends BaseActivity {
     MessagesList mlMessages;
     @BindView(R.id.miInput)
     MessageInput miInput;
+    @BindView(R.id.twvPlaces)
+    TwoWayView twvPlaces;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -75,10 +79,19 @@ public class MessageDetailActivity extends BaseActivity {
         miInput.setInputListener(new MessageInput.InputListener() {
             @Override
             public boolean onSubmit(CharSequence input) {
-                Message message = createMessage(input.toString());
-                mAdapter.addToStart(message, true);
-                postMessage(message);
+                addMessage(input.toString());
                 return true;
+            }
+        });
+
+        miInput.setAttachmentsListener(new MessageInput.AttachmentsListener() {
+            @Override
+            public void onAddAttachments() {
+                if (twvPlaces.getVisibility() == View.VISIBLE) {
+                    twvPlaces.setVisibility(View.GONE);
+                } else if (twvPlaces.getVisibility() == View.GONE) {
+                    twvPlaces.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -104,6 +117,12 @@ public class MessageDetailActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         mMessageFirebaseDas.removeRegistrations(mRegistrations);
+    }
+
+    private void addMessage(String text) {
+        Message message = createMessage(text);
+        mAdapter.addToStart(message, true);
+        postMessage(message);
     }
 
     private Message createMessage(String text) {
