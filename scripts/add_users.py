@@ -6,7 +6,7 @@ import names
 import random
 
 genders = [u'male', u'female']
-interests = [u'ArtsCrafts', u'Auto', u'BoardGamesPuzzles', u'Cooking', u'Dancing', u'DIYProjects', u'EconomyCurrentAffairs', u'FitnessWellness', u'FoodSpirits', u'Movies', u'Music', u'ParentingFamily', u'Pets', u'Photography', u'ReadingWritingLiterature', u'Shopping', u'SpiritualityGoodKarma', u'Sports', u'TechnologyScience', u'TravelOutdoor', u'VideoGames']
+interests = [u'ArtsCrafts', u'Auto', u'BoardGames', u'Cooking', u'CurrentAffairs', u'Dancing', u'DIYProjects', u'Fashion', u'Fitness', u'Food', u'Gadgets', u'Gardening', u'Movies', u'Music', u'Parenting', u'Pets', u'Photography', u'Reading', u'Spirituality', u'Sports', u'Travel', u'VideoGames']
 
 script_version=1
 
