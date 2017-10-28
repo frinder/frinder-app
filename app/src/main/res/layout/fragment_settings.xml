@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_padding"
+    android:paddingLeft="10dp">
+
+    <LinearLayout
+        android:id="@+id/llLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="@dimen/view_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvSettings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:padding="@dimen/text_padding"
+            android:text="Settings"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/ivBtnProfileClose"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:clickable="true"
+            android:padding="@dimen/text_padding"
+            app:srcCompat="@drawable/ic_close_white" />
+    </LinearLayout>
+
+    <Switch
+        android:id="@+id/switchDiscoverable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/llLayout1"
+        android:layout_marginEnd="26dp"
+        android:layout_marginRight="26dp"
+        android:layout_marginTop="26dp"
+        android:paddingRight="10dp"
+        android:text="Discoverable   "
+        android:textStyle="bold"
+        tools:checked="true" />
+
+    <TextView
+        android:id="@+id/tvRadius"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/sbRadius"
+        android:layout_alignStart="@+id/sbRadius"
+        android:layout_below="@+id/switchDiscoverable"
+        android:layout_marginTop="33dp"
+        android:paddingLeft="10dp"
+        android:text="Radius"
+        android:textStyle="bold" />
+
+    <SeekBar
+        android:id="@+id/sbRadius"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvRadius"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:max="10"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:progress="2" />
+
+    <TextView
+        android:id="@+id/tvRadiusValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvRadius"
+        android:layout_marginLeft="39dp"
+        android:layout_marginStart="39dp"
+        android:layout_toEndOf="@+id/tvRadius"
+        android:layout_toRightOf="@+id/tvRadius"
+        android:text="300m" />
+
+    <TextView
+        android:id="@+id/tvAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Age"
+        android:paddingLeft="10dp"
+        android:textStyle="bold"
+        android:layout_below="@+id/sbRadius"
+        android:layout_alignLeft="@+id/sbRadius"
+        android:layout_alignStart="@+id/sbRadius"
+        android:layout_marginTop="37dp" />
+
+    <SeekBar
+        android:id="@+id/sbAge"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvAge"
+        android:layout_alignStart="@+id/tvAge"
+        android:layout_alignTop="@+id/tvAge"
+        android:layout_marginTop="31dp"
+        android:max="5"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:progress="5" />
+
+    <TextView
+        android:id="@+id/tvAgeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvAge"
+        android:layout_alignBottom="@+id/tvAge"
+        android:layout_alignLeft="@+id/tvRadiusValue"
+        android:layout_alignStart="@+id/tvRadiusValue"
+        android:text="0 (TODO)" />
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="Save"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:layout_below="@+id/sbAge"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="64dp" />
+</RelativeLayout>

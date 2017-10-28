@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +32,7 @@ import com.frinder.frinder.adapters.InterestsAdapter;
 import com.frinder.frinder.adapters.SpacesItemDecoration;
 import com.frinder.frinder.dataaccess.DiscoverFirebaseDas;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
+import com.frinder.frinder.fragments.SettingsFragment;
 import com.frinder.frinder.model.DiscoverUser;
 import com.frinder.frinder.model.Interest;
 import com.frinder.frinder.model.User;
@@ -374,7 +376,9 @@ public class DiscoverActivity extends BaseActivity {
                 startActivity(intent);
                 return true;
             case R.id.menu_action_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
+                FragmentManager fm = getSupportFragmentManager();
+                SettingsFragment settingsDialogFrament = SettingsFragment.newInstance();
+                settingsDialogFrament.show(fm, "fragment_settings");
                 return true;
             case R.id.menu_action_logout:
                 Toast.makeText(this, "User logged out ", Toast.LENGTH_LONG).show();

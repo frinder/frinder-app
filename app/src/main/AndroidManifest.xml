@@ -50,7 +50,6 @@
         <activity android:name=".activity.DiscoverActivity" />
         <activity android:name=".activity.NotificationsActivity" />
         <activity android:name=".activity.EditProfileActivity" />
-        <activity android:name=".activity.SettingsActivity" />
         <activity android:name=".activity.MessagesListActivity" />
         <activity android:name=".activity.MessageDetailActivity" />
     </application>
