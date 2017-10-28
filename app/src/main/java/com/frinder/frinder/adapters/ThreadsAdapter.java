@@ -20,6 +20,7 @@ import com.frinder.frinder.utils.Constants;
 
 import org.parceler.Parcels;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import butterknife.BindView;
@@ -75,7 +76,10 @@ public class ThreadsAdapter extends
             }
         });
 
-        // TODO: Add last timestamp
+        if (thread.lastTimestamp != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+            holder.tvTimestamp.setText(sdf.format(thread.lastTimestamp));
+        }
     }
 
     @Override
