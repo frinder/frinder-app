@@ -41,6 +41,7 @@
 
     <com.stfalcon.chatkit.messages.MessagesList
         android:id="@+id/mlMessages"
+        textAutoLink="all"
         android:layout_below="@id/toolbar"
         android:layout_above="@id/rlSendMessage"
         android:layout_width="match_parent"
