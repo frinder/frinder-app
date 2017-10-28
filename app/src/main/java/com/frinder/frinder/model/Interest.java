@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 
 public class Interest {
+    public final static String TAG = "Interest";
 
     int mIcon;
     int mColor;
@@ -74,11 +75,11 @@ public class Interest {
         this.origArrayPosition = origArrayPosition;
     }
 
-    public static ArrayList<Interest> createFilterInterestList(String[] filterInterestLabelArray, TypedArray filterInterestIconArray, TypedArray filterInterestColorArray, String[] filterInterestDBValueArray) {
+    public static ArrayList<Interest> createFilterInterestList(String[] filterInterestLabelArray, TypedArray filterInterestIconArray, int[] filterInterestColorArray, String[] filterInterestDBValueArray) {
         ArrayList<Interest> filterInterestList = new ArrayList<Interest>();
 
         for (int i = 0; i < filterInterestLabelArray.length; i++) {
-            filterInterestList.add(new Interest(filterInterestIconArray.getResourceId(i, 0), filterInterestColorArray.getResourceId(i, 0), filterInterestLabelArray[i], filterInterestDBValueArray[i], i));
+            filterInterestList.add(new Interest(filterInterestIconArray.getResourceId(i, 0), filterInterestColorArray[i], filterInterestLabelArray[i], filterInterestDBValueArray[i], i));
         }
 
         return filterInterestList;
