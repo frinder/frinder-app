@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.frinder.frinder.R;
@@ -64,27 +64,16 @@ public class InterestsAdapter extends RecyclerView.Adapter<InterestsAdapter.View
 
         // Set item views based on your views and data model
         viewHolder.tvInterestLabel.setText(interest.getLabel());
-        viewHolder.ivInterestIcon.setImageResource(interest.getIcon());
+        viewHolder.ivInterestPic.setImageResource(interest.getPic());
 
+        int color = 0;
         if (interest.isSelected()) {
-            //color = ContextCompat.getColor(mContext, R.color.colorPrimary);
-            //viewHolder.ivInterestIcon.setBackgroundColor(color);
-
-            int selectedColor = interest.getColor();
-            viewHolder.tvInterestLabel.setTextColor(selectedColor);
-            //viewHolder.ivInterestIcon.setBackgroundColor(selectedBgTxtColor);
-            viewHolder.ivInterestIcon.setColorFilter(selectedColor);
-
-            //Drawable myIcon = viewHolder.ivInterestIcon.getDrawable();
-            //myIcon.setColorFilter(selectedBgTxtColor, PorterDuff.Mode.SRC_ATOP);
-            //viewHolder.ivInterestIcon.setImageDrawable(myIcon);
+            color = ContextCompat.getColor(mContext, R.color.yellow_a700);
         }
         else {
-            int unselectedColor = ContextCompat.getColor(mContext, R.color.black);
-            viewHolder.tvInterestLabel.setTextColor(unselectedColor);
-            //viewHolder.ivInterestIcon.setBackgroundColor(Color.TRANSPARENT);
-            viewHolder.ivInterestIcon.setColorFilter(unselectedColor);
+            color = ContextCompat.getColor(mContext, R.color.black);
         }
+        viewHolder.rlInterestContainer.setBackgroundColor(color);
     }
 
     // Returns the total count of items in the list
@@ -94,15 +83,15 @@ public class InterestsAdapter extends RecyclerView.Adapter<InterestsAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public ImageView ivInterestIcon;
+        public ImageView ivInterestPic;
         public TextView tvInterestLabel;
-        public LinearLayout llInterestContainer;
+        public RelativeLayout rlInterestContainer;
 
         public ViewHolder(final View itemView) {
             super(itemView);
 
-            llInterestContainer = (LinearLayout) itemView.findViewById(R.id.llInterestContainer);
-            ivInterestIcon = (ImageView) itemView.findViewById(R.id.ivInterestIcon);
+            rlInterestContainer = (RelativeLayout) itemView.findViewById(R.id.rlInterestContainer);
+            ivInterestPic = (ImageView) itemView.findViewById(R.id.ivInterestPic);
             tvInterestLabel = (TextView) itemView.findViewById(R.id.tvInterestLabel);
 
             itemView.setOnClickListener(new View.OnClickListener() {

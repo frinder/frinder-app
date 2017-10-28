@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/llInterestContainer"
-    android:layout_width="@dimen/filter_icon_width"
+    android:id="@+id/rlInterestContainer"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:clickable="true"
-    android:onClick="onInterestFilterClicked"
-    android:padding="@dimen/filter_icon_padding">
+    android:background="@color/black"
+    android:padding="@dimen/filter_pic_padding"
+    android:clickable="true">
     <ImageView
-        android:id="@+id/ivInterestIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:src="@drawable/ic_location_user_gray"
-        android:layout_gravity="center_horizontal"
-        android:padding="@dimen/filter_icon_padding"/>
+        android:id="@+id/ivInterestPic"
+        android:layout_width="150dp"
+        android:layout_height="75dp"
+        android:scaleType="fitXY"
+        tools:src="@drawable/interest_currentaffairs" />
     <TextView
         android:id="@+id/tvInterestLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Some Interest"
-        android:gravity="center"
-        android:textSize="@dimen/filter_text_size"
-        android:layout_gravity="center_horizontal"/>
-</LinearLayout>
+        android:background="#88000000"
+        android:textColor="@color/white"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textStyle="bold|italic"
+        tools:text="Current Affairs"
+        android:layout_centerInParent="true"/>
+</RelativeLayout>

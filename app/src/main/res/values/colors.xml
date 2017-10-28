@@ -12,6 +12,7 @@
     <color name="gray">#CCCCCC</color>
     <color name="red">#F00</color>
     <color name="darkGray">#777777</color>
+    <color name="yellow">#FFFF00</color>
 
     <color name="red_a700">#D50000</color>
     <color name="pink_a700">#C51162</color>

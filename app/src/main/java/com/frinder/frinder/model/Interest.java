@@ -12,14 +12,16 @@ public class Interest {
     public final static String TAG = "Interest";
 
     int mIcon;
+    int mPic;
     int mColor;
     String mLabel;
     String mDBValue;
     Boolean mselected;
     int origArrayPosition;
 
-    public Interest(int icon, int color, String label, String dbValue, int origArrayPosition) {
+    public Interest(int icon, int pic, int color, String label, String dbValue, int origArrayPosition) {
         this.mIcon = icon;
+        this.mPic = pic;
         this.mColor = color;
         this.mLabel = label;
         this.mDBValue = dbValue;
@@ -33,6 +35,14 @@ public class Interest {
 
     public void setIcon(int icon) {
         this.mIcon = icon;
+    }
+
+    public int getPic() {
+        return mPic;
+    }
+
+    public void setPic(int pic) {
+        this.mPic = pic;
     }
 
     public int getColor() {
@@ -75,11 +85,15 @@ public class Interest {
         this.origArrayPosition = origArrayPosition;
     }
 
-    public static ArrayList<Interest> createFilterInterestList(String[] filterInterestLabelArray, TypedArray filterInterestIconArray, int[] filterInterestColorArray, String[] filterInterestDBValueArray) {
+    public static ArrayList<Interest> createFilterInterestList(String[] filterInterestLabelArray, TypedArray filterInterestIconArray, TypedArray filterInterestPicsArray, int[] filterInterestColorArray, String[] filterInterestDBValueArray) {
         ArrayList<Interest> filterInterestList = new ArrayList<Interest>();
 
         for (int i = 0; i < filterInterestLabelArray.length; i++) {
-            filterInterestList.add(new Interest(filterInterestIconArray.getResourceId(i, 0), filterInterestColorArray[i], filterInterestLabelArray[i], filterInterestDBValueArray[i], i));
+            filterInterestList.add(new Interest(filterInterestIconArray.getResourceId(i, 0),
+                    filterInterestPicsArray.getResourceId(i, 0),
+                    filterInterestColorArray[i],
+                    filterInterestLabelArray[i],
+                    filterInterestDBValueArray[i], i));
         }
 
         return filterInterestList;
