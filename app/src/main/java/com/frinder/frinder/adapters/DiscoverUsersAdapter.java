@@ -170,9 +170,9 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
                 User user = discoverUser.getUser();
 
                 DiscoverActivity myActivity = (DiscoverActivity)mContext;
-                FragmentManager fm = myActivity.getSupportFragmentManager();
-                ShowFullProfileFragment showFullProfileFragment = ShowFullProfileFragment.newInstance(user.getUid());
-                showFullProfileFragment.show(fm, "fragment_show_full_profile");
+                FragmentManager fragmentManager = myActivity.getSupportFragmentManager();
+                ShowFullProfileFragment showFullProfileFragment = ShowFullProfileFragment.newInstance(discoverUser);
+                showFullProfileFragment.show(fragmentManager, "fragment_show_full_profile");
             }
         }
     }

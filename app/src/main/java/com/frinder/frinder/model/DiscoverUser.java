@@ -1,5 +1,6 @@
 package com.frinder.frinder.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -7,7 +8,7 @@ import java.util.ArrayList;
  */
 
 //TODO convert to Parcel
-public class DiscoverUser {
+public class DiscoverUser implements Serializable {
     private User user;
     private Double distanceFromAppUser;
     private ArrayList<String> commonInterests;
