@@ -13,6 +13,7 @@ import com.frinder.frinder.model.MessageThread;
 import com.frinder.frinder.model.User;
 import com.frinder.frinder.utils.Constants;
 import com.frinder.frinder.views.IncomingMessageViewHolder;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.stfalcon.chatkit.messages.MessageHolders;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
@@ -22,6 +23,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +33,9 @@ public class MessageDetailActivity extends BaseActivity {
     private MessageThread mThread;
     private UserFirebaseDas mUserFirebaseDas;
     private MessageFirebaseDas mMessageFirebaseDas;
+    private MessagesListAdapter<Message> mAdapter;
+    private List<ListenerRegistration> mRegistrations;
+    private ArrayList<Message> mMessages;
 
     @BindView(R.id.mlMessages)
     MessagesList mlMessages;
@@ -50,9 +55,9 @@ public class MessageDetailActivity extends BaseActivity {
 
         MessageHolders holders = new MessageHolders();
         holders.setIncomingTextHolder(IncomingMessageViewHolder.class);
-        final MessagesListAdapter<Message> adapter =
-                new MessagesListAdapter<>(Profile.getCurrentProfile().getId(), holders, null);
-        mlMessages.setAdapter(adapter);
+        mAdapter = new MessagesListAdapter<>(Profile.getCurrentProfile().getId(), holders, null);
+        mlMessages.setAdapter(mAdapter);
+        mMessages = new ArrayList<>();
 
         // TODO: Set user's name as title
         mUserFirebaseDas = new UserFirebaseDas(this);
@@ -66,22 +71,39 @@ public class MessageDetailActivity extends BaseActivity {
         });
 
         mMessageFirebaseDas = new MessageFirebaseDas(this);
-        mMessageFirebaseDas.getMessages(mThread, new MessageFirebaseDas.OnCompletionListener() {
-            @Override
-            public void onMessagesReceived(ArrayList<Message> messages) {
-                adapter.addToEnd(messages, true);
-            }
-        });
-
+        mMessages = new ArrayList<>();
         miInput.setInputListener(new MessageInput.InputListener() {
             @Override
             public boolean onSubmit(CharSequence input) {
                 Message message = createMessage(input.toString());
-                adapter.addToStart(message, true);
+                mAdapter.addToStart(message, true);
                 postMessage(message);
                 return true;
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mRegistrations = mMessageFirebaseDas.getMessages(mThread, new MessageFirebaseDas.OnCompletionListener() {
+            @Override
+            public void onMessagesReceived(List<Message> messages) {
+                updateOrAddMessages(messages);
+            }
+        }, new MessageFirebaseDas.OnMessagesUpdateListener() {
+            @Override
+            public void onUpdateMessages(List<Message> messages) {
+                updateOrAddMessages(messages);
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mMessageFirebaseDas.removeRegistrations(mRegistrations);
     }
 
     private Message createMessage(String text) {
@@ -106,5 +128,38 @@ public class MessageDetailActivity extends BaseActivity {
                 Toast.makeText(getBaseContext(), "Sending message failed", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void updateOrAddMessages(List<Message> messages) {
+        // since we do not support deleting or updating messages, we can skip this step if the count is the same
+        if (messages.size() == mMessages.size()) {
+            return;
+        }
+        List<Message> addedMessages = getAddedMessages(messages);
+        for (Message message : addedMessages) {
+            mAdapter.addToStart(message, true);
+            mMessages.add(message);
+        }
+    }
+
+    private List<Message> getAddedMessages(List<Message> updatedMessages) {
+        ArrayList<Message> addedMessages = new ArrayList<>();
+        // TODO: Optimize
+        for (Message updatedMessage : updatedMessages) {
+            // We currently do not support updating messages
+            if (!containsMessage(updatedMessage)) {
+                addedMessages.add(updatedMessage);
+            }
+        }
+        return addedMessages;
+    }
+
+    private boolean containsMessage(Message inMessage) {
+        for (Message message : mMessages) {
+            if (inMessage.uid != null && inMessage.uid.equals(message.uid)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
