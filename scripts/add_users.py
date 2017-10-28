@@ -8,13 +8,20 @@ import random
 genders = [u'male', u'female']
 interests = [u'ArtsCrafts', u'Auto', u'BoardGames', u'Cooking', u'CurrentAffairs', u'Dancing', u'DIYProjects', u'Fashion', u'Fitness', u'Food', u'Gadgets', u'Gardening', u'Movies', u'Music', u'Parenting', u'Pets', u'Photography', u'Reading', u'Spirituality', u'Sports', u'Travel', u'VideoGames']
 
-script_version=1
+script_version=2
 
 def printUsers(db):
   docs = helpers.queryUsers(db)
   for doc in docs:
     helpers.printSnapshot(doc)
 
+def getProfilPicUrl(gender):
+  tag = None 
+  if gender == u'male':
+    tag = 'men'
+  else :
+    tag = 'women'
+  return u'https://randomuser.me/api/portraits/' + tag + '/' + str(random.randint(0, 50)) + '.jpg'
 
 def addUser(db, ref_lat, ref_lon, range):
   doc_ref = db.collection(u'users').document()
@@ -28,7 +35,7 @@ def addUser(db, ref_lat, ref_lon, range):
     u'name': names.get_full_name(gender=gender),
     u'linkUrl': u'https://www.google.com',
     u'email': u'fake@gmail.com',
-    u'profilePicUrl': None,
+    u'profilePicUrl': getProfilPicUrl(gender),
     u'discoverable': True,
     u'gender': gender,
     u'age': random.randint(14,80),
