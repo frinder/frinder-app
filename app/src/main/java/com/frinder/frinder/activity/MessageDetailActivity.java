@@ -1,18 +1,24 @@
 package com.frinder.frinder.activity;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.facebook.Profile;
 import com.frinder.frinder.R;
+import com.frinder.frinder.adapters.PlacesAdapter;
 import com.frinder.frinder.dataaccess.MessageFirebaseDas;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.Message;
 import com.frinder.frinder.model.MessageThread;
+import com.frinder.frinder.model.Place;
 import com.frinder.frinder.model.User;
 import com.frinder.frinder.utils.Constants;
+import com.frinder.frinder.utils.FacebookPlacesSearch;
 import com.frinder.frinder.views.IncomingMessageViewHolder;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.stfalcon.chatkit.messages.MessageHolders;
@@ -20,7 +26,6 @@ import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
-import org.lucasr.twowayview.TwoWayView;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -32,19 +37,23 @@ import butterknife.ButterKnife;
 
 public class MessageDetailActivity extends BaseActivity {
 
+    private static final String TAG = "MessageDetailActivity";
+
     private MessageThread mThread;
     private UserFirebaseDas mUserFirebaseDas;
     private MessageFirebaseDas mMessageFirebaseDas;
     private MessagesListAdapter<Message> mAdapter;
     private List<ListenerRegistration> mRegistrations;
     private ArrayList<Message> mMessages;
+    private ArrayList<Place> mPlaces;
+    private PlacesAdapter mPlaceAdapter;
 
     @BindView(R.id.mlMessages)
     MessagesList mlMessages;
     @BindView(R.id.miInput)
     MessageInput miInput;
-    @BindView(R.id.twvPlaces)
-    TwoWayView twvPlaces;
+    @BindView(R.id.rvPlaces)
+    RecyclerView rvPlaces;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -84,16 +93,12 @@ public class MessageDetailActivity extends BaseActivity {
             }
         });
 
-        miInput.setAttachmentsListener(new MessageInput.AttachmentsListener() {
-            @Override
-            public void onAddAttachments() {
-                if (twvPlaces.getVisibility() == View.VISIBLE) {
-                    twvPlaces.setVisibility(View.GONE);
-                } else if (twvPlaces.getVisibility() == View.GONE) {
-                    twvPlaces.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+        mPlaces = new ArrayList<>();
+        mPlaceAdapter = new PlacesAdapter(this, mPlaces);
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        rvPlaces.setLayoutManager(horizontalLayoutManager);
+        rvPlaces.setAdapter(mPlaceAdapter);
+        setupLocationListener();
     }
 
     @Override
@@ -180,5 +185,31 @@ public class MessageDetailActivity extends BaseActivity {
             }
         }
         return false;
+    }
+
+    private void setupLocationListener() {
+        miInput.setAttachmentsListener(new MessageInput.AttachmentsListener() {
+            @Override
+            public void onAddAttachments() {
+                if (rvPlaces.getVisibility() == View.VISIBLE) {
+                    rvPlaces.setVisibility(View.GONE);
+                } else if (rvPlaces.getVisibility() == View.GONE) {
+                    rvPlaces.setVisibility(View.VISIBLE);
+                    FacebookPlacesSearch.searchPlaces(MessageDetailActivity.this,
+                            new FacebookPlacesSearch.OnCompletionListener() {
+                                @Override
+                                public void onSuccess(List<Place> places) {
+                                    mPlaces.addAll(places);
+                                    mPlaceAdapter.notifyDataSetChanged();
+                                }
+
+                                @Override
+                                public void onFailure() {
+                                    Log.d(TAG, "Querying places failed");
+                                }
+                            });
+                }
+            }
+        });
     }
 }
