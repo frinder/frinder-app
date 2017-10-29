@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_splash"
     tools:context="com.frinder.frinder.activity.LoginActivity">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/coffee_brown"/>
+    <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:scaleType="centerCrop"-->
+        <!--android:src="@drawable/background_splash"/>-->
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
