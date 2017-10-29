@@ -10,11 +10,13 @@ import java.util.ArrayList;
 //TODO convert to Parcel
 public class DiscoverUser implements Serializable {
     private User user;
+    private boolean meetupRequestSent;
     private Double distanceFromAppUser;
     private ArrayList<String> commonInterests;
 
-    public DiscoverUser(User user, Double distance, ArrayList<String> interests) {
+    public DiscoverUser(User user, Boolean meetupRequestSent, Double distance, ArrayList<String> interests) {
         this.user = user;
+        this.meetupRequestSent = meetupRequestSent;
         this.distanceFromAppUser = distance;
         this.commonInterests = interests;
     }
@@ -25,6 +27,14 @@ public class DiscoverUser implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public boolean isMeetupRequestSent() {
+        return meetupRequestSent;
+    }
+
+    public void setMeetupRequestSent(boolean meetupRequestSent) {
+        this.meetupRequestSent = meetupRequestSent;
     }
 
     public Double getDistanceFromAppUser() {
@@ -46,6 +56,7 @@ public class DiscoverUser implements Serializable {
     @Override
     public String toString() {
         return "DiscoverUser{" +
+                "meetupRequestSent=" + this.meetupRequestSent +
                 "distanceFromAppUser=" + this.distanceFromAppUser +
                 ", interests=" + this.commonInterests +
                 ", " + this.user.toString() +

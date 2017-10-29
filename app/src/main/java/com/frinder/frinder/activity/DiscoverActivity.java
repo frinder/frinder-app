@@ -57,7 +57,6 @@ public class DiscoverActivity extends BaseActivity {
     ArrayList<Interest> interests;
     RecyclerView rvInterests;
     InterestsAdapter interestsAdapter;
-    SpacesItemDecoration decoration;
     int previousInterestClickedPosition = -1;
 
     //Counts required for nearbyUsers
@@ -86,8 +85,6 @@ public class DiscoverActivity extends BaseActivity {
         //Note: This is to support filtering by multiple interests
         //filterInterestList = new ArrayList<>();
 
-
-
         // Lookup the recyclerview in activity layout
         rvInterests = (RecyclerView) findViewById(R.id.rvInterests);
         LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -113,7 +110,7 @@ public class DiscoverActivity extends BaseActivity {
         adapter = new DiscoverUsersAdapter(this, nearbyUsers);
         rvDiscoverusers.setAdapter(adapter);
         rvDiscoverusers.setLayoutManager(new LinearLayoutManager(this));
-        decoration = new SpacesItemDecoration(24);
+        SpacesItemDecoration decoration = new SpacesItemDecoration(24);
         rvDiscoverusers.addItemDecoration(decoration);
 
         unFilteredNearbyUsersCount = 0;
@@ -299,7 +296,7 @@ public class DiscoverActivity extends BaseActivity {
                                             user.getLocation().get(0), user.getLocation().get(1), results);
                                     double dInMtr = Double.parseDouble("" + results[0]);
 
-                                    nearbyUsers.add(new DiscoverUser(user, dInMtr, filterInterests));
+                                    nearbyUsers.add(new DiscoverUser(user, false, dInMtr, filterInterests));
                                     Log.d(TAG, "Added " + user.getName() + "to recyclerview");
                                 }
 
