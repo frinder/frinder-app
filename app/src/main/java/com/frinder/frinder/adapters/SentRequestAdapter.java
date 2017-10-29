@@ -52,6 +52,11 @@ public class SentRequestAdapter extends RequestsAdapter {
         });
     }
 
+    @Override
+    protected boolean shouldDisplayUnreadTag(Request request) {
+        return false;
+    }
+
     public class SentViewHolder extends RequestsAdapter.ViewHolder {
 
         @BindView(R.id.tvDelete)
