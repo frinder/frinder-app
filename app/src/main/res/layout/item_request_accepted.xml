@@ -1,43 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content">
 
-    <include layout="@layout/item_request" />
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    card_view:cardBackgroundColor="#FFF"
+    card_view:cardCornerRadius="6dp"
+    card_view:cardElevation="6dp"
+    android:layout_margin="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_below="@id/rlBasicRequest"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:paddingHorizontal="10dp"
+    <RelativeLayout
+        android:padding="8dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tvMessage"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/button_text"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:drawableLeft="@drawable/ic_message_white"
-            android:text="@string/tv_message" />
+        <include layout="@layout/item_request" />
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_below="@id/rlBasicRequest"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tvNavigateTo"
-            style="@style/button_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:drawableLeft="@drawable/ic_directions_walk_white"
-            android:text="@string/tv_navigate_to" />
-            android:layout_weight="1"
-            android:visibility="invisible" />
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/button_text"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:drawableLeft="@drawable/ic_message_white"
+                android:text="@string/tv_message" />
 
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tvNavigateTo"
+                style="@style/button_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:drawableLeft="@drawable/ic_directions_walk_white"
+                android:text="@string/tv_navigate_to" />
+                android:layout_weight="1"
+                android:visibility="invisible" />
 
-</RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

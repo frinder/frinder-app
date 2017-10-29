@@ -3,9 +3,9 @@ package com.frinder.frinder.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -109,4 +109,11 @@ public class EditProfileActivity extends BaseActivity {
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.menu_action_edit_profile).setVisible(false);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
 }

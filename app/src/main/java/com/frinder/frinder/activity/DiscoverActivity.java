@@ -2,7 +2,6 @@ package com.frinder.frinder.activity;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -18,20 +17,17 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.facebook.Profile;
-import com.facebook.login.LoginManager;
 import com.frinder.frinder.R;
 import com.frinder.frinder.adapters.DiscoverUsersAdapter;
 import com.frinder.frinder.adapters.InterestsAdapter;
 import com.frinder.frinder.adapters.SpacesItemDecoration;
 import com.frinder.frinder.dataaccess.DiscoverFirebaseDas;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
-import com.frinder.frinder.fragments.SettingsFragment;
 import com.frinder.frinder.model.DiscoverUser;
 import com.frinder.frinder.model.Interest;
 import com.frinder.frinder.model.User;
@@ -342,45 +338,6 @@ public class DiscoverActivity extends BaseActivity {
         repeatGetDiscoverUsers();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_discover, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.menu_action_notifications:
-                startActivity(new Intent(this, NotificationsActivity.class));
-                return true;
-            case R.id.menu_action_messages:
-                startActivity(new Intent(this, MessagesListActivity.class));
-                return true;
-            case R.id.menu_action_edit_profile:
-                Intent intent = new Intent(this,EditProfileActivity.class);
-                intent.putExtra("userId",Profile.getCurrentProfile().getId());
-                startActivity(intent);
-                return true;
-            case R.id.menu_action_settings:
-                FragmentManager fm = getSupportFragmentManager();
-                SettingsFragment settingsDialogFrament = SettingsFragment.newInstance();
-                settingsDialogFrament.show(fm, "fragment_settings");
-                return true;
-            case R.id.menu_action_logout:
-                Toast.makeText(this, "User logged out ", Toast.LENGTH_LONG).show();
-                LoginManager.getInstance().logOut();
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     private boolean requestLocationPermissions() {
         int hasFineLocation = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
         int hasCoarseLocation = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -392,6 +349,11 @@ public class DiscoverActivity extends BaseActivity {
         return true;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.menu_action_discover).setVisible(false);
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

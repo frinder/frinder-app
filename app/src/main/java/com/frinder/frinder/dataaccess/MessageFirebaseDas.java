@@ -109,7 +109,7 @@ public class MessageFirebaseDas {
             private ArrayList<MessageThread> mThreads;
 
             @Override
-            public void onThreadsReceived(ArrayList<MessageThread> threads) {
+            public void onThreadsReceived(List<MessageThread> threads) {
                 // TODO: Can this be called from different thread? If so, add synchronization logic
                 if (!mFirstReceived) {
                     mThreads = new ArrayList<>(threads);
@@ -163,27 +163,39 @@ public class MessageFirebaseDas {
         }
     }
 
-    public void getMessages(final MessageThread thread, final OnCompletionListener listener) {
-        getDocument(thread.uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+    public List<ListenerRegistration> getMessages(final MessageThread thread,
+                                                  final OnCompletionListener listener,
+                                                  final OnMessagesUpdateListener updateListener) {
+        final DocumentReference document = getDocument(thread.uid);
+        document.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if (document != null && document.exists()) {
-                        Log.d(TAG, "GetUser: DocumentSnapshot data: " + task.getResult().getData());
-                        if (task.getResult() != null && task.getResult().getData() != null) {
-                            listener.onMessagesReceived(parseMessageList(document, thread));
-                            return;
-                        }
-                    } else {
-                        Log.d(TAG, "GetUser: No such document");
-                    }
+                    listener.onMessagesReceived(parseMessages(document, thread));
+                    return;
                 } else {
                     Log.d(TAG, "GetUser: get failed with ", task.getException());
                 }
                 listener.onMessagesReceived(null);
             }
         });
+
+        ArrayList<ListenerRegistration> listenerRegistrations = new ArrayList<>();
+        if (updateListener != null) {
+            EventListener<DocumentSnapshot> eventListener = new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(DocumentSnapshot snapshot, FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.w(TAG, "listen:error", e);
+                        return;
+                    }
+                    updateListener.onUpdateMessages(parseMessages(snapshot, thread));
+                }
+            };
+            listenerRegistrations.add(document.addSnapshotListener(eventListener));
+        }
+        return listenerRegistrations;
     }
 
     public void addMessage(final MessageThread thread,
@@ -191,7 +203,7 @@ public class MessageFirebaseDas {
                            final OnMessageSendCompletionListener inListener) {
         getMessages(thread, new OnCompletionListener() {
             @Override
-            public void onMessagesReceived(ArrayList<Message> inMessages) {
+            public void onMessagesReceived(List<Message> inMessages) {
                 ArrayList<Message> messages = new ArrayList<Message>();
                 messages.addAll(inMessages);
                 messages.add(message);
@@ -217,7 +229,15 @@ public class MessageFirebaseDas {
                             }
                         });
             }
-        });
+        }, null);
+    }
+
+    private List<Message> parseMessages(DocumentSnapshot document, MessageThread thread) {
+        if (document != null && document.exists()) {
+            Log.d(TAG, "GetUser: DocumentSnapshot data: " + document.getData());
+            return parseMessageList(document, thread);
+        }
+        return null;
     }
 
     private void setupThreadCompletionListeners(Query query, final OnCompletionListener listener) {
@@ -291,19 +311,23 @@ public class MessageFirebaseDas {
             // override if required
         }
 
-        public void onThreadsReceived(ArrayList<MessageThread> threads) {
+        public void onThreadsReceived(List<MessageThread> threads) {
             // override if required
         }
 
-        public void onMessagesReceived(ArrayList<Message> messages) {
+        public void onMessagesReceived(List<Message> messages) {
             // override if required
         }
     }
 
     public abstract  static class OnThreadUpdateListener {
-        public  abstract void onThreadAdded(MessageThread thread);
-        public  abstract void onThreadUpdated(MessageThread thread);
-        public  abstract void onThreadRemoved(MessageThread thread);
+        public abstract void onThreadAdded(MessageThread thread);
+        public abstract void onThreadUpdated(MessageThread thread);
+        public abstract void onThreadRemoved(MessageThread thread);
+    }
+
+    public abstract  static class OnMessagesUpdateListener {
+        public abstract void onUpdateMessages(List<Message> messages);
     }
 
     public abstract static class OnMessageSendCompletionListener {
@@ -345,6 +369,9 @@ public class MessageFirebaseDas {
 
     private static Message convertMessageFromFirebaseObject(MessageThread thread, Map<String, Object> messageMap) {
         Message message = new Message();
+        if (messageMap.containsKey(Constants.MESSAGE_COLUMN_ID)) {
+            message.uid = (String)messageMap.get(Constants.MESSAGE_COLUMN_ID);
+        }
         message.thread = thread;
         message.timestamp = (Date)messageMap.get(Constants.MESSAGE_COLUMN_TIMESTAMP);
         message.text = (String)messageMap.get(Constants.MESSAGE_COLUMN_TEXT);
@@ -357,6 +384,7 @@ public class MessageFirebaseDas {
     @NonNull
     private Map<String, Object> convertMessageToFirebaseObject(MessageThread thread, Message message) {
         Map<String, Object> msg = new HashMap<>();
+        msg.put(Constants.MESSAGE_COLUMN_ID, message.uid);
         msg.put(Constants.MESSAGE_COLUMN_TIMESTAMP, message.timestamp);
         msg.put(Constants.MESSAGE_COLUMN_TEXT, message.text);
         switch (message.type) {

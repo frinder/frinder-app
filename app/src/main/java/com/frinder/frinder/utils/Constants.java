@@ -36,6 +36,7 @@ public final class Constants {
     public static final String THREAD_COLUMN_LAST_SENDERID = "lastSenderId";
 
     // Message Firebase Datastore Keys (Column Names)
+    public static final String MESSAGE_COLUMN_ID = "messageId";
     public static final String MESSAGE_COLUMN_SENDERID = "senderId";
     public static final String MESSAGE_COLUMN_TEXT = "text";
     public static final String MESSAGE_COLUMN_TIMESTAMP = "timestamp";
@@ -48,6 +49,18 @@ public final class Constants {
     public static final String FACEBOOK_PROFILE_AGE_RANGE = "age_range";
     public static final String FACEBOOK_PROFILE_LINK = "link";
     public static final String FACEBOOK_PROFILE_PUBLIC_PROFILE = "public_profile";
+
+    // Facebook places key
+    public static final String FACEBOOK_PLACES_DESCRIPTION = "description";
+    public static final String FACEBOOK_PLACES_CHECKINS = "checkins";
+    public static final String FACEBOOK_PLACES_LOCATION = "location";
+    public static final String FACEBOOK_PLACES_LOCATION_LATITUDE = "latitude";
+    public static final String FACEBOOK_PLACES_LOCATION_LONGITUDE = "longitude";
+    public static final String FACEBOOK_PLACES_NAME = "name";
+    public static final String FACEBOOK_PLACES_PICTURE = "picture";
+    public static final String FACEBOOK_PLACES_PICTURE_DATA = "data";
+    public static final String FACEBOOK_PLACES_PICTURE_DATA_URL = "url";
+    public static final String FACEBOOK_PLACES_ADDRESS = "single_line_address";
 
     // Intent extra
     public static final String INTENT_EXTRA_THREAD = "thread";

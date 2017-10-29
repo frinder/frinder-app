@@ -1,40 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content">
 
-    <include layout="@layout/item_request" />
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    card_view:cardBackgroundColor="#FFF"
+    card_view:cardCornerRadius="6dp"
+    card_view:cardElevation="6dp"
+    android:layout_margin="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_below="@id/rlBasicRequest"
-        android:layout_centerHorizontal="true"
-        android:paddingHorizontal="10dp"
-        android:weightSum="2"
+    <RelativeLayout
+        android:padding="8dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tvAccept"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/button_text"
-            android:drawableLeft="@drawable/ic_check_white"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:text="@string/tv_accept" />
+        <include layout="@layout/item_request" />
 
-        <TextView
-            android:id="@+id/tvDeny"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/button_text"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:drawableLeft="@drawable/ic_close_white"
-            android:text="@string/tv_deny" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_below="@id/rlBasicRequest"
+            android:layout_centerHorizontal="true"
+            android:paddingHorizontal="10dp"
+            android:weightSum="2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tvAccept"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/button_text"
+                android:drawableLeft="@drawable/ic_check_white"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="@string/tv_accept" />
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/tvDeny"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/button_text"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:drawableLeft="@drawable/ic_close_white"
+                android:text="@string/tv_deny" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

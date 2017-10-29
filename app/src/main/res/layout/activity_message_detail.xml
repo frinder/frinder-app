@@ -12,16 +12,26 @@
 
     <com.stfalcon.chatkit.messages.MessageInput
         android:id="@+id/miInput"
+        app:showAttachmentButton="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:inputHint="Enter a message"/>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvPlaces"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_above="@id/miInput"
+        android:drawSelectorOnTop="false"
+        android:visibility="gone"
+        tools:context=".activity.MessageDetailActivity" />
+
     <com.stfalcon.chatkit.messages.MessagesList
         android:id="@+id/mlMessages"
-        textAutoLink="all"
+        app:textAutoLink="all"
         android:layout_below="@id/toolbar"
-        android:layout_above="@id/miInput"
+        android:layout_above="@id/rvPlaces"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
