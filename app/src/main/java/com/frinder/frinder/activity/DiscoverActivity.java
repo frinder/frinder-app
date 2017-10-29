@@ -374,6 +374,7 @@ public class DiscoverActivity extends BaseActivity {
             case R.id.menu_action_logout:
                 Toast.makeText(this, "User logged out ", Toast.LENGTH_LONG).show();
                 LoginManager.getInstance().logOut();
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

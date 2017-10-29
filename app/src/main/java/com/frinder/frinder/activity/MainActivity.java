@@ -63,6 +63,7 @@ public class MainActivity extends BaseActivity {
         //TODO sent profile user data with intent
         Intent discoverIntent = new Intent(this, DiscoverActivity.class);
         startActivity(discoverIntent);
+        finish();
     }
 
     private void facebookUserLogin() {
