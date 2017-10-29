@@ -14,7 +14,6 @@ import com.facebook.Profile;
 import com.frinder.frinder.R;
 import com.frinder.frinder.activity.MessageDetailActivity;
 import com.frinder.frinder.dataaccess.MessageFirebaseDas;
-import com.frinder.frinder.dataaccess.RequestFirebaseDas;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.MessageThread;
 import com.frinder.frinder.model.Request;
@@ -33,13 +32,11 @@ public class AcceptedRequestAdapter extends RequestsAdapter {
 
     private MessageFirebaseDas mMessageFirebaseDas;
     private UserFirebaseDas mUserFirebaseDas;
-    private RequestFirebaseDas mRequestFirebaseDas;
 
     public AcceptedRequestAdapter(Context context, List<Request> requests) {
         super(context, requests);
         mMessageFirebaseDas = new MessageFirebaseDas(getContext());
         mUserFirebaseDas = new UserFirebaseDas(getContext());
-        mRequestFirebaseDas = new RequestFirebaseDas(getContext());
     }
 
     String getUserId(Request request) {
@@ -120,13 +117,13 @@ public class AcceptedRequestAdapter extends RequestsAdapter {
                 });
             }
         });
-
-        if (request.unread) {
-            if (request.senderId.equals(Profile.getCurrentProfile().getId())) {
-                mRequestFirebaseDas.updateUnread(request, false);
-            }
-        }
     }
+
+    @Override
+    protected boolean shouldDisplayUnreadTag(Request request) {
+        return request.unread && request.senderId.equals(Profile.getCurrentProfile().getId());
+    }
+
 
     public class AcceptedViewHolder extends RequestsAdapter.ViewHolder {
 

@@ -26,12 +26,14 @@ public abstract class RequestsAdapter extends
     private Context mContext;
     private UserFirebaseDas mUserDas;
     private RequestFirebaseDas mRequestDas;
+    private RequestFirebaseDas mRequestFirebaseDas;
 
     public RequestsAdapter(Context context, List<Request> requests) {
         mRequests = requests;
         mContext = context;
         mUserDas = new UserFirebaseDas(mContext);
         mRequestDas = new RequestFirebaseDas(mContext);
+        mRequestFirebaseDas = new RequestFirebaseDas(mContext);
     }
 
     @Override
@@ -41,6 +43,7 @@ public abstract class RequestsAdapter extends
 
         String userId = getUserId(request);
         holder.position = position;
+        final boolean shouldDisplayUnreadTag = shouldDisplayUnreadTag(request);
         // TODO: Move this to a static variable/cache this
         mUserDas.getUser(userId, new UserFirebaseDas.OnCompletionListener() {
             @Override
@@ -48,10 +51,13 @@ public abstract class RequestsAdapter extends
                 // Ensure that the ViewHolder is still at the same position
                 if (user != null && holder.position == position) {
                     populateUserDetails(holder, user);
-                    holder.ivNewTag.setVisibility(request.unread ? View.VISIBLE : View.INVISIBLE);
+                    holder.ivNewTag.setVisibility(shouldDisplayUnreadTag ? View.VISIBLE : View.INVISIBLE);
                 }
             }
         });
+        if (shouldDisplayUnreadTag) {
+            mRequestFirebaseDas.updateUnread(request, false);
+        }
     }
 
     @Override
@@ -73,6 +79,8 @@ public abstract class RequestsAdapter extends
             notifyItemRemoved(position);
         }
     }
+
+    protected abstract boolean shouldDisplayUnreadTag(Request request);
 
     protected Context getContext() {
         return mContext;
