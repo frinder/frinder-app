@@ -87,6 +87,8 @@ public class BaseActivity extends AppCompatActivity implements ConnectivityChang
             case R.id.menu_action_logout:
                 Toast.makeText(this, "User logged out ", Toast.LENGTH_LONG).show();
                 LoginManager.getInstance().logOut();
+                Intent loginIntent = new Intent(this,MainActivity.class);
+                startActivity(loginIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

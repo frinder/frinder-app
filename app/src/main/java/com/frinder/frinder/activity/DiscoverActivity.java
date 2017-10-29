@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -213,7 +214,8 @@ public class DiscoverActivity extends BaseActivity {
 
     private void repeatGetDiscoverUsers() {
         handler.removeCallbacksAndMessages(null);
-
+        rippleBackground.startRippleAnimation();
+        ivDiscoverUserIcon.setVisibility(View.VISIBLE);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -236,7 +238,6 @@ public class DiscoverActivity extends BaseActivity {
     public void getdiscoverUsers() {
         rippleBackground.startRippleAnimation();
         ivDiscoverUserIcon.setVisibility(View.VISIBLE);
-
         //Clear the list each time discover menu button is clicked as user list will change based on who is nearby
         if (!nearbyUsers.isEmpty()) {
             nearbyUsers.clear();
@@ -400,7 +401,6 @@ public class DiscoverActivity extends BaseActivity {
                     Double.toString(location.getLatitude()) + "," +
                     Double.toString(location.getLongitude());
             Log.d(TAG, msg);
-            Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
 
             if(location!=null) {
                 ArrayList<Double> locationList = new ArrayList<>();
