@@ -36,12 +36,12 @@ public class IncomingMessageViewHolder extends MessageHolders.IncomingTextMessag
     public void onBind(final Message message) {
         super.onBind(message);
         this.mCurrentMessage = message;
+        messageUserAvatar.setVisibility(View.VISIBLE);
         mUserDas.getUser(message.senderId, new UserFirebaseDas.OnCompletionListener() {
             @Override
             public void onUserReceived(User user) {
                 // Ensure that the ViewHolder is still at the same position
                 if (message == mCurrentMessage) {
-                    messageUserAvatar.setVisibility(View.VISIBLE);
                     Glide.with(mContext)
                             .load(user.getProfilePicUrl())
                             .centerCrop()

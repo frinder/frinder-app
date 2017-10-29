@@ -3,12 +3,9 @@ package com.frinder.frinder.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -23,8 +20,6 @@ import com.frinder.frinder.R;
 import com.frinder.frinder.model.User;
 
 import org.json.JSONObject;
-
-import java.util.Arrays;
 
 public class LoginActivity extends BaseActivity {
 
@@ -101,4 +96,8 @@ public class LoginActivity extends BaseActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 }

@@ -2,11 +2,11 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:drawable="@color/white"/>
+        android:drawable="@color/colorPrimary"/>
 
     <item android:gravity="center"
         android:width="200dp"
         android:height="200dp"
-        android:drawable="@drawable/ic_icon"/>
+        android:drawable="@drawable/ic_icon_white"/>
 
 </layer-list>
