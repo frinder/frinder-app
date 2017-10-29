@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 // The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
 const functions = require('firebase-functions');
 
@@ -91,3 +93,53 @@ exports.createUser = functions.firestore
 
     return true;
 });
+
+exports.updateRequest = functions.firestore
+  .document('requests/{requestId}')
+  .onUpdate(event => {
+    var newValue = event.data.data();
+    var oldValue = event.data.previous.data();
+    var requestId = newValue.id;
+
+    if (!oldValue.accepted && newValue.accepted) {
+        console.log('Request with id ' + requestId + ' has been accepted');
+        return loadUser(newValue.senderId).then(user => {
+          if (user === null) {
+            console.log('Request with id ' + requestId + ': could not find user with id:' + newValue.senderId);
+            return;
+          }
+          if (user.token === null) {
+            console.log('Request with id ' + requestId + ': could not find token for user:' + user.name);
+            return;
+          }
+          let payload = {
+            notification: {
+                title: 'Frinder alert!',
+                body: 'Someone accepted your friend request',
+                sound: 'default',
+                badge: '1'
+            }
+          };
+          return admin.messaging().sendToDevice(user.token, payload);
+        });
+    } else {
+        console.log('No change observe for request with id ' + requestId + '. ');      
+    }
+    return true;
+});
+
+function loadUser(userId) {
+  var docRef = admin.database().ref('/users').doc(userId);
+  let defer = new Promise((resolve, reject) => {
+    docRef.get().then(function(doc) {
+      if (doc.exists) {
+        resolve(doc);
+      } else {
+        resolve(null);
+      }
+    }).catch(function(error) {
+      reject(err);
+    });
+  });
+  return defer;
+}
