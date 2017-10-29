@@ -2,28 +2,28 @@
 <resources>
     <!--TODO get vector icons for all interests-->
     <integer-array name="filter_interest_icon">
-        <item>@drawable/interest_artcrafts</item>
-        <item>@drawable/interest_auto</item>
-        <item>@drawable/interest_boardgames</item>
-        <item>@drawable/interest_cooking</item>
-        <item>@drawable/interest_currentaffairs</item>
-        <item>@drawable/interest_dancing</item>
-        <item>@drawable/interest_diy</item>
-        <item>@drawable/interest_fashion</item>
-        <item>@drawable/interest_fitness</item>
-        <item>@drawable/interest_food</item>
-        <item>@drawable/interest_gadgets</item>
-        <item>@drawable/interest_gardening</item>
-        <item>@drawable/interest_movies</item>
-        <item>@drawable/interest_music</item>
-        <item>@drawable/interest_parenting</item>
-        <item>@drawable/interest_pets</item>
-        <item>@drawable/interest_photography</item>
-        <item>@drawable/interest_reading</item>
-        <item>@drawable/interest_spirituality</item>
-        <item>@drawable/interest_sport</item>
-        <item>@drawable/interest_travel</item>
-        <item>@drawable/interest_videogames</item>
+        <item>@drawable/ic_interest_artscrafts</item>
+        <item>@drawable/ic_interest_auto</item>
+        <item>@drawable/ic_interest_boardgame</item>
+        <item>@drawable/ic_interest_cooking</item>
+        <item>@drawable/ic_interest_currentaffairs</item>
+        <item>@drawable/ic_interest_dancing</item>
+        <item>@drawable/ic_interest_diyprojects</item>
+        <item>@drawable/ic_interest_fashion</item>
+        <item>@drawable/ic_interest_fitness</item>
+        <item>@drawable/ic_interest_food</item>
+        <item>@drawable/ic_interest_gadget</item>
+        <item>@drawable/ic_interest_gardening</item>
+        <item>@drawable/ic_interest_movies</item>
+        <item>@drawable/ic_interest_music</item>
+        <item>@drawable/ic_interest_parenting</item>
+        <item>@drawable/ic_interest_pets</item>
+        <item>@drawable/ic_interest_photography</item>
+        <item>@drawable/ic_interest_reading</item>
+        <item>@drawable/ic_interest_spirituality</item>
+        <item>@drawable/ic_interest_sports</item>
+        <item>@drawable/ic_interest_travel</item>
+        <item>@drawable/ic_interest_videogames</item>
     </integer-array>
 
     <integer-array name="filter_interest_pics">

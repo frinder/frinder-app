@@ -1,7 +1,7 @@
 package com.frinder.frinder.adapters;
 
 import android.content.Context;
-import android.graphics.Typeface;
+import android.content.res.TypedArray;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,6 +25,8 @@ import com.frinder.frinder.model.Request;
 import com.frinder.frinder.model.User;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -73,21 +76,21 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
         // Set item views based on your views and data model
         if (user.getProfilePicUrl() == null || user.getProfilePicUrl().isEmpty()) {
             if (user.getGender().contentEquals("female")) {
-                viewHolder.ivUserImage.setImageResource(R.drawable.profile_img_female);
+                viewHolder.ivDiscoverUserImage.setImageResource(R.drawable.profile_img_female);
             } else if (user.getGender().contentEquals("male")) {
-                viewHolder.ivUserImage.setImageResource(R.drawable.profile_img_male);
+                viewHolder.ivDiscoverUserImage.setImageResource(R.drawable.profile_img_male);
             } else {
-                viewHolder.ivUserImage.setImageResource(R.drawable.profile_img_neutral);
+                viewHolder.ivDiscoverUserImage.setImageResource(R.drawable.profile_img_neutral);
             }
         }
         else {
             Glide.with(mContext)
                     .load(user.getProfilePicUrl())
                     .centerCrop()
-                    .into(viewHolder.ivUserImage);
+                    .into(viewHolder.ivDiscoverUserImage);
         }
 
-        viewHolder.tvUserName.setText(user.getName());
+        viewHolder.tvDiscoverUserName.setText(user.getName());
 
         double dInMtr = discoverUser.getDistanceFromAppUser();
         double dInMiles = dInMtr/1609;
@@ -96,43 +99,77 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
         double distance = Double.parseDouble(numberFormat.format(dInMiles));
         if (distance == 0) {
             distance = Double.parseDouble(numberFormat.format(dInFeet));
-            viewHolder.tvDistance.setText(distance + "ft");
-            //Log.d(TAG, "FINAL: " + user.getName() + " @ " + distance + "ft");
+            if (distance == 0) {
+                viewHolder.tvDiscoverDistance.setText("Next to you!");
+            }
+            else {
+                viewHolder.tvDiscoverDistance.setText(distance + "ft");
+                //Log.d(TAG, "FINAL: " + user.getName() + " @ " + distance + "ft");
+            }
         }
         else {
-            viewHolder.tvDistance.setText(distance + "mi");
+            viewHolder.tvDiscoverDistance.setText(distance + "mi");
             //Log.d(TAG, "FINAL: " + user.getName() + " @ " + distance + "mi");
         }
 
-        viewHolder.tvUserDesc.setText(user.getDesc());
+        viewHolder.tvDiscoverUserDesc.setText(user.getDesc());
 
-        viewHolder.llUserInterests.removeAllViews();
-        TextView tvLikesLabel = new TextView(mContext);
-        tvLikesLabel.setText("Likes:");
-        tvLikesLabel.setTypeface(tvLikesLabel.getTypeface(), Typeface.BOLD);
-        viewHolder.llUserInterests.addView(tvLikesLabel);
-        for (String interest : user.getInterests()) {
-            TextView textView = new TextView(mContext);
-            textView.setText(interest);
-            if (discoverUser.getCommonInterests().contains(interest)) {
-                textView.setTextColor(ContextCompat.getColor(mContext, R.color.dark_orange));
+        viewHolder.llDiscoverInterestsLayout.removeViews(1, viewHolder.llDiscoverInterestsLayout.getChildCount()-1);
+
+        if (!user.getInterests().isEmpty()) {
+            viewHolder.hScrollViewDiscoverInterests.setVisibility(View.VISIBLE);
+
+            ArrayList<String> filterInterestLabel = new ArrayList<String>(Arrays.asList(mContext.getResources().getStringArray(R.array.filter_interest_label)));
+            ArrayList<String> filterInterestForDB = new ArrayList<String>(Arrays.asList(mContext.getResources().getStringArray(R.array.filter_interest_forDB)));
+            TypedArray filterInterestColorArray = mContext.getResources().obtainTypedArray(R.array.filter_interest_color);
+            TypedArray filterInterestIconArray = mContext.getResources().obtainTypedArray(R.array.filter_interest_icon);
+
+            for (String interest : user.getInterests()) {
+                int index = filterInterestForDB.indexOf(interest);
+                String interestLabel = filterInterestLabel.get(index);
+
+                ImageView imageView = new ImageView(mContext);
+                imageView.setImageDrawable(ContextCompat.getDrawable(mContext, filterInterestIconArray.getResourceId(index, 0)));
+                imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.white));
+
+                viewHolder.llDiscoverInterestsLayout.addView(imageView);
+
+                View tView = viewHolder.llDiscoverInterestsLayout.getChildAt(viewHolder.llDiscoverInterestsLayout.getChildCount() - 1);
+                LinearLayout.LayoutParams tLayoutParams = (LinearLayout.LayoutParams) tView.getLayoutParams();
+                tLayoutParams.setMargins(15, 15, 15, 15); // llp.setMargins(left, top, right, bottom);
+                imageView.setLayoutParams(tLayoutParams);
             }
-            viewHolder.llUserInterests.addView(textView);
+
+            filterInterestColorArray.recycle();
+            filterInterestIconArray.recycle();
+        }
+        else {
+            viewHolder.hScrollViewDiscoverInterests.setVisibility(View.GONE);
         }
 
         // TODO: Set this based on status of request
-        viewHolder.tvBtnRequestToMeet.setClickable(true);
-        viewHolder.tvBtnRequestToMeet.setText(R.string.tv_btn_request_to_meet_label);
-        viewHolder.tvBtnRequestToMeet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Send meetup request to selected user");
-                sendMeetupRequest(user.getUid());
-                // TODO: Check whether request suceeded
-                viewHolder.tvBtnRequestToMeet.setClickable(false);
-                viewHolder.tvBtnRequestToMeet.setText(R.string.tv_btn_existing_request_label);
-            }
-        });
+        if (!discoverUser.isMeetupRequestSent()) {
+            viewHolder.llDiscoverBtnDistance.setBackground(ContextCompat.getDrawable(mContext, R.drawable.item_user_blueorange_gradient));
+            viewHolder.tvDiscoverBtnRequestToMeet.setClickable(true);
+            viewHolder.tvDiscoverBtnRequestToMeet.setText(R.string.tv_btn_request_to_meet_label);
+
+            viewHolder.tvDiscoverBtnRequestToMeet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "Send meetup request to selected user");
+                    sendMeetupRequest(user.getUid());
+                    // TODO: Check whether request suceeded
+                    viewHolder.llDiscoverBtnDistance.setBackground(ContextCompat.getDrawable(mContext, R.drawable.item_user_bluegreen_gradient));
+                    viewHolder.tvDiscoverBtnRequestToMeet.setText(R.string.tv_btn_existing_request_label);
+                    viewHolder.tvDiscoverBtnRequestToMeet.setClickable(false);
+                }
+            });
+        }
+        else {
+            viewHolder.llDiscoverBtnDistance.setBackground(ContextCompat.getDrawable(mContext, R.drawable.item_user_bluegreen_gradient));
+            viewHolder.tvDiscoverBtnRequestToMeet.setText(R.string.tv_btn_existing_request_label);
+            viewHolder.tvDiscoverBtnRequestToMeet.setClickable(false);
+        }
     }
 
     // Returns the total count of items in the list
@@ -142,18 +179,22 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.ivUserImage)
-        ImageView ivUserImage;
-        @BindView(R.id.tvUserName)
-        TextView tvUserName;
-        @BindView(R.id.tvDistance)
-        TextView tvDistance;
-        @BindView(R.id.tvUserDesc)
-        TextView tvUserDesc;
-        @BindView(R.id.llUserInterests)
-        LinearLayout llUserInterests;
-        @BindView(R.id.tvBtnRequestToMeet)
-        TextView tvBtnRequestToMeet;
+        @BindView (R.id.llDiscoverBtnDistance)
+        LinearLayout llDiscoverBtnDistance;
+        @BindView(R.id.ivDiscoverUserImage)
+        ImageView ivDiscoverUserImage;
+        @BindView(R.id.tvDiscoverUserName)
+        TextView tvDiscoverUserName;
+        @BindView(R.id.tvDiscoverDistance)
+        TextView tvDiscoverDistance;
+        @BindView(R.id.tvDiscoverUserDesc)
+        TextView tvDiscoverUserDesc;
+        @BindView(R.id.tvDiscoverBtnRequestToMeet)
+        TextView tvDiscoverBtnRequestToMeet;
+        @BindView(R.id.llDiscoverInterestsLayout)
+        LinearLayout llDiscoverInterestsLayout;
+        @BindView(R.id.hScrollViewDiscoverInterests)
+        HorizontalScrollView hScrollViewDiscoverInterests;
 
         public ViewHolder(View itemView) {
             super(itemView);

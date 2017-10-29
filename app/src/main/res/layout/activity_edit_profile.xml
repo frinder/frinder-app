@@ -90,7 +90,7 @@
         android:layout_height="wrap_content"
         android:minHeight="0dp"
         android:minWidth="0dp"
-        android:background="@color/darkGray"
+        android:background="@color/dark_gray"
         android:padding="@dimen/text_padding"
         android:includeFontPadding="false"
         android:text="Skip"

@@ -3,6 +3,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     card_view:cardBackgroundColor="@color/card_layout_background"
@@ -12,86 +13,118 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_horizontal_margin">
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/llDiscoverBtnDistance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/item_user_blueorange_gradient">
+            <TextView
+                android:id="@+id/tvDiscoverDistance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start|center_vertical"
+                android:drawableStart="@drawable/ic_location_on_white"
+                android:drawableLeft="@drawable/ic_location_on_white"
+                android:drawablePadding="@dimen/textview_drawable_padding"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                tools:text="10 feet away" />
+
+            <TextView
+                android:id="@+id/tvDiscoverBtnRequestToMeet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:drawableLeft="@drawable/ic_request_to_meet_white"
+                android:drawableStart="@drawable/ic_request_to_meet_white"
+                android:drawablePadding="@dimen/textview_drawable_padding"
+                android:padding="@dimen/text_padding"
+                android:text="@string/tv_btn_request_to_meet_label"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:gravity="center_vertical"/>
+        </LinearLayout>
 
         <ImageView
-            android:id="@+id/ivUserImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:id="@+id/ivDiscoverUserImage"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_below="@id/llDiscoverBtnDistance"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="@dimen/activity_vertical_margin"
             tools:src="@drawable/profile_img_neutral" />
 
         <TextView
-            android:id="@+id/tvUserName"
+            android:id="@+id/tvDiscoverUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@id/ivUserImage"
-            android:layout_toEndOf="@id/ivUserImage"
-            android:layout_toRightOf="@id/ivUserImage"
-            android:textAlignment="center"
+            android:layout_alignTop="@id/ivDiscoverUserImage"
+            android:layout_toRightOf="@id/ivDiscoverUserImage"
+            android:layout_toEndOf="@id/ivDiscoverUserImage"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:gravity="start"
+            android:paddingLeft="@dimen/text_padding"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/black"
+            android:background="#ffffcc"
             android:textStyle="bold"
             tools:text="User Name" />
 
         <TextView
-            android:id="@+id/tvDistance"
+            android:id="@+id/tvDiscoverUserDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/tvUserName"
-            android:layout_alignBottom="@+id/tvUserName"
-            android:gravity="center_vertical"
-            tools:text="10 feet away" />
-
-        <TextView
-            android:id="@+id/tvUserDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/tvUserName"
-            android:layout_alignStart="@id/tvUserName"
-            android:layout_below="@id/tvUserName"
+            android:layout_below="@id/tvDiscoverUserName"
+            android:layout_alignLeft="@id/tvDiscoverUserName"
+            android:layout_alignStart="@id/tvDiscoverUserName"
+            android:layout_alignRight="@id/tvDiscoverUserName"
+            android:layout_alignEnd="@id/tvDiscoverUserName"
+            android:layout_alignBottom="@id/ivDiscoverUserImage"
+            android:ellipsize="end"
+            android:paddingLeft="@dimen/text_padding"
+            android:paddingRight="@dimen/text_padding"
             android:textColor="@color/black"
-            tools:text="This is a short description about the user" />
+            android:background="#ffffcc"
+            tools:text="This is a short description about the user."/>
 
-        <TextView
-            android:id="@+id/tvBtnRequestToMeet"
-            android:layout_width="wrap_content"
+        <HorizontalScrollView
+            android:id="@+id/hScrollViewDiscoverInterests"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/dark_orange"
-            android:clickable="true"
-            android:drawableLeft="@drawable/ic_request_to_meet_white"
-            android:drawablePadding="@dimen/textview_drawable_padding"
-            android:drawableStart="@drawable/ic_request_to_meet_white"
-            android:padding="@dimen/text_padding"
-            android:text="@string/tv_btn_request_to_meet_label"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:layout_alignBottom="@+id/ivUserImage"
+            android:layout_below="@id/ivDiscoverUserImage"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
+            android:layout_alignParentEnd="true"
+            android:background="@color/dark_gray">
         <LinearLayout
-            android:id="@+id/llUserInterests"
+            android:id="@+id/llDiscoverInterestsLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_alignLeft="@id/tvUserDesc"
-            android:layout_alignStart="@id/tvUserDesc"
-            android:layout_toStartOf="@id/tvBtnRequestToMeet"
-            android:layout_toLeftOf="@id/tvBtnRequestToMeet"
-            android:layout_alignBottom="@id/ivUserImage"
-            android:layout_below="@id/tvUserDesc"
-            android:textColor="@color/black">
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/interests_label"
+                android:textColor="@color/white"
+                android:layout_marginLeft="@dimen/view_margin"
+                android:layout_marginStart="@dimen/view_margin"
+                android:textStyle="bold|italic"/>
+            <!-- Child views are added programatically in DiscoverUserAdapter.java -->
         </LinearLayout>
+        </HorizontalScrollView>
     </RelativeLayout>
 </android.support.v7.widget.CardView>
