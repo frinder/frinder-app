@@ -158,7 +158,8 @@ public class RequestFirebaseDas {
         }
         return db.collection("requests")
                 .whereEqualTo(Constants.REQUEST_COLUMN_RECEIVER_ID, Profile.getCurrentProfile().getId())
-                .whereEqualTo("unread", true);
+                .whereEqualTo("unread", true)
+                .whereEqualTo("accepted", false);
     }
 
 
