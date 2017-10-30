@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_splash"
     tools:context="com.frinder.frinder.activity.LoginActivity">
 
     <!--<ImageView-->
@@ -13,14 +12,35 @@
         <!--android:scaleType="centerCrop"-->
         <!--android:src="@drawable/background_splash"/>-->
 
+    <ImageView
+        android:id="@+id/ivLoginScreenImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
         android:textSize="20sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="120dp"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="180dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="96dp"
+        android:fontFamily="sans-serif"
+        android:text="frinder"
+        android:textColor="@color/white"
+        android:textSize="72sp"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

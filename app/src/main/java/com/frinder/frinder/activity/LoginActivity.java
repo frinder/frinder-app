@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -35,6 +37,11 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
+        ImageView ivLoginScreenImage = (ImageView) findViewById(R.id.ivLoginScreenImage);
+        Glide.with(this)
+                .load(R.drawable.image_nature)
+                .centerCrop()
+                .into(ivLoginScreenImage);
         callbackManager = CallbackManager.Factory.create();
 
 //        loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
