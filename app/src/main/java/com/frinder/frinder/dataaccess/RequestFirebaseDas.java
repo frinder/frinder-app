@@ -15,13 +15,17 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RequestFirebaseDas {
@@ -138,6 +142,86 @@ public class RequestFirebaseDas {
         getResults(getReceivedRequestsQuery(true), inListener);
     }
 
+    private Query getUnreadSenderQuery() {
+        return db.collection("requests")
+                .whereEqualTo(Constants.REQUEST_COLUMN_SENDER_ID, Profile.getCurrentProfile().getId())
+                .whereEqualTo("unread", true)
+                .whereEqualTo("accepted", true);
+    }
+
+    private Query getUnreadReceiverQuery() {
+        return db.collection("requests")
+                .whereEqualTo(Constants.REQUEST_COLUMN_RECEIVER_ID, Profile.getCurrentProfile().getId())
+                .whereEqualTo("unread", true);
+    }
+
+
+    public void getUnreadStatus(final OnUnreadStatusUpdateListener listener) {
+        OnUnreadStatusUpdateListener inListener = new OnUnreadStatusUpdateListener() {
+
+            private boolean mFirstReceived = false;
+            private boolean mStatus;
+
+            @Override
+            public void onUnreadStatusUpdated(boolean status) {
+                // TODO: Can this be called from different thread? If so, add synchronization logic
+                if (!mFirstReceived) {
+                    mStatus = status;
+                    mFirstReceived = true;
+                } else {
+                    listener.onUnreadStatusUpdated(status || mStatus);
+                }
+            }
+        };
+
+        getQueyUnreadStatus(getUnreadSenderQuery(), inListener);
+        getQueyUnreadStatus(getUnreadReceiverQuery(), inListener);
+    }
+
+    public ArrayList<ListenerRegistration> setupUnreadListener(final OnUnreadStatusUpdateListener listener) {
+        EventListener<QuerySnapshot> eventListener = new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "listen:error", e);
+                    return;
+                }
+                List<DocumentSnapshot> documents = snapshots.getDocuments();
+                listener.onUnreadStatusUpdated(documents.size() > 0);
+            }
+        };
+
+        ArrayList<ListenerRegistration> listenerRegistrations = new ArrayList<>();
+        listenerRegistrations.add(getUnreadSenderQuery().addSnapshotListener(eventListener));
+        listenerRegistrations.add(getUnreadSenderQuery().addSnapshotListener(eventListener));
+        return listenerRegistrations;
+    }
+
+    public void removeRegistrations(List<ListenerRegistration> listenerRegistrations) {
+        for (ListenerRegistration registration : listenerRegistrations) {
+            registration.remove();
+        }
+    }
+
+    private void getQueyUnreadStatus(Query query, final OnUnreadStatusUpdateListener listener) {
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot querySnapshot = task.getResult();
+                    if (querySnapshot != null) {
+                        List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+                        listener.onUnreadStatusUpdated(documents.size() > 0);
+                    }
+                    return;
+                }
+
+                Log.d(TAG, "Error getting documents: ", task.getException());
+                listener.onUnreadStatusUpdated(false);
+            }
+        });
+    }
+
     private Query getSentRequestsQuery(boolean accepted) {
         return db.collection("requests")
                 .whereEqualTo(Constants.REQUEST_COLUMN_SENDER_ID, Profile.getCurrentProfile().getId())
@@ -168,6 +252,10 @@ public class RequestFirebaseDas {
 
     public static abstract class OnCompletionListener {
         abstract public void onRequestsReceived(ArrayList<Request> requests);
+    }
+
+    public abstract  static class OnUnreadStatusUpdateListener {
+        public abstract void onUnreadStatusUpdated(boolean status);
     }
 
     @NonNull
