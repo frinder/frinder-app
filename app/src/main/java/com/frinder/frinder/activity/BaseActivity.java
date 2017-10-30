@@ -126,6 +126,11 @@ public class BaseActivity extends AppCompatActivity
         updateRequestMenuItem(value);
     }
 
+    @Override
+    public void onUnreadRequestsUpdated() {
+        // Ignore
+    }
+
     private void updateRequestMenuItem(boolean unreadStatus) {
         if (mRequestsMenuItem != null) {
             mRequestsMenuItem.setIcon(unreadStatus ? R.drawable.ic_notifications_alert : R.drawable.ic_notifications_white);

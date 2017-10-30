@@ -14,6 +14,7 @@ import com.frinder.frinder.R;
 import com.frinder.frinder.adapters.RequestsAdapter;
 import com.frinder.frinder.dataaccess.RequestFirebaseDas;
 import com.frinder.frinder.model.Request;
+import com.frinder.frinder.utils.UnreadRequestsUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,8 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public abstract class RequestFragment extends Fragment {
+public abstract class RequestFragment extends Fragment
+        implements UnreadRequestsUtils.UnreadRequestsListener {
 
     private Unbinder mUnbinder;
     private ArrayList<Request> mRequests;
@@ -49,23 +51,44 @@ public abstract class RequestFragment extends Fragment {
         mAdapter = createAdapater(mRequests);
         rvRequests.setAdapter(mAdapter);
         rvRequests.setLayoutManager(new LinearLayoutManager(getContext()));
+        fetchRequests();
 
-        getRequests(getContext(), new RequestFirebaseDas.OnCompletionListener() {
-            @Override
-            public void onRequestsReceived(ArrayList<Request> requests) {
-                mRequests.addAll(requests);
-                mAdapter.notifyDataSetChanged();
-            }
-        });
+        UnreadRequestsUtils unreadRequestsUtils = UnreadRequestsUtils.getInstance(getContext());
+        unreadRequestsUtils.addListener(this);
 
         return view;
     }
 
     @Override public void onDestroyView() {
+        UnreadRequestsUtils.getInstance(getContext()).removeListener(this);
         super.onDestroyView();
         mUnbinder.unbind();
     }
 
+    @Override
+    public void onUnreadRequestsUpdated(boolean value) {
+        // ignore
+    }
+
+    @Override
+    public void onUnreadRequestsUpdated() {
+        if (shouldRefetchOnUnreadUpdate()) {
+            fetchRequests();
+        }
+    }
+
     abstract RequestsAdapter createAdapater(List<Request> requests);
     abstract void getRequests(Context context, RequestFirebaseDas.OnCompletionListener listener);
+    abstract boolean shouldRefetchOnUnreadUpdate();
+
+    private void fetchRequests() {
+        getRequests(getContext(), new RequestFirebaseDas.OnCompletionListener() {
+            @Override
+            public void onRequestsReceived(ArrayList<Request> requests) {
+                mRequests.clear();
+                mRequests.addAll(requests);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+    }
 }

@@ -13,7 +13,11 @@ public class UnreadRequestsUtils extends UnreadUtils{
     private RequestFirebaseDas mRequestFirebaseDas;
 
     public interface UnreadRequestsListener extends UnreadListener {
+        // Called only when the value changes
         void onUnreadRequestsUpdated(boolean value);
+
+        // Called for every update
+        void onUnreadRequestsUpdated();
     }
 
     // Only the first context is used
@@ -29,7 +33,7 @@ public class UnreadRequestsUtils extends UnreadUtils{
         mRequestFirebaseDas.getUnreadStatus(new RequestFirebaseDas.OnUnreadStatusUpdateListener() {
             @Override
             public void onUnreadStatusUpdated(boolean status) {
-                updateStatus(status);
+                updateInitialStatus(status);
             }
         });
         register();
@@ -51,9 +55,14 @@ public class UnreadRequestsUtils extends UnreadUtils{
     }
 
     @Override
-    protected void notifyListener(UnreadListener inListener, boolean status) {
+    protected void notifyUnreadStatusChange(UnreadListener inListener, boolean status) {
         UnreadRequestsListener listener = (UnreadRequestsListener)inListener;
         listener.onUnreadRequestsUpdated(status);
     }
 
+    @Override
+    protected void notifyUpdate(UnreadListener inListener) {
+        UnreadRequestsListener listener = (UnreadRequestsListener)inListener;
+        listener.onUnreadRequestsUpdated();
+    }
 }

@@ -27,4 +27,9 @@ public class ReceivedRequestFragment extends RequestFragment {
         das.getReceivedRequests(listener);
     }
 
+    @Override
+    boolean shouldRefetchOnUnreadUpdate() {
+        return true;
+    }
+
 }
