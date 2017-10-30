@@ -134,6 +134,7 @@ public class MessageDetailActivity extends BaseActivity implements PlacesAdapter
     private void addMessage(String text) {
         Message message = createMessage(text);
         mAdapter.addToStart(message, true);
+        mMessages.add(message);
         postMessage(message);
     }
 
