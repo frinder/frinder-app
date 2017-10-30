@@ -39,8 +39,8 @@ public class LoginActivity extends BaseActivity {
         loginButton = (LoginButton) findViewById(R.id.login_button);
         ImageView ivLoginScreenImage = (ImageView) findViewById(R.id.ivLoginScreenImage);
         Glide.with(this)
-                .load(R.drawable.image_nature)
-                .centerCrop()
+                .load(R.drawable.image_swing)
+                .fitCenter()
                 .into(ivLoginScreenImage);
         callbackManager = CallbackManager.Factory.create();
 
