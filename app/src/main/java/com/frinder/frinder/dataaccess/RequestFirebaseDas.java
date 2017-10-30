@@ -143,6 +143,9 @@ public class RequestFirebaseDas {
     }
 
     private Query getUnreadSenderQuery() {
+        if (Profile.getCurrentProfile() == null) {
+            return null;
+        }
         return db.collection("requests")
                 .whereEqualTo(Constants.REQUEST_COLUMN_SENDER_ID, Profile.getCurrentProfile().getId())
                 .whereEqualTo("unread", true)
@@ -150,6 +153,9 @@ public class RequestFirebaseDas {
     }
 
     private Query getUnreadReceiverQuery() {
+        if (Profile.getCurrentProfile() == null) {
+            return null;
+        }
         return db.collection("requests")
                 .whereEqualTo(Constants.REQUEST_COLUMN_RECEIVER_ID, Profile.getCurrentProfile().getId())
                 .whereEqualTo("unread", true);
@@ -174,8 +180,14 @@ public class RequestFirebaseDas {
             }
         };
 
-        getQueryUnreadStatus(getUnreadSenderQuery(), inListener);
-        getQueryUnreadStatus(getUnreadReceiverQuery(), inListener);
+        Query senderQuery = getUnreadSenderQuery();
+        Query receiverQuery = getUnreadReceiverQuery();
+        if (senderQuery != null && receiverQuery != null) {
+            getQueryUnreadStatus(getUnreadSenderQuery(), inListener);
+            getQueryUnreadStatus(getUnreadReceiverQuery(), inListener);
+        } else {
+            listener.onUnreadStatusUpdated(false);
+        }
     }
 
     public ArrayList<ListenerRegistration> setupUnreadListener(final OnUnreadStatusUpdateListener listener) {
@@ -186,15 +198,20 @@ public class RequestFirebaseDas {
                     Log.w(TAG, "listen:error", e);
                     return;
                 }
-                List<DocumentSnapshot> documents = snapshots.getDocuments();
-                listener.onUnreadStatusUpdated(documents.size() > 0);
+                getUnreadStatus(listener);
             }
         };
 
-        ArrayList<ListenerRegistration> listenerRegistrations = new ArrayList<>();
-        listenerRegistrations.add(getUnreadSenderQuery().addSnapshotListener(eventListener));
-        listenerRegistrations.add(getUnreadSenderQuery().addSnapshotListener(eventListener));
-        return listenerRegistrations;
+        Query senderQuery = getUnreadSenderQuery();
+        Query receiverQuery = getUnreadReceiverQuery();
+        if (senderQuery != null && receiverQuery != null) {
+            ArrayList<ListenerRegistration> listenerRegistrations = new ArrayList<>();
+            listenerRegistrations.add(getUnreadSenderQuery().addSnapshotListener(eventListener));
+            listenerRegistrations.add(getUnreadReceiverQuery().addSnapshotListener(eventListener));
+            return listenerRegistrations;
+        } else {
+            return null;
+        }
     }
 
     public void removeRegistrations(List<ListenerRegistration> listenerRegistrations) {

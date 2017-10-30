@@ -379,6 +379,9 @@ public class MessageFirebaseDas {
     }
 
     private Query getUnreadUserQuery(String userColumn) {
+        if (Profile.getCurrentProfile() == null) {
+            return null;
+        }
         return db.collection("messages")
                 .whereEqualTo(userColumn, Profile.getCurrentProfile().getId())
                 .whereEqualTo(Constants.THREAD_COLUMN_LAST_RECEIVERID, Profile.getCurrentProfile().getId())
@@ -403,8 +406,14 @@ public class MessageFirebaseDas {
             }
         };
 
-        getQueryUnreadStatus(getUnreadUserQuery(Constants.THREAD_COLUMN_USER1), inListener);
-        getQueryUnreadStatus(getUnreadUserQuery(Constants.THREAD_COLUMN_USER1), inListener);
+        Query user1Query = getUnreadUserQuery(Constants.THREAD_COLUMN_USER1);
+        Query user2Query = getUnreadUserQuery(Constants.THREAD_COLUMN_USER2);
+        if (user1Query != null && user2Query != null) {
+            getQueryUnreadStatus(user1Query, inListener);
+            getQueryUnreadStatus(user2Query, inListener);
+        } else {
+            listener.onUnreadStatusUpdated(false);
+        }
     }
 
     public ArrayList<ListenerRegistration> setupUnreadListener(final OnUnreadStatusUpdateListener listener) {
@@ -415,15 +424,20 @@ public class MessageFirebaseDas {
                     Log.w(TAG, "listen:error", e);
                     return;
                 }
-                List<DocumentSnapshot> documents = snapshots.getDocuments();
-                listener.onUnreadStatusUpdated(documents.size() > 0);
+                getUnreadStatus(listener);
             }
         };
 
-        ArrayList<ListenerRegistration> listenerRegistrations = new ArrayList<>();
-        listenerRegistrations.add(getUnreadUserQuery(Constants.THREAD_COLUMN_USER1).addSnapshotListener(eventListener));
-        listenerRegistrations.add(getUnreadUserQuery(Constants.THREAD_COLUMN_USER2).addSnapshotListener(eventListener));
-        return listenerRegistrations;
+        Query user1Query = getUnreadUserQuery(Constants.THREAD_COLUMN_USER1);
+        Query user2Query = getUnreadUserQuery(Constants.THREAD_COLUMN_USER2);
+        if (user1Query != null && user2Query != null) {
+            ArrayList<ListenerRegistration> listenerRegistrations = new ArrayList<>();
+            listenerRegistrations.add(user1Query.addSnapshotListener(eventListener));
+            listenerRegistrations.add(user2Query.addSnapshotListener(eventListener));
+            return listenerRegistrations;
+        } else {
+            return null;
+        }
     }
 
     private void getQueryUnreadStatus(Query query, final OnUnreadStatusUpdateListener listener) {

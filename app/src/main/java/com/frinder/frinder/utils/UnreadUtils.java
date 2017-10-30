@@ -26,6 +26,7 @@ public abstract  class UnreadUtils {
     }
 
     public void addListener(UnreadListener listener) {
+        register();
         mListeners.add(listener);
     }
 
