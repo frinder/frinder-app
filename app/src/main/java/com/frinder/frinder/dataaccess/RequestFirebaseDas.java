@@ -174,8 +174,8 @@ public class RequestFirebaseDas {
             }
         };
 
-        getQueyUnreadStatus(getUnreadSenderQuery(), inListener);
-        getQueyUnreadStatus(getUnreadReceiverQuery(), inListener);
+        getQueryUnreadStatus(getUnreadSenderQuery(), inListener);
+        getQueryUnreadStatus(getUnreadReceiverQuery(), inListener);
     }
 
     public ArrayList<ListenerRegistration> setupUnreadListener(final OnUnreadStatusUpdateListener listener) {
@@ -203,7 +203,7 @@ public class RequestFirebaseDas {
         }
     }
 
-    private void getQueyUnreadStatus(Query query, final OnUnreadStatusUpdateListener listener) {
+    private void getQueryUnreadStatus(Query query, final OnUnreadStatusUpdateListener listener) {
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {

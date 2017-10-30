@@ -16,15 +16,19 @@ import com.facebook.login.LoginManager;
 import com.frinder.frinder.R;
 import com.frinder.frinder.fragments.SettingsFragment;
 import com.frinder.frinder.utils.ConnectivityChangeReceiver;
+import com.frinder.frinder.utils.UnreadMessagesUtils;
 import com.frinder.frinder.utils.UnreadRequestsUtils;
 
 public class BaseActivity extends AppCompatActivity
         implements ConnectivityChangeReceiver.OnConnectivityChangedListener,
-        UnreadRequestsUtils.UnreadRequestsListener {
+        UnreadRequestsUtils.UnreadRequestsListener,
+        UnreadMessagesUtils.UnreadMessagesListener {
 
     private ConnectivityChangeReceiver connectivityChangeReceiver;
-    private boolean mUnreadStatus;
+    private boolean mUnreadRequestsStatus;
+    private boolean mUnreadMessagesStatus;
     private MenuItem mRequestsMenuItem;
+    private MenuItem mMessagesMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +37,12 @@ public class BaseActivity extends AppCompatActivity
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         registerReceiver(connectivityChangeReceiver, filter);
-        UnreadRequestsUtils unreadUtils = UnreadRequestsUtils.getInstance(this);
-        unreadUtils.addListener(this);
-        mUnreadStatus = unreadUtils.getUnreadStatus();
+        UnreadRequestsUtils unreadRequestsUtils = UnreadRequestsUtils.getInstance(this);
+        unreadRequestsUtils.addListener(this);
+        mUnreadRequestsStatus = unreadRequestsUtils.getUnreadStatus();
+        UnreadMessagesUtils unreadMessagesUtils = UnreadMessagesUtils.getInstance(this);
+        unreadMessagesUtils.addListener(this);
+        mUnreadMessagesStatus = unreadMessagesUtils.getUnreadStatus();
     }
 
     @Override
@@ -72,7 +79,9 @@ public class BaseActivity extends AppCompatActivity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         mRequestsMenuItem = menu.findItem(R.id.menu_action_notifications);
-        updateRequestMenuItem(mUnreadStatus);
+        updateRequestMenuItem(mUnreadRequestsStatus);
+        mMessagesMenuItem = menu.findItem(R.id.menu_action_messages);
+        updateMessageMenuItem(mUnreadMessagesStatus);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -113,13 +122,26 @@ public class BaseActivity extends AppCompatActivity
 
     @Override
     public void onUnreadRequestsUpdated(boolean value) {
-        mUnreadStatus = value;
+        mUnreadRequestsStatus = value;
         updateRequestMenuItem(value);
     }
 
     private void updateRequestMenuItem(boolean unreadStatus) {
         if (mRequestsMenuItem != null) {
             mRequestsMenuItem.setIcon(unreadStatus ? R.drawable.ic_notifications_alert : R.drawable.ic_notifications_white);
+        }
+    }
+
+    @Override
+    public void onUnreadMessagesUpdated(boolean value) {
+        mUnreadMessagesStatus = value;
+        updateMessageMenuItem(value);
+
+    }
+
+    private void updateMessageMenuItem(boolean unreadStatus) {
+        if (mMessagesMenuItem != null) {
+            mMessagesMenuItem.setIcon(unreadStatus ? R.drawable.ic_message_alert : R.drawable.ic_message_white);
         }
     }
 }
