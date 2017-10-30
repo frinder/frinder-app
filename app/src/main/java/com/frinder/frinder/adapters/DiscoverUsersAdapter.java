@@ -149,9 +149,10 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
 
         // TODO: Set this based on status of request
         if (!discoverUser.isMeetupRequestSent()) {
-            viewHolder.llDiscoverBtnDistance.setBackground(ContextCompat.getDrawable(mContext, R.drawable.item_user_blueorange_gradient));
-            viewHolder.tvDiscoverBtnRequestToMeet.setClickable(true);
-            viewHolder.tvDiscoverBtnRequestToMeet.setText(R.string.tv_btn_request_to_meet_label);
+            viewHolder.llDiscoverBtnDistance.setBackground(ContextCompat.getDrawable(mContext, R.drawable.item_user_yelloworange_gradient));
+            viewHolder.tvDiscoverBtnRequestSent.setVisibility(View.GONE);
+            viewHolder.ivDiscoverBtnRequestSentIcon.setVisibility(View.GONE);
+            viewHolder.tvDiscoverBtnRequestToMeet.setVisibility(View.VISIBLE);
 
             viewHolder.tvDiscoverBtnRequestToMeet.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -159,16 +160,18 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
                     Log.d(TAG, "Send meetup request to selected user");
                     sendMeetupRequest(user.getUid());
                     // TODO: Check whether request suceeded
-                    viewHolder.llDiscoverBtnDistance.setBackground(ContextCompat.getDrawable(mContext, R.drawable.item_user_bluegreen_gradient));
-                    viewHolder.tvDiscoverBtnRequestToMeet.setText(R.string.tv_btn_existing_request_label);
-                    viewHolder.tvDiscoverBtnRequestToMeet.setClickable(false);
+                    viewHolder.llDiscoverBtnDistance.setBackground(ContextCompat.getDrawable(mContext, R.drawable.item_user_yellowgreen_gradient));
+                    viewHolder.tvDiscoverBtnRequestToMeet.setVisibility(View.GONE);
+                    viewHolder.tvDiscoverBtnRequestSent.setVisibility(View.VISIBLE);
+                    viewHolder.ivDiscoverBtnRequestSentIcon.setVisibility(View.VISIBLE);
                 }
             });
         }
         else {
-            viewHolder.llDiscoverBtnDistance.setBackground(ContextCompat.getDrawable(mContext, R.drawable.item_user_bluegreen_gradient));
-            viewHolder.tvDiscoverBtnRequestToMeet.setText(R.string.tv_btn_existing_request_label);
-            viewHolder.tvDiscoverBtnRequestToMeet.setClickable(false);
+            viewHolder.llDiscoverBtnDistance.setBackground(ContextCompat.getDrawable(mContext, R.drawable.item_user_yellowgreen_gradient));
+            viewHolder.tvDiscoverBtnRequestToMeet.setVisibility(View.GONE);
+            viewHolder.tvDiscoverBtnRequestSent.setVisibility(View.VISIBLE);
+            viewHolder.ivDiscoverBtnRequestSentIcon.setVisibility(View.VISIBLE);
         }
     }
 
@@ -195,6 +198,10 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
         LinearLayout llDiscoverInterestsLayout;
         @BindView(R.id.hScrollViewDiscoverInterests)
         HorizontalScrollView hScrollViewDiscoverInterests;
+        @BindView(R.id.tvDiscoverBtnRequestSent)
+        TextView tvDiscoverBtnRequestSent;
+        @BindView(R.id.ivDiscoverBtnRequestSentIcon)
+        ImageView ivDiscoverBtnRequestSentIcon;
 
         public ViewHolder(View itemView) {
             super(itemView);

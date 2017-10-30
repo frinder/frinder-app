@@ -15,6 +15,8 @@
     <color name="red">#F00</color>
     <color name="dark_gray">#888888</color>
     <color name="yellow">#FFFF00</color>
+    <color name="red_900">#b71c1c</color>
+    <color name="orange_700">#F57C00</color>
 
     <color name="red_a700">#D50000</color>
     <color name="pink_a700">#C51162</color>
