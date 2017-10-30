@@ -158,6 +158,7 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Send meetup request to selected user");
+                    discoverUser.setMeetupRequestSent(true);
                     sendMeetupRequest(user.getUid());
                     // TODO: Check whether request suceeded
                     viewHolder.llDiscoverBtnDistance.setBackground(ContextCompat.getDrawable(mContext, R.drawable.item_user_bluegreen_gradient));
