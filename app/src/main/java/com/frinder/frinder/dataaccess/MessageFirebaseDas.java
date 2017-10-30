@@ -213,6 +213,13 @@ public class MessageFirebaseDas {
                 threadData.put(Constants.THREAD_COLUMN_LAST_MESSAGE, message.text);
                 threadData.put(Constants.THREAD_COLUMN_LAST_TIMESTAMP, message.timestamp);
                 threadData.put(Constants.THREAD_COLUMN_LAST_SENDERID, message.senderId);
+                String receiverId;
+                if (message.senderId.equals(thread.userId)) {
+                    receiverId = Profile.getCurrentProfile().getId();
+                } else {
+                    receiverId = thread.userId;
+                }
+                threadData.put(Constants.THREAD_COLUMN_LAST_RECEIVERID, receiverId);
                 threadData.put(Constants.THREAD_COLUMN_UNREAD, true);
                 getDocument(thread.uid)
                         .update(threadData)
@@ -335,6 +342,10 @@ public class MessageFirebaseDas {
         public abstract void onFailure();
     }
 
+    public abstract static class OnUnreadStatusUpdateListener {
+        public abstract void onUnreadStatusUpdated(boolean status);
+    }
+
     private static MessageThread convertThreadFromFirebaseObject(String id, Map<String, Object> threadMap) {
         MessageThread thread = new MessageThread();
         thread.uid = id;
@@ -365,6 +376,73 @@ public class MessageFirebaseDas {
         } else {
             return null;
         }
+    }
+
+    private Query getUnreadUserQuery(String userColumn) {
+        return db.collection("messages")
+                .whereEqualTo(userColumn, Profile.getCurrentProfile().getId())
+                .whereEqualTo(Constants.THREAD_COLUMN_LAST_RECEIVERID, Profile.getCurrentProfile().getId())
+                .whereEqualTo("unread", true);
+    }
+
+    public void getUnreadStatus(final OnUnreadStatusUpdateListener listener) {
+        OnUnreadStatusUpdateListener inListener = new OnUnreadStatusUpdateListener() {
+
+            private boolean mFirstReceived = false;
+            private boolean mStatus;
+
+            @Override
+            public void onUnreadStatusUpdated(boolean status) {
+                // TODO: Can this be called from different thread? If so, add synchronization logic
+                if (!mFirstReceived) {
+                    mStatus = status;
+                    mFirstReceived = true;
+                } else {
+                    listener.onUnreadStatusUpdated(status || mStatus);
+                }
+            }
+        };
+
+        getQueryUnreadStatus(getUnreadUserQuery(Constants.THREAD_COLUMN_USER1), inListener);
+        getQueryUnreadStatus(getUnreadUserQuery(Constants.THREAD_COLUMN_USER1), inListener);
+    }
+
+    public ArrayList<ListenerRegistration> setupUnreadListener(final OnUnreadStatusUpdateListener listener) {
+        EventListener<QuerySnapshot> eventListener = new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "listen:error", e);
+                    return;
+                }
+                List<DocumentSnapshot> documents = snapshots.getDocuments();
+                listener.onUnreadStatusUpdated(documents.size() > 0);
+            }
+        };
+
+        ArrayList<ListenerRegistration> listenerRegistrations = new ArrayList<>();
+        listenerRegistrations.add(getUnreadUserQuery(Constants.THREAD_COLUMN_USER1).addSnapshotListener(eventListener));
+        listenerRegistrations.add(getUnreadUserQuery(Constants.THREAD_COLUMN_USER2).addSnapshotListener(eventListener));
+        return listenerRegistrations;
+    }
+
+    private void getQueryUnreadStatus(Query query, final OnUnreadStatusUpdateListener listener) {
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot querySnapshot = task.getResult();
+                    if (querySnapshot != null) {
+                        List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+                        listener.onUnreadStatusUpdated(documents.size() > 0);
+                    }
+                    return;
+                }
+
+                Log.d(TAG, "Error getting documents: ", task.getException());
+                listener.onUnreadStatusUpdated(false);
+            }
+        });
     }
 
     private static Message convertMessageFromFirebaseObject(MessageThread thread, Map<String, Object> messageMap) {

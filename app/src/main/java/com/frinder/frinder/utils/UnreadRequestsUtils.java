@@ -6,19 +6,13 @@ import com.frinder.frinder.dataaccess.RequestFirebaseDas;
 import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
-public class UnreadRequestsUtils {
+public class UnreadRequestsUtils extends UnreadUtils{
     private static final String TAG = "UnreadRequestsUtils";
     private static UnreadRequestsUtils mInstance = null;
-
-    private HashSet<UnreadRequestsListener> mListeners;
-    private boolean mStatus = false;
-    private Context mContext;
-    private ArrayList<ListenerRegistration> mRegistrations;
     private RequestFirebaseDas mRequestFirebaseDas;
 
-    public interface UnreadRequestsListener {
+    public interface UnreadRequestsListener extends UnreadListener {
         void onUnreadRequestsUpdated(boolean value);
     }
 
@@ -30,9 +24,8 @@ public class UnreadRequestsUtils {
     }
 
     public UnreadRequestsUtils(Context context) {
-        mContext = context;
-        mListeners = new HashSet<>();
-        mRequestFirebaseDas = new RequestFirebaseDas(mContext);
+        super(context);
+        mRequestFirebaseDas = new RequestFirebaseDas(context);
         mRequestFirebaseDas.getUnreadStatus(new RequestFirebaseDas.OnUnreadStatusUpdateListener() {
             @Override
             public void onUnreadStatusUpdated(boolean status) {
@@ -42,51 +35,25 @@ public class UnreadRequestsUtils {
         register();
     }
 
-    public void addListener(UnreadRequestsListener listener) {
-        mListeners.add(listener);
+    @Override
+    protected ArrayList<ListenerRegistration> setupRegistrations() {
+        return mRequestFirebaseDas.setupUnreadListener(new RequestFirebaseDas.OnUnreadStatusUpdateListener() {
+            @Override
+            public void onUnreadStatusUpdated(boolean status) {
+                updateStatus(status);
+            }
+        });
     }
 
-    public void removeListener(UnreadRequestsListener listener) {
-        mListeners.remove(listener);
+    @Override
+    protected void removeRegistrations(ArrayList<ListenerRegistration> registrations) {
+        mRequestFirebaseDas.removeRegistrations(registrations);
     }
 
-    public boolean getUnreadStatus() {
-        return mStatus;
+    @Override
+    protected void notifyListener(UnreadListener inListener, boolean status) {
+        UnreadRequestsListener listener = (UnreadRequestsListener)inListener;
+        listener.onUnreadRequestsUpdated(status);
     }
 
-    public boolean isRegistered() {
-        return mRegistrations != null;
-    }
-
-    public void register() {
-        if (!isRegistered()) {
-            mRegistrations = mRequestFirebaseDas.setupUnreadListener(new RequestFirebaseDas.OnUnreadStatusUpdateListener() {
-                @Override
-                public void onUnreadStatusUpdated(boolean status) {
-                    updateStatus(status);
-                }
-            });
-        }
-    }
-
-    // TODO: Figure out when to call this
-    public void unregister() {
-        if (isRegistered()) {
-            mRequestFirebaseDas.removeRegistrations(mRegistrations);
-            mRegistrations = null;
-        }
-    }
-
-    private void updateStatus(boolean status) {
-        if (status != mStatus) {
-            mStatus = status;
-            notifyStatusChange(status);
-        }
-    }
-
-    private void notifyStatusChange(boolean status) {
-        for (UnreadRequestsListener listener : mListeners) {
-            listener.onUnreadRequestsUpdated(status);
-        }
-    }
 }
