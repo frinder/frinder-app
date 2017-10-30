@@ -6,8 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.frinder.frinder.R;
@@ -65,6 +65,7 @@ public class InterestsAdapter extends RecyclerView.Adapter<InterestsAdapter.View
         // Set item views based on your views and data model
         viewHolder.tvInterestLabel.setText(interest.getLabel());
         viewHolder.ivInterestPic.setImageResource(interest.getPic());
+        viewHolder.ivInterestIcon.setImageResource(interest.getIcon());
 
         int color = 0;
         if (interest.isSelected()) {
@@ -73,7 +74,7 @@ public class InterestsAdapter extends RecyclerView.Adapter<InterestsAdapter.View
         else {
             color = ContextCompat.getColor(mContext, R.color.black);
         }
-        viewHolder.rlInterestContainer.setBackgroundColor(color);
+        viewHolder.flInterestContainer.setBackgroundColor(color);
     }
 
     // Returns the total count of items in the list
@@ -84,14 +85,16 @@ public class InterestsAdapter extends RecyclerView.Adapter<InterestsAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         public ImageView ivInterestPic;
+        public ImageView ivInterestIcon;
         public TextView tvInterestLabel;
-        public RelativeLayout rlInterestContainer;
+        public FrameLayout flInterestContainer;
 
         public ViewHolder(final View itemView) {
             super(itemView);
 
-            rlInterestContainer = (RelativeLayout) itemView.findViewById(R.id.rlInterestContainer);
+            flInterestContainer = (FrameLayout) itemView.findViewById(R.id.flInterestContainer);
             ivInterestPic = (ImageView) itemView.findViewById(R.id.ivInterestPic);
+            ivInterestIcon = (ImageView) itemView.findViewById(R.id.ivInterestIcon);
             tvInterestLabel = (TextView) itemView.findViewById(R.id.tvInterestLabel);
 
             itemView.setOnClickListener(new View.OnClickListener() {

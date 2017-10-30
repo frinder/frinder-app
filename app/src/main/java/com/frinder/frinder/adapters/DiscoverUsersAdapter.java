@@ -114,7 +114,8 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
 
         viewHolder.tvDiscoverUserDesc.setText(user.getDesc());
 
-        viewHolder.llDiscoverInterestsLayout.removeViews(1, viewHolder.llDiscoverInterestsLayout.getChildCount()-1);
+        //viewHolder.llDiscoverInterestsLayout.removeViews(1, viewHolder.llDiscoverInterestsLayout.getChildCount()-1);
+        viewHolder.llDiscoverInterestsLayout.removeAllViews();
 
         if (!user.getInterests().isEmpty()) {
             viewHolder.hScrollViewDiscoverInterests.setVisibility(View.VISIBLE);
@@ -126,11 +127,10 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
 
             for (String interest : user.getInterests()) {
                 int index = filterInterestForDB.indexOf(interest);
-                String interestLabel = filterInterestLabel.get(index);
 
                 ImageView imageView = new ImageView(mContext);
                 imageView.setImageDrawable(ContextCompat.getDrawable(mContext, filterInterestIconArray.getResourceId(index, 0)));
-                imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.white));
+                imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.dark_gray ));
 
                 viewHolder.llDiscoverInterestsLayout.addView(imageView);
 
@@ -149,7 +149,7 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
 
         // TODO: Set this based on status of request
         if (!discoverUser.isMeetupRequestSent()) {
-            viewHolder.llDiscoverBtnDistance.setBackground(ContextCompat.getDrawable(mContext, R.drawable.item_user_yelloworange_gradient));
+            viewHolder.llDiscoverBtnDistance.setBackground(ContextCompat.getDrawable(mContext, R.drawable.item_user_blueorange_gradient));
             viewHolder.tvDiscoverBtnRequestSent.setVisibility(View.GONE);
             viewHolder.ivDiscoverBtnRequestSentIcon.setVisibility(View.GONE);
             viewHolder.tvDiscoverBtnRequestToMeet.setVisibility(View.VISIBLE);
@@ -160,7 +160,7 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
                     Log.d(TAG, "Send meetup request to selected user");
                     sendMeetupRequest(user.getUid());
                     // TODO: Check whether request suceeded
-                    viewHolder.llDiscoverBtnDistance.setBackground(ContextCompat.getDrawable(mContext, R.drawable.item_user_yellowgreen_gradient));
+                    viewHolder.llDiscoverBtnDistance.setBackground(ContextCompat.getDrawable(mContext, R.drawable.item_user_bluegreen_gradient));
                     viewHolder.tvDiscoverBtnRequestToMeet.setVisibility(View.GONE);
                     viewHolder.tvDiscoverBtnRequestSent.setVisibility(View.VISIBLE);
                     viewHolder.ivDiscoverBtnRequestSentIcon.setVisibility(View.VISIBLE);
@@ -168,7 +168,7 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
             });
         }
         else {
-            viewHolder.llDiscoverBtnDistance.setBackground(ContextCompat.getDrawable(mContext, R.drawable.item_user_yellowgreen_gradient));
+            viewHolder.llDiscoverBtnDistance.setBackground(ContextCompat.getDrawable(mContext, R.drawable.item_user_bluegreen_gradient));
             viewHolder.tvDiscoverBtnRequestToMeet.setVisibility(View.GONE);
             viewHolder.tvDiscoverBtnRequestSent.setVisibility(View.VISIBLE);
             viewHolder.ivDiscoverBtnRequestSentIcon.setVisibility(View.VISIBLE);

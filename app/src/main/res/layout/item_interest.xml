@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rlInterestContainer"
+    android:id="@+id/flInterestContainer"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@color/black"
@@ -9,17 +9,29 @@
     android:clickable="true">
     <ImageView
         android:id="@+id/ivInterestPic"
-        android:layout_width="150dp"
-        android:layout_height="75dp"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
         android:scaleType="fitXY"
         tools:src="@drawable/interest_currentaffairs" />
-    <TextView
-        android:id="@+id/tvInterestLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textStyle="bold|italic"
-        tools:text="Current Affairs"
-        android:layout_centerInParent="true"/>
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:orientation="vertical"
+        android:gravity="center">
+        <ImageView
+            android:id="@+id/ivInterestIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="@color/white"
+            tools:src="@drawable/ic_interest_currentaffairs"/>
+        <TextView
+            android:id="@+id/tvInterestLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="bold|italic"
+            tools:text="Current Affairs"
+            />
+    </LinearLayout>
+</FrameLayout>
