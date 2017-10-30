@@ -21,7 +21,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvPlaces"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="180dp"
         android:layout_above="@id/miInput"
         android:drawSelectorOnTop="false"
         android:visibility="gone"

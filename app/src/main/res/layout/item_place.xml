@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/ivPicture"
             android:textSize="12sp"
+            android:maxLines="2"
             android:textStyle="bold"
             tools:text="Starbucks"
             android:layout_centerHorizontal="true"/>
@@ -39,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tvTitle"
             android:textSize="10sp"
+            android:maxLines="1"
             tools:text="0.2 miles"
             android:layout_centerHorizontal="true"/>
     </RelativeLayout>
