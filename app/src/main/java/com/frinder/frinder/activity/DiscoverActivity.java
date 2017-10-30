@@ -33,7 +33,10 @@ import com.frinder.frinder.model.User;
 import com.frinder.frinder.utils.LocationUtils;
 import com.skyfishjy.library.RippleBackground;
 
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import static com.frinder.frinder.activity.MainActivity.LOCATION_DENY_MSG;
@@ -122,8 +125,7 @@ public class DiscoverActivity extends BaseActivity {
             @Override
             public void onUserReceived(User user) {
                 currentUser = user;
-                Log.d(TAG, "in onUserReceived");
-                Log.d(TAG, currentUser.toString());
+                Log.d(TAG, "onCreate onUserReceived: user = " + currentUser.toString());
                 if(currentUser.getLocation()!=null && currentUser.getLocation().size() > 0) {
                     getdiscoverUsers();
                 }
@@ -164,16 +166,6 @@ public class DiscoverActivity extends BaseActivity {
         String interestClickedDBValue = interestClicked.getDBValue();
         int originalArrayPosition = interestClicked.getOrigArrayPosition();
 
-        Log.d(TAG, "\nINTERESTPICK previousInterestClickedPosition = " + previousInterestClickedPosition
-                + "\ncurrent selected position =" + position);
-        if (previousInterestClickedPosition != -1) {
-            Log.d(TAG, "INTERESTPICK previous position selected? " + interests.get(previousInterestClickedPosition).isSelected()
-                    + "\ncurrent position selected = " + interestClicked.isSelected());
-        }
-        else {
-            Log.d(TAG, "INTERESTPICK previous position selected? NA"
-                    + "\ncurrent position selected = " + interestClicked.isSelected());
-        }
         if (filterInterest.isEmpty()) {
             interestClicked.setSelected(true);
             filterInterest = interestClickedDBValue;
@@ -197,7 +189,7 @@ public class DiscoverActivity extends BaseActivity {
             }
         }
 
-        Log.d(TAG, "INTERESTPICK Interest picked = " + filterInterest);
+        Log.d(TAG, "getSelectedInterest: Interest picked = " + filterInterest);
 
         //ToDo Call method to refresh Discover UI
         if(currentUser.getLocation()!=null && currentUser.getLocation().size() > 0) {
@@ -261,13 +253,10 @@ public class DiscoverActivity extends BaseActivity {
                         discoverFirebaseDas.getUser(userId, new DiscoverFirebaseDas.OnCompletionListener() {
                             @Override
                             public void onUserReceived(User user) {
-                                Log.d(TAG, "Checking if user " + user.getName() + " matches filters");
+                                //Log.d(TAG, "getNearbyUsers: Checking if user " + user.getName() + " matches filters");
 
                                 //check if user matches filters
-
                                 boolean isDiscoverable = user.getDiscoverable();
-
-
 
                                 boolean correctTimestamp = false;
                                 Date currentTimestamp = new Date();
@@ -275,16 +264,15 @@ public class DiscoverActivity extends BaseActivity {
                                     correctTimestamp = true;
                                 }
 
-
                                 boolean interestMatch = false;
-                                Log.d(TAG, user.getName() + ", user interests =" + user.getInterests().toString());
-                                Log.d(TAG, user.getName() + ", filter interests =" + filterInterests.toString());
+                                //Log.d(TAG, user.getName() + ", user interests =" + user.getInterests().toString());
+                                //Log.d(TAG, user.getName() + ", filter interests =" + filterInterests.toString());
                                 if (filterInterests.size() > 0) {
                                     if (user.getInterests() != null && user.getInterests().size() > 0) {
                                         ArrayList<String> filterInterestsCopy = new ArrayList<String>(filterInterests);
                                         filterInterestsCopy.retainAll(user.getInterests());
                                         if (filterInterestsCopy.size() > 0) interestMatch = true;
-                                        Log.d(TAG, user.getName() + ", common interests =" + filterInterestsCopy.toString());
+                                        //Log.d(TAG, user.getName() + ", common interests =" + filterInterestsCopy.toString());
                                     }
                                 }
                                 else {
@@ -302,13 +290,13 @@ public class DiscoverActivity extends BaseActivity {
                                         double dInMtr = Double.parseDouble("" + results[0]);
 
                                         nearbyUsers.add(new DiscoverUser(user, false, dInMtr, filterInterests));
-                                        Log.d(TAG, "Added " + user.getName() + "to recyclerview");
+                                        Log.d(TAG, "getNearbyUsers: Added " + user.getName() + "to nearbyUsers");
                                     }
                                 }
 
                                 ++filteredNearbyUsersCount;
                                 checkAllNearbyUsers(unFilteredNearbyUsersCount, filteredNearbyUsersCount);
-                                Log.d(TAG, "unFilteredNearbyUsersCount=" + unFilteredNearbyUsersCount + ", filteredNearbyUsersCount=" + filteredNearbyUsersCount);
+                                //Log.d(TAG, "unFilteredNearbyUsersCount=" + unFilteredNearbyUsersCount + ", filteredNearbyUsersCount=" + filteredNearbyUsersCount);
                             }
                         });
                     }
@@ -321,9 +309,11 @@ public class DiscoverActivity extends BaseActivity {
     }
 
     private void checkAllNearbyUsers(int checkUnFilteredNearbyUsersCount, int checkFilteredNearbyUsersCount) {
-        Log.d(TAG, "checkUnFilteredNearbyUsersCount=" + checkUnFilteredNearbyUsersCount + ", checkFilteredNearbyUsersCount=" + checkFilteredNearbyUsersCount);
+        //Log.d(TAG, "checkAllNearbyUsers: nearby unfiltered users=" + checkUnFilteredNearbyUsersCount + ", nearby filtered users=" + checkFilteredNearbyUsersCount);
         if (checkUnFilteredNearbyUsersCount == checkFilteredNearbyUsersCount) {
             if (nearbyUsers.size() > 0) {
+                Log.d(TAG, "checkAllNearbyUsers: Sorting " + nearbyUsers.size() + " users by distance from app user");
+                sortNearbyUsers();
                 adapter.notifyDataSetChanged();
                 srlDiscoverContainer.setRefreshing(false);
                 rippleBackground.stopRippleAnimation();
@@ -332,6 +322,15 @@ public class DiscoverActivity extends BaseActivity {
                 displayMsgRepeatDiscover();
             }
         }
+    }
+
+    private void sortNearbyUsers() {
+        //List< DummyPage > sortedList = new ArrayList< DummyPage >(list);
+        Collections.sort(nearbyUsers, new Comparator<DiscoverUser>() {
+            public int compare(DiscoverUser dUser1, DiscoverUser dUser2) {
+                return dUser1.getDistanceFromAppUser().compareTo(dUser2.getDistanceFromAppUser());
+            }
+        });
     }
 
     private void displayMsgRepeatDiscover() {
@@ -417,8 +416,7 @@ public class DiscoverActivity extends BaseActivity {
                         @Override
                         public void onUserReceived(User user) {
                             currentUser = user;
-                            Log.d(TAG, "in onUserReceived");
-                            Log.d(TAG, currentUser.toString());
+                            Log.d(TAG, "Location Update onUserReceived: user = " + currentUser.toString());
                             if (currentUser.getLocation() != null && currentUser.getLocation().size() > 0) {
                                 getdiscoverUsers();
                             } else {
