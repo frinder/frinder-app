@@ -91,7 +91,7 @@ public class AcceptedRequestAdapter extends RequestsAdapter {
                         ArrayList<Double> location = user.getLocation();
                         Uri gmmIntentUri = Uri.parse("google.navigation:q="+location.get(0)+","+location.get(1)+"&mode=w");
                         try {
-                            viewHolder.tvNavigateTo.setVisibility(View.INVISIBLE);
+                            viewHolder.tvNavigateTo.setVisibility(View.GONE);
                             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                             mapIntent.setPackage("com.google.android.apps.maps");
                             getContext().startActivity(mapIntent);

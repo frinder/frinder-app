@@ -22,33 +22,31 @@
             android:layout_below="@id/rlBasicRequest"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/tvMessage"
-                android:layout_weight="1"
+                style="@style/button_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/button_text"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:maxLines="1"
                 android:drawableLeft="@drawable/ic_message_white"
                 android:text="@string/tv_message" />
-
 
             <TextView
                 android:id="@+id/tvNavigateTo"
                 style="@style/button_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:maxLines="1"
                 android:drawableLeft="@drawable/ic_directions_walk_white"
-                android:text="@string/tv_navigate_to" />
-                android:layout_weight="1"
-                android:visibility="invisible" />
-
+                android:text="@string/tv_navigate_to"
+                android:visibility="gone" />
 
         </LinearLayout>
 
