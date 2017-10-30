@@ -34,6 +34,7 @@ import com.frinder.frinder.utils.LocationUtils;
 import com.skyfishjy.library.RippleBackground;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import static com.frinder.frinder.activity.MainActivity.LOCATION_DENY_MSG;
 
@@ -263,8 +264,7 @@ public class DiscoverActivity extends BaseActivity {
                                 Log.d(TAG, "Checking if user " + user.getName() + " matches filters");
 
                                 //check if user matches filters
-                                //TODO uncomment following code after testing UI
-                                /*
+
                                 boolean isDiscoverable = user.getDiscoverable();
 
 
@@ -290,11 +290,10 @@ public class DiscoverActivity extends BaseActivity {
                                 else {
                                     interestMatch = true;
                                 }
-                                */
 
-                                //TODO uncomment after testing UI
-                                //if (isDiscoverable && correctTimestamp && interestMatch) {
-                                if (true) {
+                                //TODO uncomment for UI testing - to show all nearby users without checking interests, discoverability or timestamp
+                                //if (true) {
+                                if (isDiscoverable && correctTimestamp && interestMatch) {
                                     //find distance from AppUser
                                     float[] results = new float[1];
                                     if (currentUser.getLocation() != null && user.getLocation() != null) {
