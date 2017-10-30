@@ -7,6 +7,7 @@
     card_view:cardBackgroundColor="#FFF"
     card_view:cardCornerRadius="4dp"
     card_view:cardElevation="4dp"
+    android:clickable="true"
     android:layout_margin="4dp"
     android:layout_width="120dp"
     android:layout_height="match_parent">
@@ -14,8 +15,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"
-        android:clickable="true">
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/ivPicture"
