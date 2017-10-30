@@ -128,7 +128,7 @@
         <TextView
             android:id="@+id/tvDiscoverInterestLabel"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="24dp"
             android:gravity="center"
             android:layout_toEndOf="@id/ivDiscoverUserImage"
             android:layout_toRightOf="@id/ivDiscoverUserImage"
