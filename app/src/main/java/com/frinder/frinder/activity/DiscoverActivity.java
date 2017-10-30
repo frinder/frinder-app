@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -292,12 +291,14 @@ public class DiscoverActivity extends BaseActivity {
                                 if (isDiscoverable && correctTimestamp && interestMatch) {
                                     //find distance from AppUser
                                     float[] results = new float[1];
-                                    Location.distanceBetween(currentUser.getLocation().get(0), currentUser.getLocation().get(1),
-                                            user.getLocation().get(0), user.getLocation().get(1), results);
-                                    double dInMtr = Double.parseDouble("" + results[0]);
+                                    if (currentUser.getLocation() != null && user.getLocation() != null) {
+                                        Location.distanceBetween(currentUser.getLocation().get(0), currentUser.getLocation().get(1),
+                                                user.getLocation().get(0), user.getLocation().get(1), results);
+                                        double dInMtr = Double.parseDouble("" + results[0]);
 
-                                    nearbyUsers.add(new DiscoverUser(user, false, dInMtr, filterInterests));
-                                    Log.d(TAG, "Added " + user.getName() + "to recyclerview");
+                                        nearbyUsers.add(new DiscoverUser(user, false, dInMtr, filterInterests));
+                                        Log.d(TAG, "Added " + user.getName() + "to recyclerview");
+                                    }
                                 }
 
                                 ++filteredNearbyUsersCount;
