@@ -28,7 +28,6 @@ public class User implements Serializable, IUser {
 
     public User() {
         interests = new ArrayList<>();
-        location = new ArrayList<>();
     }
 
     public String getUid() {
