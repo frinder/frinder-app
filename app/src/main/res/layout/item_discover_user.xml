@@ -107,7 +107,7 @@
             android:layout_marginRight="@dimen/view_margin"
             android:layout_marginEnd="@dimen/view_margin"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/black"
+            android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
             tools:text="User Name" />
 
@@ -136,7 +136,17 @@
             android:text="@string/interests_label"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textStyle="bold|italic"
-            android:textColor="@color/dark_gray"/>
+            android:textColor="@color/dark_gray" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_alignEnd="@id/tvDiscoverUserDesc"
+            android:layout_alignLeft="@id/tvDiscoverUserDesc"
+            android:layout_alignRight="@id/tvDiscoverUserDesc"
+            android:layout_alignStart="@id/tvDiscoverUserDesc"
+            android:layout_above="@id/tvDiscoverInterestLabel"
+            android:background="@drawable/darkgray_thin_ui_separator"/>
 
         <HorizontalScrollView
             android:id="@+id/hScrollViewDiscoverInterests"
