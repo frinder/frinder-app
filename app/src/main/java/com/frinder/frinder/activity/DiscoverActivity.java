@@ -95,7 +95,6 @@ public class DiscoverActivity extends BaseActivity {
                 getResources().getStringArray(R.array.filter_interest_forDB));
         interestsAdapter = new InterestsAdapter(this, interests);
         rvInterests.setAdapter(interestsAdapter);
-
         interestsAdapter.setOnItemClickListener(new InterestsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {

@@ -3,6 +3,10 @@ package com.frinder.frinder.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -12,23 +16,25 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.Toast;
 
 import com.frinder.frinder.R;
+import com.frinder.frinder.adapters.EditInterestsAdapter;
+import com.frinder.frinder.adapters.InterestsAdapter;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
+import com.frinder.frinder.model.Interest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.frinder.frinder.R.id.rvInterests;
+
 public class EditProfileActivity extends BaseActivity {
     String userId;
     private UserFirebaseDas userFirebaseDas;
-    private ArrayList<CheckBox> cbInterestList;
-    private int numInterests;
-    private String[] filterInterestLabel;
-    private String[] filterInterestDBVal;
     private EditText etAboutMe;
     private HashMap<String, Boolean> interests;
-
+    EditInterestsAdapter editInterestsAdapter;
     private static final String TAG = "EditProfileActivity";
 
     @Override
@@ -42,62 +48,47 @@ public class EditProfileActivity extends BaseActivity {
 
         etAboutMe = (EditText) findViewById(R.id.etAboutMe);
 
-        //Get all interests and add Checkboxes to TableLayout
-        TableLayout tlInterestLayout = (TableLayout) findViewById(R.id.tlInterestLayout);
-        tlInterestLayout.setStretchAllColumns(true);
+        RecyclerView rvInterests = (RecyclerView) findViewById(R.id.rvEditInterests);
+        StaggeredGridLayoutManager gridLayoutManager =
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        rvInterests.setLayoutManager(gridLayoutManager);
+        final ArrayList<Interest>  editInterests = Interest.createFilterInterestList(getResources().getStringArray(R.array.filter_interest_label),
+                getResources().obtainTypedArray(R.array.filter_interest_icon),
+                getResources().obtainTypedArray(R.array.filter_interest_pics),
+                getResources().getIntArray(R.array.filter_interest_color),
+                getResources().getStringArray(R.array.filter_interest_forDB));
+        editInterestsAdapter = new EditInterestsAdapter(this, editInterests);
+        rvInterests.setAdapter(editInterestsAdapter);
 
-
-        filterInterestLabel = getResources().getStringArray(R.array.filter_interest_label);
-        filterInterestDBVal = getResources().getStringArray(R.array.filter_interest_forDB);
-        numInterests = filterInterestLabel.length;
-        cbInterestList = new ArrayList<>();
-        ArrayList<TableRow> trInterestLayoutList = new ArrayList<>();
-
-        for (int i=0; i<numInterests; i++) {
-            if ((i+1)%2 == 1) {
-                TableRow trInterestLayout = new TableRow(this);
-                trInterestLayoutList.add(trInterestLayout);
-                tlInterestLayout.addView(trInterestLayout);
+        editInterestsAdapter.setOnItemClickListener(new EditInterestsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                Interest interestClicked = editInterests.get(position);
+                if(interests.containsKey(interestClicked.getDBValue()) && interests.get(interestClicked.getDBValue()).equals(true)) {
+                    interests.put(interestClicked.getDBValue(),false);
+                    interestClicked.setSelected(false);
+                } else {
+                    interests.put(interestClicked.getDBValue(),true);
+                    interestClicked.setSelected(true);
+                }
+                editInterestsAdapter.notifyItemChanged(position);
             }
-
-            TableRow tableRow = trInterestLayoutList.get(i/2);
-            tableRow.setLayoutParams(new TableRow.LayoutParams(
-                    TableRow.LayoutParams.MATCH_PARENT,
-                    TableRow.LayoutParams.WRAP_CONTENT));
-            tableRow.setGravity(Gravity.TOP);
-
-            CheckBox cbInterest = new CheckBox(this);
-            cbInterest.setText(filterInterestLabel[i].replace("\n", "/"));
-            cbInterestList.add(cbInterest);
-
-            tableRow.addView(cbInterest);
-        }
-
+        });
         interests = new HashMap<>();
         Button profileSubmit = (Button)findViewById(R.id.editProfileSubmit);
 
         profileSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                interests.clear();
-                for (int i=0; i<cbInterestList.size(); i++) {
-                    CheckBox checkbox = cbInterestList.get(i);
-                    if (checkbox.isChecked()) {
-                        interests.put(filterInterestDBVal[i], true);
-                    }
+                if(TextUtils.isEmpty(etAboutMe.getText())) {
+                    Toast.makeText(getApplicationContext(), "AboutMe is empty!",Toast.LENGTH_SHORT).show();
+                } else if(interests.size()==0) {
+                    Toast.makeText(getApplicationContext(), "Select any interest!",Toast.LENGTH_SHORT).show();
                 }
-
-                Log.d(TAG, interests.toString());
-
-                updateDBAndClose();
-            }
-        });
-
-        Button profileSkip = (Button)findViewById(R.id.editProfileSkip);
-        profileSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateDBAndClose();
+                else {
+                    Log.d(TAG, interests.toString());
+                    updateDBAndClose();
+                }
             }
         });
 

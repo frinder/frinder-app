@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlInterestContainer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
+    android:padding="@dimen/filter_pic_padding">
+
+    <ImageView
+        android:id="@+id/ivInterestPic"
+        android:layout_width="150dp"
+        android:layout_height="75dp"
+        android:scaleType="fitXY"
+        tools:src="@drawable/interest_currentaffairs" />
+
+    <TextView
+        android:id="@+id/tvInterestLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/white"
+        android:textStyle="bold|italic"
+        tools:text="Current Affairs" />
+</RelativeLayout>
