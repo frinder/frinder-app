@@ -16,10 +16,15 @@ import com.facebook.login.LoginManager;
 import com.frinder.frinder.R;
 import com.frinder.frinder.fragments.SettingsFragment;
 import com.frinder.frinder.utils.ConnectivityChangeReceiver;
+import com.frinder.frinder.utils.UnreadRequestsUtils;
 
-public class BaseActivity extends AppCompatActivity implements ConnectivityChangeReceiver.OnConnectivityChangedListener{
+public class BaseActivity extends AppCompatActivity
+        implements ConnectivityChangeReceiver.OnConnectivityChangedListener,
+        UnreadRequestsUtils.UnreadRequestsListener {
 
     private ConnectivityChangeReceiver connectivityChangeReceiver;
+    private boolean mUnreadStatus;
+    private MenuItem mRequestsMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,9 @@ public class BaseActivity extends AppCompatActivity implements ConnectivityChang
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         registerReceiver(connectivityChangeReceiver, filter);
+        UnreadRequestsUtils unreadUtils = UnreadRequestsUtils.getInstance(this);
+        unreadUtils.addListener(this);
+        mUnreadStatus = unreadUtils.getUnreadStatus();
     }
 
     @Override
@@ -48,8 +56,9 @@ public class BaseActivity extends AppCompatActivity implements ConnectivityChang
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         unregisterReceiver(connectivityChangeReceiver);
+        UnreadRequestsUtils.getInstance(this).removeListener(this);
+        super.onDestroy();
     }
 
     @Override
@@ -58,6 +67,13 @@ public class BaseActivity extends AppCompatActivity implements ConnectivityChang
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        mRequestsMenuItem = menu.findItem(R.id.menu_action_notifications);
+        updateRequestMenuItem(mUnreadStatus);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -92,6 +108,18 @@ public class BaseActivity extends AppCompatActivity implements ConnectivityChang
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onUnreadRequestsUpdated(boolean value) {
+        mUnreadStatus = value;
+        updateRequestMenuItem(value);
+    }
+
+    private void updateRequestMenuItem(boolean unreadStatus) {
+        if (mRequestsMenuItem != null) {
+            mRequestsMenuItem.setIcon(unreadStatus ? R.drawable.ic_notifications_alert : R.drawable.ic_notifications_white);
         }
     }
 }
