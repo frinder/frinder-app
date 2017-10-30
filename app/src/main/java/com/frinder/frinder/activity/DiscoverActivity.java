@@ -80,6 +80,7 @@ public class DiscoverActivity extends BaseActivity {
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setLogo(R.drawable.ic_location_user_gray);
 
         //Note: This is to support filtering by multiple interests
         //filterInterestList = new ArrayList<>();
