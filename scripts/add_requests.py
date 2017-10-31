@@ -29,6 +29,7 @@ def createRequest(db, sender, receiver):
     u'accepted': accepted,
     u'acceptedTimestamp': acceptedTimestamp,
     u'createdByScript': True,
+    u'locationShare' : True,
     u'scriptVersion': script_version
   })
   doc = doc_ref.get()
