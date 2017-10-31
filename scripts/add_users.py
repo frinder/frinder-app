@@ -5,10 +5,10 @@ import helpers
 import names
 import random
 
-genders = [u'male', u'female']
-interests = [u'ArtsCrafts', u'Auto', u'BoardGames', u'Cooking', u'CurrentAffairs', u'Dancing', u'DIYProjects', u'Fashion', u'Fitness', u'Food', u'Gadgets', u'Gardening', u'Movies', u'Music', u'Parenting', u'Pets', u'Photography', u'Reading', u'Spirituality', u'Sports', u'Travel', u'VideoGames']
+gender_choices = [u'male', u'female']
+interest_choices = [u'ArtsCrafts', u'Auto', u'BoardGames', u'Cooking', u'CurrentAffairs', u'Dancing', u'DIYProjects', u'Fashion', u'Fitness', u'Food', u'Gadgets', u'Gardening', u'Movies', u'Music', u'Parenting', u'Pets', u'Photography', u'Reading', u'Spirituality', u'Sports', u'Travel', u'VideoGames']
 
-script_version=2
+script_version=3
 
 def printUsers(db):
   docs = helpers.queryUsers(db)
@@ -23,12 +23,16 @@ def getProfilPicUrl(gender):
     tag = 'women'
   return u'https://randomuser.me/api/portraits/' + tag + '/' + str(random.randint(0, 50)) + '.jpg'
 
-def addUser(db, ref_lat, ref_lon, range):
+def addUser(db, ref_lat, ref_lon, ref_range):
   doc_ref = db.collection(u'users').document()
   uid = doc_ref.id
-  gender = random.choice(genders)
-  lat = ref_lat + random.uniform(-range, range)
-  lon = ref_lon + random.uniform(-range, range)
+  gender = random.choice(gender_choices)
+  lat = ref_lat + random.uniform(-ref_range, ref_range)
+  lon = ref_lon + random.uniform(-ref_range, ref_range)
+  interests = {}
+  no_interests = random.randint(2, 6)
+  for i in range(0, no_interests):
+    interests[random.choice(interest_choices)] = True
   doc_ref.set({
     u'desc': u'Test user created using a script',
     u'id': unicode(uid),
@@ -40,7 +44,7 @@ def addUser(db, ref_lat, ref_lon, range):
     u'gender': gender,
     u'age': random.randint(14,80),
     u'timestamp': datetime.datetime.utcnow(),
-    u'interests': {random.choice(interests):True},
+    u'interests': interests,
     u'location': [lat, lon],
     u'createdByScript': True,
     u'scriptVersion': script_version
