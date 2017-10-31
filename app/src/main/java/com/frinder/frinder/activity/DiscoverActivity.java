@@ -14,7 +14,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -123,7 +122,7 @@ public class DiscoverActivity extends BaseActivity {
             @Override
             public void onUserReceived(User user) {
                 currentUser = user;
-                Log.d(TAG, "onCreate onUserReceived: user = " + currentUser.toString());
+                //Log.d(TAG, "onCreate onUserReceived: user = " + currentUser.toString());
                 if(currentUser.getLocation()!=null && currentUser.getLocation().size() > 0) {
                     getdiscoverUsers();
                 }
@@ -187,7 +186,7 @@ public class DiscoverActivity extends BaseActivity {
             }
         }
 
-        Log.d(TAG, "getSelectedInterest: Interest picked = " + filterInterest);
+        //Log.d(TAG, "getSelectedInterest: Interest picked = " + filterInterest);
 
         //ToDo Call method to refresh Discover UI
         if(currentUser.getLocation()!=null && currentUser.getLocation().size() > 0) {
@@ -247,6 +246,7 @@ public class DiscoverActivity extends BaseActivity {
             public void onNearbyUserListReceived(ArrayList<String> userIdList) {
                 if (userIdList != null) {
                     unFilteredNearbyUsersCount = userIdList.size();
+                    //Log.d(TAG, "Started filtering users - " + userIdList.size());
                     for (String userId : userIdList) {
                         discoverFirebaseDas.getUser(userId, new DiscoverFirebaseDas.OnCompletionListener() {
                             @Override
@@ -289,7 +289,7 @@ public class DiscoverActivity extends BaseActivity {
                                         double dInMtr = Double.parseDouble("" + results[0]);
 
                                         nearbyUsers.add(new DiscoverUser(user, false, dInMtr, filterInterests));
-                                        Log.d(TAG, "getNearbyUsers: Added " + user.getName() + "to nearbyUsers");
+                                        //Log.d(TAG, "getNearbyUsers: Added " + user.getName() + "to nearbyUsers");
                                     }
                                 }
 
@@ -310,8 +310,9 @@ public class DiscoverActivity extends BaseActivity {
     private void checkAllNearbyUsers(int checkUnFilteredNearbyUsersCount, int checkFilteredNearbyUsersCount) {
         //Log.d(TAG, "checkAllNearbyUsers: nearby unfiltered users=" + checkUnFilteredNearbyUsersCount + ", nearby filtered users=" + checkFilteredNearbyUsersCount);
         if (checkUnFilteredNearbyUsersCount == checkFilteredNearbyUsersCount) {
+            //Log.d(TAG, "Finished filtering users");
             if (nearbyUsers.size() > 0) {
-                Log.d(TAG, "checkAllNearbyUsers: Sorting " + nearbyUsers.size() + " users by distance from app user");
+                //Log.d(TAG, "checkAllNearbyUsers: Sorting " + nearbyUsers.size() + " users by distance from app user");
                 sortNearbyUsers();
                 adapter.notifyDataSetChanged();
                 srlDiscoverContainer.setRefreshing(false);
@@ -401,13 +402,13 @@ public class DiscoverActivity extends BaseActivity {
             String msg = "Updated Location: " +
                     Double.toString(location.getLatitude()) + "," +
                     Double.toString(location.getLongitude());
-            Log.d(TAG, msg);
+            //Log.d(TAG, msg);
 
             if(location!=null) {
                 ArrayList<Double> locationList = new ArrayList<>();
                 locationList.add(location.getLatitude());
                 locationList.add(location.getLongitude());
-                Log.d(TAG, "Updating user " + Profile.getCurrentProfile().getId() + " location with " + locationList.toString());
+                //Log.d(TAG, "Updating user " + Profile.getCurrentProfile().getId() + " location with " + locationList.toString());
                 userFirebaseDas.updateUserLocation(profile.getId(), locationList);
 
                 if(currentUser!=null && (currentUser.getLocation()==null || currentUser.getLocation().size() == 0)) {
@@ -415,7 +416,7 @@ public class DiscoverActivity extends BaseActivity {
                         @Override
                         public void onUserReceived(User user) {
                             currentUser = user;
-                            Log.d(TAG, "Location Update onUserReceived: user = " + currentUser.toString());
+                            //Log.d(TAG, "Location Update onUserReceived: user = " + currentUser.toString());
                             if (currentUser.getLocation() != null && currentUser.getLocation().size() > 0) {
                                 getdiscoverUsers();
                             } else {
