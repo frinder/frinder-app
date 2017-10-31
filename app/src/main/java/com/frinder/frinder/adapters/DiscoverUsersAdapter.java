@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -157,7 +156,7 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
             viewHolder.tvDiscoverBtnRequestToMeet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "Send meetup request to selected user");
+                    //Log.d(TAG, "Send meetup request to selected user");
                     discoverUser.setMeetupRequestSent(true);
                     sendMeetupRequest(user.getUid());
                     // TODO: Check whether request suceeded
