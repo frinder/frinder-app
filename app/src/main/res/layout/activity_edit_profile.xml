@@ -27,7 +27,7 @@
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:padding="@dimen/text_padding"
-            android:text="EditProfile"
+            android:text="Edit Profile"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/white"
             android:textStyle="bold" />
