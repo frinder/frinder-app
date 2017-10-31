@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -121,7 +120,7 @@ public class BaseActivity extends AppCompatActivity
                 settingsDialogFrament.show(fm, "fragment_settings");
                 return true;
             case R.id.menu_action_logout:
-                Toast.makeText(this, "User logged out ", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "User logged out ", Toast.LENGTH_LONG).show();
                 LoginManager.getInstance().logOut();
                 if (Build.VERSION.SDK_INT >= 25) {
                     removeShorcuts();

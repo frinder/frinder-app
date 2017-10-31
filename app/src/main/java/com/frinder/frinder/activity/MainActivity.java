@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.Profile;
@@ -13,7 +12,6 @@ import com.facebook.login.LoginManager;
 import com.frinder.frinder.dataaccess.UserFirebaseDas;
 import com.frinder.frinder.model.User;
 import com.google.firebase.FirebaseApp;
-
 
 import io.fabric.sdk.android.Fabric;
 
@@ -89,7 +87,7 @@ public class MainActivity extends BaseActivity {
                     userFirebaseDas.addUser(loggedUser);
                     editProfile();
                 } else {
-                    Toast.makeText(this,"Profile is null",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this,"Profile is null",Toast.LENGTH_SHORT).show();
                 }
             }
             if (resultCode == Activity.RESULT_CANCELED) {
@@ -107,7 +105,7 @@ public class MainActivity extends BaseActivity {
 
     public void logoutUser(View view) {
         LoginManager.getInstance().logOut();
-        Toast.makeText(this, "User logged out ", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "User logged out ", Toast.LENGTH_LONG).show();
     }
 
     public void readUserComplete(User user) {

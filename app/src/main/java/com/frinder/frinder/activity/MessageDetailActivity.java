@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Toast;
 
 import com.facebook.Profile;
 import com.frinder.frinder.R;
@@ -152,12 +151,12 @@ public class MessageDetailActivity extends BaseActivity implements PlacesAdapter
         mMessageFirebaseDas.addMessage(mThread, message, new MessageFirebaseDas.OnMessageSendCompletionListener() {
             @Override
             public void onSuccess() {
-                Toast.makeText(getBaseContext(), "Sending message succeeded", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(), "Sending message succeeded", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure() {
-                Toast.makeText(getBaseContext(), "Sending message failed", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(), "Sending message failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
