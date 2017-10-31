@@ -1,7 +1,12 @@
 package com.frinder.frinder.activity;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +24,8 @@ import com.frinder.frinder.utils.ConnectivityChangeReceiver;
 import com.frinder.frinder.utils.UnreadMessagesUtils;
 import com.frinder.frinder.utils.UnreadRequestsUtils;
 
+import java.util.Arrays;
+
 public class BaseActivity extends AppCompatActivity
         implements ConnectivityChangeReceiver.OnConnectivityChangedListener,
         UnreadRequestsUtils.UnreadRequestsListener,
@@ -29,6 +36,7 @@ public class BaseActivity extends AppCompatActivity
     private boolean mUnreadMessagesStatus;
     private MenuItem mRequestsMenuItem;
     private MenuItem mMessagesMenuItem;
+    private ShortcutManager shortcutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +51,9 @@ public class BaseActivity extends AppCompatActivity
         UnreadMessagesUtils unreadMessagesUtils = UnreadMessagesUtils.getInstance(this);
         unreadMessagesUtils.addListener(this);
         mUnreadMessagesStatus = unreadMessagesUtils.getUnreadStatus();
+        if (Build.VERSION.SDK_INT >= 25 && Profile.getCurrentProfile()!=null) {
+            createShortcut();
+        }
     }
 
     @Override
@@ -112,6 +123,9 @@ public class BaseActivity extends AppCompatActivity
             case R.id.menu_action_logout:
                 Toast.makeText(this, "User logged out ", Toast.LENGTH_LONG).show();
                 LoginManager.getInstance().logOut();
+                if (Build.VERSION.SDK_INT >= 25) {
+                    removeShorcuts();
+                }
                 Intent loginIntent = new Intent(this,MainActivity.class);
                 startActivity(loginIntent);
                 return true;
@@ -148,5 +162,54 @@ public class BaseActivity extends AppCompatActivity
         if (mMessagesMenuItem != null) {
             mMessagesMenuItem.setIcon(unreadStatus ? R.drawable.ic_message_alert : R.drawable.ic_message_white);
         }
+    }
+
+    @TargetApi(25)
+    private void createShortcut() {
+        shortcutManager = getSystemService(ShortcutManager.class);
+
+        Intent intentDiscover = new Intent(getApplicationContext(), DiscoverActivity.class);
+        intentDiscover.setAction(Intent.ACTION_VIEW);
+
+        ShortcutInfo shortcutDiscover = new ShortcutInfo.Builder(this, "discoverShortcut")
+                .setIntent(intentDiscover)
+                .setShortLabel(getString(R.string.discover_shortcut))
+                .setLongLabel("Discover")
+                .setShortLabel("Discover Friends")
+                .setDisabledMessage("Login to open this")
+                .setIcon(Icon.createWithResource(this, R.drawable.ic_discover_pink))
+                .build();
+
+        Intent intentNotification = new Intent(getApplicationContext(), NotificationsActivity.class);
+        intentNotification.setAction(Intent.ACTION_VIEW);
+
+        ShortcutInfo shortcutNotification = new ShortcutInfo.Builder(this, "notificationShortcut")
+                .setIntent(intentNotification)
+                .setShortLabel(getString(R.string.notification_shortcut))
+                .setLongLabel("Notification")
+                .setShortLabel("Frinder Notifcation")
+                .setDisabledMessage("Login to open this")
+                .setIcon(Icon.createWithResource(this, R.drawable.ic_notifications_alert))
+                .build();
+
+        Intent intentMessage = new Intent(getApplicationContext(), MessagesListActivity.class);
+        intentMessage.setAction(Intent.ACTION_VIEW);
+
+        ShortcutInfo shortcutMessage = new ShortcutInfo.Builder(this, "messageShortcut")
+                .setIntent(intentMessage)
+                .setShortLabel(getString(R.string.message_shortcut))
+                .setLongLabel("Messages")
+                .setShortLabel("Frinder Messages")
+                .setDisabledMessage("Login to open this")
+                .setIcon(Icon.createWithResource(this, R.drawable.ic_message_alert))
+                .build();
+        shortcutManager.setDynamicShortcuts(Arrays.asList(shortcutDiscover,shortcutMessage, shortcutNotification));
+    }
+
+    @TargetApi(25)
+    private void removeShorcuts() {
+        ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+        shortcutManager.disableShortcuts(Arrays.asList("shortcutDiscover,shortcutMessage, shortcutNotification"));
+        shortcutManager.removeAllDynamicShortcuts();
     }
 }
