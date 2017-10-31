@@ -58,11 +58,12 @@ public class SettingsFragment extends DialogFragment {
         final TextView tvAgeRangeValue = (TextView)view.findViewById(R.id.tvAgeValue);
 
         int radiusValuePref = pref.getInt("radius",300);
+        double radiusToDisplay = Math.round(((radiusValuePref*1.0)/1609) * 10.0) / 10.0;
         int radiusProgressValPref = pref.getInt("radiusProgressVal",2);
         radiusVal = radiusValuePref;
         radiusProgressVal = radiusProgressValPref;
         sbRadius.setProgress(radiusProgressValPref);
-        tvRadiusValue.setText(radiusValuePref+"m");
+        tvRadiusValue.setText(radiusToDisplay+"mi");
 
         String ageRangeValuePref = pref.getString("ageRange","30-40");
         int ageRangeProgressValPref = pref.getInt("ageRangeProgressVal",2);
@@ -76,8 +77,9 @@ public class SettingsFragment extends DialogFragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 radiusProgressVal = progress;
-                radiusVal = 100 + (100*progress);
-                tvRadiusValue.setText(String.valueOf(radiusVal)+"m");
+                float radiusValMile = (float) (0.1 + (0.1*progress));
+                radiusVal = Math.round(radiusValMile * 1609);
+                tvRadiusValue.setText(String.valueOf(radiusValMile)+"mi");
             }
 
             @Override
