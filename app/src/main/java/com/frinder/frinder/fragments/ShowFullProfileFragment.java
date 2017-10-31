@@ -91,10 +91,10 @@ public class ShowFullProfileFragment extends DialogFragment implements View.OnCl
         double dInFeet = dInMtr*3.2808;
         DecimalFormat numberFormat = new DecimalFormat("#.##");
         double distance = Double.parseDouble(numberFormat.format(dInMiles));
-        if (distance == 0) {
+        if (distance < 0.1) {
             distance = Double.parseDouble(numberFormat.format(dInFeet));
-            if (distance == 0) {
-                tvFullProfileDistance.setText("Next to you!");
+            if (distance < 10) {
+                tvFullProfileDistance.setText("< 10ft");
             }
             else {
                 tvFullProfileDistance.setText(distance + "ft");

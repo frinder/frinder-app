@@ -97,10 +97,10 @@ public class DiscoverUsersAdapter extends RecyclerView.Adapter<DiscoverUsersAdap
         double dInFeet = dInMtr*3.2808;
         DecimalFormat numberFormat = new DecimalFormat("#.##");
         double distance = Double.parseDouble(numberFormat.format(dInMiles));
-        if (distance == 0) {
+        if (distance < 0.1) {
             distance = Double.parseDouble(numberFormat.format(dInFeet));
-            if (distance == 0) {
-                viewHolder.tvDiscoverDistance.setText("Next to you!");
+            if (distance < 10) {
+                viewHolder.tvDiscoverDistance.setText("< 10ft");
             }
             else {
                 viewHolder.tvDiscoverDistance.setText(distance + "ft");

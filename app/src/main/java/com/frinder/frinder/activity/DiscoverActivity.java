@@ -33,11 +33,9 @@ import com.frinder.frinder.model.User;
 import com.frinder.frinder.utils.LocationUtils;
 import com.skyfishjy.library.RippleBackground;
 
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 
 import static com.frinder.frinder.activity.MainActivity.LOCATION_DENY_MSG;
 
@@ -258,11 +256,12 @@ public class DiscoverActivity extends BaseActivity {
                                 //check if user matches filters
                                 boolean isDiscoverable = user.getDiscoverable();
 
-                                boolean correctTimestamp = false;
+                                /*boolean correctTimestamp = false;
                                 Date currentTimestamp = new Date();
                                 if (currentTimestamp.getTime() - user.getTimestamp().getTime() < (TIME_USER_LAST_ACTIVE * 60000)) {
                                     correctTimestamp = true;
-                                }
+                                }*/
+                                boolean correctTimestamp = true;
 
                                 boolean interestMatch = false;
                                 //Log.d(TAG, user.getName() + ", user interests =" + user.getInterests().toString());

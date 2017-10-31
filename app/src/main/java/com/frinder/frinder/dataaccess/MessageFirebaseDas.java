@@ -518,9 +518,11 @@ public class MessageFirebaseDas {
         private static ArrayList<Message> parseMessageList(DocumentSnapshot snapshot, MessageThread thread) {
             ArrayList<Message> messageList = new ArrayList<>();
             List<HashMap> messages = (List<HashMap>)snapshot.get(Constants.THREAD_COLUMN_MESSAGES);
-            for (HashMap data : messages) {
-                Message message = convertMessageFromFirebaseObject(thread, data);
-                messageList.add(message);
+            if (messages != null) {
+                for (HashMap data : messages) {
+                    Message message = convertMessageFromFirebaseObject(thread, data);
+                    messageList.add(message);
+                }
             }
             return messageList;
         }
