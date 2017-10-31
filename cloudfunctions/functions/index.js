@@ -91,3 +91,29 @@ exports.createUser = functions.firestore
 
     return true;
 });
+
+exports.deleteUser = functions.firestore
+  .document('users/{userId}')
+  .onDelete(event => {
+    // Get an object representing the document
+    var value = event.data.previous.data();
+
+    var userName = value.name;
+    var userId = value.id;
+
+    //remove value from GeoFire
+
+    // Create a Firebase reference where GeoFire will store its information
+    var dbRef = admin.database().ref('/users_location');
+
+    // Create a GeoFire index
+    var geoFire = new GeoFire(dbRef);
+
+    geoFire.remove(userId).then(() => {
+       console.log('GeoFire Delete successful for ' + userName + '(' + userId + ')');
+    }).catch(error => {
+         console.log(error);
+    });
+
+    return true;
+});
