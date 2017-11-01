@@ -1,8 +1,5 @@
 # *Frinder* [![Build status](https://travis-ci.org/frinder/frinder-app.svg?branch=master)](https://travis-ci.org/frinder/frinder-app/builds)
 
-[[ http://www.sheawong.com/wp-content/uploads/2013/08/keephatin.gif | height = 100px ]]
-
-
 **Frinder** is an android app that matches you with people nearby who are also looking to meet new people (not focussed on dating).
 
 Have you found yourself in the following situations when you were bored and could use some conversation? 
@@ -76,15 +73,13 @@ This app links to your Facebook profile and has a profile that contains basic in
 
 ## Walkthroughs
 
-[[ http://www.sheawong.com/wp-content/uploads/2013/08/keephatin.gif | height = 100px ]]
-
 Sprint 3
 
 [![Sprint 3 Walkthrough](https://user-images.githubusercontent.com/1111292/32263236-1621d046-be96-11e7-955e-3f6c05825cc0.png)](https://www.youtube.com/watch?v=kgYTNTG9ht0&feature=youtu.be)
 
 Sprint 2
 
-![Sprint 2 Walkthrough - User logging into app for the first time](https://i.imgur.com/8d9zsQr.gif | width=400) ![Sprint 2 Walkthrough - User logging into app again](https://i.imgur.com/eB4oOkB.gif) ![Sprint 2 Walkthrough - Showing settings screen](https://i.imgur.com/u3u2nst.gif)
+![Sprint 2 Walkthrough - User logging into app for the first time](https://i.imgur.com/8d9zsQr.gif | width=400px) ![Sprint 2 Walkthrough - User logging into app again](https://i.imgur.com/eB4oOkB.gif) ![Sprint 2 Walkthrough - Showing settings screen](https://i.imgur.com/u3u2nst.gif)
 
 Sprint 1
 
