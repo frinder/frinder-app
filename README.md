@@ -79,7 +79,7 @@ Sprint 3
 
 Sprint 2
 
-![Sprint 2 Walkthrough - User logging into app for the first time](https://i.imgur.com/8d9zsQr.gif) ![Sprint 2 Walkthrough - User logging into app again](https://i.imgur.com/eB4oOkB.gif) ![Sprint 2 Walkthrough - Showing settings screen](https://i.imgur.com/u3u2nst.gif)
+![Sprint 2 Walkthrough - User logging into app for the first time](https://i.imgur.com/8d9zsQr.gif | width=400) ![Sprint 2 Walkthrough - User logging into app again](https://i.imgur.com/eB4oOkB.gif) ![Sprint 2 Walkthrough - Showing settings screen](https://i.imgur.com/u3u2nst.gif)
 
 Sprint 1
 
