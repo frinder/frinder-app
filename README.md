@@ -79,8 +79,7 @@ Sprint 3
 
 Sprint 2
 
-<img src="https://i.imgur.com/8d9zsQr.gif" width="280"> <img src="https://i.imgur.com/eB4oOkB.gif" width="280">
-<img src="https://i.imgur.com/u3u2nst.gif" width="280">
+<img src="https://i.imgur.com/8d9zsQr.gif" width="280"><img src="https://i.imgur.com/eB4oOkB.gif" width="280"><img src="https://i.imgur.com/u3u2nst.gif" width="280">
 
 Sprint 1
 
@@ -92,5 +91,14 @@ Sprint 1
 
 ## Open-source libraries used
 
-- [Glide](https://github.com/bumptech/glide) - Image loading and caching library for Android
-- [ButterKnife](https://github.com/JakeWharton/butterknife) - Bind Android views and callbacks to fields and methods
+- ButterKnife
+- ChatKit
+- CircleImageView
+- Crashlytics SDK
+- Facebook SDK
+- Firebase SDK
+- GeoFire
+- Glide
+- Parceler
+- ripplebackground
+- recyclerview-animators
