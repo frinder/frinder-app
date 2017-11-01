@@ -14,13 +14,13 @@ This app links to your Facebook profile and has a profile that contains basic in
 
 ## User Stories
 
-Profile
+**Profile**
 * [X] User can sign into Frinder using Facebook login
 * [X] Query user profile data from facebook
 * [X] User can click on a person to view their detailed profile
 * [X] User can edit/fill their profile (desc, choose interests)
 
-Discover Users
+**Discover Users**
 * [X] User can view list of active people nearby
 * [X] Ask for the required permissions (location)
 * [X] Update the server with the user's location updates
@@ -28,20 +28,20 @@ Discover Users
 * [X] Setup geofire for faster location queries
 * [x] Auto refresh discover feed
 
-Requests
+**Requests**
 * [X] In a notification view, user can view their friend request(s) and contact details of accepted friends
   * [X] Use Fragments + Tabs to differentiate between sent, received and accepted requests
 * [X] Update the server with responses to the requests
 * [X] Add an unread mechanism to highlight new request
 * [X] Add in-app badging to notify user about new requests
 
-Messaging
+**Messages**
 * [X] User can send/receive messages in the app
 * [X] Add a messages view to view your recent messages
 * [x] Observe changes to the message thread and thread list while on the view and update UI
 * [x] Add in-app badging for unread messages
 
-General
+**General**
 * [x] Setup firebase
 * [x] Error handling (permissions, internet connectivity)
 * [X] Setup automated builds to catch build failures
@@ -50,17 +50,17 @@ General
   * [x] Add scripts to clean up/update db entries on changes to the scheme
   * [x] Add scripts to clear data added while testing
 
-User interface
+**User interface**
 * [x] Explore different list view options (card stack, single card)
 * [x] Improve the UI of the app (icons, color scheme, launch screen)
 
-Bonus
+**Bonus**
 * [x] Show a list of suggested nearby places to help choose the location for the initial meet (hooked to Facebook Place search)
 * [x] Allow the user to ephemerally share their location so as to allow new contacts to find them
 * [x] Add app shortcuts to allow users to easily perform certain actions
 * [ ] Fire push notifications to notify users when the app is not active
 
-Ambitious:
+**Ambitious**
 * [ ] Find common attributes with the person
   * [ ] Mutual friends
   * [ ] Similar visited places
@@ -75,7 +75,7 @@ Ambitious:
 
 Sprint 3
 
-[![Sprint 3 Walkthrough](https://user-images.githubusercontent.com/1111292/32263236-1621d046-be96-11e7-955e-3f6c05825cc0.png)]](https://www.youtube.com/watch?v=kgYTNTG9ht0&feature=youtu.be)
+[![Sprint 3 Walkthrough](https://user-images.githubusercontent.com/1111292/32263236-1621d046-be96-11e7-955e-3f6c05825cc0.png)](https://www.youtube.com/watch?v=kgYTNTG9ht0&feature=youtu.be)
 
 Sprint 2
 
