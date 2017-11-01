@@ -79,12 +79,15 @@ Sprint 3
 
 Sprint 2
 
-<img src="https://i.imgur.com/8d9zsQr.gif" width="250">
+<img src="https://i.imgur.com/8d9zsQr.gif" width="300"> <img src="https://i.imgur.com/eB4oOkB.gif" width="300">
+<img src="https://i.imgur.com/u3u2nst.gif" width="300">
+
 
 ![Sprint 2 Walkthrough - User logging into app for the first time](https://i.imgur.com/8d9zsQr.gif) ![Sprint 2 Walkthrough - User logging into app again](https://i.imgur.com/eB4oOkB.gif) ![Sprint 2 Walkthrough - Showing settings screen](https://i.imgur.com/u3u2nst.gif)
 
 Sprint 1
 
+<img src="https://imgur.com/gBtGWj1.gif" width="300">
 ![Sprint 1 Walkthrough](https://imgur.com/gBtGWj1.gif)
 
 ## Wireframe
