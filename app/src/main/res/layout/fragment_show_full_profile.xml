@@ -106,7 +106,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/darkgray_thin_ui_separator"/>
+        android:background="@drawable/discover_user_ui_separator"/>
 
     <TextView
         android:id="@+id/tvFullProfileUserDesc"
@@ -131,7 +131,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/darkgray_thin_ui_separator"/>
+        android:background="@drawable/discover_user_ui_separator"/>
 
     <TextView
         android:id="@+id/tvFullProfileInterestLabel"
