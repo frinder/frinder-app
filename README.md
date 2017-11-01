@@ -2,9 +2,9 @@
 
 **Frinder** is an android app that matches you with people nearby who are also looking to meet new people (not focussed on dating).
 
-Have you found yourself in the following situations when you were bored and could use some conversation? 
-- Waiting for a flight alone 
-- Taking the train by yourself 
+Have you found yourself in the following situations when you were bored and could use some conversation?
+- Waiting for a flight alone
+- Taking the train by yourself
 - At a bar alone
 - Having a meal by yourself at your office cafe  
 
@@ -74,7 +74,7 @@ This app links to your Facebook profile and has a profile that contains basic in
 
 Sprint 3
 
-[<img src="https://user-images.githubusercontent.com/1111292/32263236-1621d046-be96-11e7-955e-3f6c05825cc0.png" width="840">](https://www.youtube.com/watch?v=kgYTNTG9ht0&feature=youtu.be)
+[<img src="https://user-images.githubusercontent.com/1111292/32263236-1621d046-be96-11e7-955e-3f6c05825cc0.png" width="840">](https://www.youtube.com/watch?v=dY6HYsqdYvM&feature=youtu.be)
 
 Sprint 2
 
