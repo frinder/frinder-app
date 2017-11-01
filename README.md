@@ -77,8 +77,6 @@ Sprint 3
 
 [<img src="https://user-images.githubusercontent.com/1111292/32263236-1621d046-be96-11e7-955e-3f6c05825cc0.png" width="840">](https://www.youtube.com/watch?v=kgYTNTG9ht0&feature=youtu.be)
 
-[![Sprint 3 Walkthrough](https://user-images.githubusercontent.com/1111292/32263236-1621d046-be96-11e7-955e-3f6c05825cc0.png)](https://www.youtube.com/watch?v=kgYTNTG9ht0&feature=youtu.be)
-
 Sprint 2
 
 <img src="https://i.imgur.com/8d9zsQr.gif" width="280"> <img src="https://i.imgur.com/eB4oOkB.gif" width="280">
@@ -90,7 +88,7 @@ Sprint 1
 
 ## Wireframe
 
-![Sprint 1 Wireframe](https://user-images.githubusercontent.com/1111292/31313212-b4bbb4d8-ab90-11e7-9346-af22cdf64056.JPG)
+<img src="https://user-images.githubusercontent.com/1111292/31313212-b4bbb4d8-ab90-11e7-9346-af22cdf64056.JPG" width="840" alt="Wireframe">
 
 ## Open-source libraries used
 
