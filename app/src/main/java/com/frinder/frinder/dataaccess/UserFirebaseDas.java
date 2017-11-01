@@ -33,6 +33,25 @@ public class UserFirebaseDas {
         this.db = FirebaseFirestore.getInstance();
     }
 
+    public void updateUserTimestamp(String id) {
+        DocumentReference userRef = db.collection("users").document(id);
+        Map<String, Object> userData = new HashMap();
+        userData.put("timestamp",new Date());
+        userRef.update(userData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "TimestampUpdate: DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "TimestampUpdate: Error updating document", e);
+                    }
+                });
+    }
+
     public void updateUserLocation(String id, ArrayList location) {
         DocumentReference userRef = db.collection("users").document(id);
         Map<String, Object> userData = new HashMap();

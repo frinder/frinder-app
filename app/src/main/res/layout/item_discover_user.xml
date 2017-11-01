@@ -146,7 +146,7 @@
             android:layout_alignRight="@id/tvDiscoverUserDesc"
             android:layout_alignStart="@id/tvDiscoverUserDesc"
             android:layout_above="@id/tvDiscoverInterestLabel"
-            android:background="@drawable/darkgray_thin_ui_separator"/>
+            android:background="@drawable/discover_user_ui_separator"/>
 
         <HorizontalScrollView
             android:id="@+id/hScrollViewDiscoverInterests"

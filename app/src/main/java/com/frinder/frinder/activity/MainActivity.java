@@ -51,6 +51,7 @@ public class MainActivity extends BaseActivity {
 
     private void readProfile() {
         profile = Profile.getCurrentProfile();
+        userFirebaseDas.updateUserTimestamp(profile.getId());
         userFirebaseDas.getUser(profile.getId(), new UserFirebaseDas.OnCompletionListener() {
             @Override
             public void onUserReceived(User user) {
