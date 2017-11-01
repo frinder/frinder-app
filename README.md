@@ -1,5 +1,8 @@
 # *Frinder* [![Build status](https://travis-ci.org/frinder/frinder-app.svg?branch=master)](https://travis-ci.org/frinder/frinder-app/builds)
 
+[[ http://www.sheawong.com/wp-content/uploads/2013/08/keephatin.gif | height = 100px ]]
+
+
 **Frinder** is an android app that matches you with people nearby who are also looking to meet new people (not focussed on dating).
 
 Have you found yourself in the following situations when you were bored and could use some conversation? 
@@ -72,6 +75,8 @@ This app links to your Facebook profile and has a profile that contains basic in
 * [ ] Allow group meetups
 
 ## Walkthroughs
+
+[[ http://www.sheawong.com/wp-content/uploads/2013/08/keephatin.gif | height = 100px ]]
 
 Sprint 3
 
