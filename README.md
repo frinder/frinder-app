@@ -64,7 +64,6 @@ This app links to your Facebook profile and has a profile that contains basic in
 * [ ] Find common attributes with the person
   * [ ] Mutual friends
   * [ ] Similar visited places
-  * [ ] (very ambitious) Common interests
 * [ ] Link to Instagram and LinkedIn accounts
 * [ ] Show people around you on a map
 * [ ] On meeting, support sharing contact details via NFC
