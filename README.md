@@ -75,20 +75,18 @@ This app links to your Facebook profile and has a profile that contains basic in
 
 Sprint 3
 
+[<img src="https://user-images.githubusercontent.com/1111292/32263236-1621d046-be96-11e7-955e-3f6c05825cc0.png" width="840">](https://www.youtube.com/watch?v=kgYTNTG9ht0&feature=youtu.be)
+
 [![Sprint 3 Walkthrough](https://user-images.githubusercontent.com/1111292/32263236-1621d046-be96-11e7-955e-3f6c05825cc0.png)](https://www.youtube.com/watch?v=kgYTNTG9ht0&feature=youtu.be)
 
 Sprint 2
 
-<img src="https://i.imgur.com/8d9zsQr.gif" width="300"> <img src="https://i.imgur.com/eB4oOkB.gif" width="300">
-<img src="https://i.imgur.com/u3u2nst.gif" width="300">
-
-
-![Sprint 2 Walkthrough - User logging into app for the first time](https://i.imgur.com/8d9zsQr.gif) ![Sprint 2 Walkthrough - User logging into app again](https://i.imgur.com/eB4oOkB.gif) ![Sprint 2 Walkthrough - Showing settings screen](https://i.imgur.com/u3u2nst.gif)
+<img src="https://i.imgur.com/8d9zsQr.gif" width="280"> <img src="https://i.imgur.com/eB4oOkB.gif" width="280">
+<img src="https://i.imgur.com/u3u2nst.gif" width="280">
 
 Sprint 1
 
-<img src="https://imgur.com/gBtGWj1.gif" width="300">
-![Sprint 1 Walkthrough](https://imgur.com/gBtGWj1.gif)
+<img src="https://imgur.com/gBtGWj1.gif" width="280">
 
 ## Wireframe
 
